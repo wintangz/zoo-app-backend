@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/account")
 public class AccountController {
-    private IAccountService accountService;
+    private final IAccountService accountService;
 
     public AccountController(IAccountService accountService) {
         this.accountService = accountService;

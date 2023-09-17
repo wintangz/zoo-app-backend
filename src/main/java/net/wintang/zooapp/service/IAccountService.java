@@ -7,6 +7,6 @@ import java.util.List;
 
 @Service
 public interface IAccountService {
-    public List<Account> findAllAccounts();
-    public Account createNewAccount(Account account);
+    List<Account> findAllAccounts();
+    Account createNewAccount(Account account);
 }
