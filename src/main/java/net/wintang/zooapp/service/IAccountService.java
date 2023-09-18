@@ -9,4 +9,6 @@ import java.util.List;
 public interface IAccountService {
     List<Account> findAllAccounts();
     Account createNewAccount(Account account);
+    Account updateAccountById(Account account);
+    boolean deleteAccountById(Long id);
 }

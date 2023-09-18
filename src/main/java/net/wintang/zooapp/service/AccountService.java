@@ -22,4 +22,20 @@ public class AccountService implements IAccountService {
     public Account createNewAccount(Account account) {
         return accountRepository.save(account);
     }
+
+    @Override
+    public Account updateAccountById(Account account) {
+        if(accountRepository.findById(account.getId()).isPresent()){
+            return accountRepository.save(account);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean deleteAccountById(Long id) {
+        if(accountRepository.findById(id).isPresent()) {
+            accountRepository.deleteById(id);
+            return true;
+        } else return false;
+    }
 }

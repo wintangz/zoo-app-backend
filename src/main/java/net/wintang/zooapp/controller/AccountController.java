@@ -41,4 +41,30 @@ public class AccountController {
                 new ResponseObject("Ok", "Create successfully", accountService.createNewAccount(account))
         );
     }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ResponseObject> updateAccountById(@PathVariable Long id, @RequestBody Account account) {
+        account.setId(id);
+        Account updatedAccount = accountService.updateAccountById(account);
+        if(updatedAccount != null){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("Ok", "Updated successfully", updatedAccount)
+            );
+        } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("Failed", "Account not found!", null)
+            );
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseObject> deleteAccountById(@PathVariable Long id) {
+        if(accountService.deleteAccountById(id)) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("Ok", "Deleted successfully", null)
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("Failed", "Account not found!", null)
+            );
+        }
+    }
 }
