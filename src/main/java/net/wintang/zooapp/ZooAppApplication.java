@@ -10,5 +10,5 @@ public class ZooAppApplication {
 		SpringApplication.run(ZooAppApplication.class, args);
 	}
 
-	//test 2
+	//test
 }
