@@ -1,4 +1,4 @@
-package net.wintang.zooapp.model;
+package net.wintang.zooapp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,6 +1,7 @@
 package net.wintang.zooapp.service;
 
-import net.wintang.zooapp.model.Account;
+import net.wintang.zooapp.entity.Account;
+import net.wintang.zooapp.model.AccountModel;
 import net.wintang.zooapp.repository.IAccountRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +14,13 @@ public class AccountService implements IAccountService {
         this.accountRepository = accountRepository;
     }
 
+    private List<AccountModel> mapToModel(List<Account> accounts) {
+        return accounts.stream().map(AccountModel::new).toList();
+    }
+
     @Override
-    public List<Account> findAllAccounts() {
-        return accountRepository.findAll();
+    public List<AccountModel> findAllAccounts() {
+        return mapToModel(accountRepository.findAll());
     }
 
     @Override

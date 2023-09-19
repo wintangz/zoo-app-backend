@@ -1,7 +1,8 @@
 package net.wintang.zooapp.controller;
 
 import net.wintang.zooapp.ResponseObject;
-import net.wintang.zooapp.model.Account;
+import net.wintang.zooapp.entity.Account;
+import net.wintang.zooapp.model.AccountModel;
 import net.wintang.zooapp.service.IAccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class AccountController {
     @GetMapping("")
     public ResponseEntity<ResponseObject> findAllAccounts(){
         ResponseObject responseObject = new ResponseObject();
-        List<Account> accounts = accountService.findAllAccounts();
+        List<AccountModel> accounts = accountService.findAllAccounts();
         if(!accounts.isEmpty()){
             responseObject.setStatus("Ok");
             responseObject.setMessage("Successfully");
