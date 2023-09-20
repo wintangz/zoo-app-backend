@@ -2,7 +2,7 @@ package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.ResponseObject;
 import net.wintang.zooapp.entity.Account;
-import net.wintang.zooapp.model.AccountModel;
+import net.wintang.zooapp.model.AccountDTO;
 import net.wintang.zooapp.repository.IAccountRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +17,14 @@ public class AccountService implements IAccountService {
         this.accountRepository = accountRepository;
     }
 
-    private List<AccountModel> mapToModel(List<Account> accounts) {
-        return accounts.stream().map(AccountModel::new).toList();
+    private List<AccountDTO> mapToModel(List<Account> accounts) {
+        return accounts.stream().map(AccountDTO::new).toList();
     }
 
     @Override
     public ResponseEntity<ResponseObject> findAllAccounts() {
         ResponseObject response = new ResponseObject();
-        List<AccountModel> accounts = mapToModel(accountRepository.findAll());
+        List<AccountDTO> accounts = mapToModel(accountRepository.findAll());
         if(!accounts.isEmpty()){
             response.setStatus("Ok");
             response.setMessage("Successfully");
