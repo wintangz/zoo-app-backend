@@ -1,8 +1,11 @@
 package net.wintang.zooapp.service;
 
+import net.wintang.zooapp.ResponseObject;
 import net.wintang.zooapp.entity.Account;
 import net.wintang.zooapp.model.AccountModel;
 import net.wintang.zooapp.repository.IAccountRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +22,18 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public List<AccountModel> findAllAccounts() {
-        return mapToModel(accountRepository.findAll());
+    public ResponseEntity<ResponseObject> findAllAccounts() {
+        ResponseObject response = new ResponseObject();
+        List<AccountModel> accounts = mapToModel(accountRepository.findAll());
+        if(!accounts.isEmpty()){
+            response.setStatus("Ok");
+            response.setMessage("Successfully");
+            response.setData(accounts);
+        } else {
+            response.setStatus("Ok");
+            response.setMessage("No account found!!!");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @Override

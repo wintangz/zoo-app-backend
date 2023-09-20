@@ -2,13 +2,10 @@ package net.wintang.zooapp.controller;
 
 import net.wintang.zooapp.ResponseObject;
 import net.wintang.zooapp.entity.Account;
-import net.wintang.zooapp.model.AccountModel;
 import net.wintang.zooapp.service.IAccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -22,18 +19,7 @@ public class AccountController {
 
     @GetMapping("")
     public ResponseEntity<ResponseObject> findAllAccounts(){
-        ResponseObject responseObject = new ResponseObject();
-        List<AccountModel> accounts = accountService.findAllAccounts();
-        if(!accounts.isEmpty()){
-            responseObject.setStatus("Ok");
-            responseObject.setMessage("Successfully");
-            responseObject.setData(accounts);
-        } else {
-            responseObject.setStatus("Ok");
-            responseObject.setMessage("No account found!!!");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(
-                responseObject);
+        return accountService.findAllAccounts();
     }
 
     @PostMapping("/create")
@@ -49,7 +35,7 @@ public class AccountController {
         Account updatedAccount = accountService.updateAccountById(account);
         if(updatedAccount != null){
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("Ok", "Updated successfully", updatedAccount)
+                    new ResponseObject("Ok", "Update successfully", updatedAccount)
             );
         } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new ResponseObject("Failed", "Account not found!", null)
@@ -60,7 +46,7 @@ public class AccountController {
     public ResponseEntity<ResponseObject> deleteAccountById(@PathVariable Long id) {
         if(accountService.deleteAccountById(id)) {
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("Ok", "Deleted successfully", null)
+                    new ResponseObject("Ok", "Delete successfully", null)
             );
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
