@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface IAccountService {
     ResponseEntity<ResponseObject> findAllAccounts();
-    Account createNewAccount(Account account);
+    ResponseEntity<ResponseObject> createNewAccount(Account account);
     Account updateAccountById(Account account);
     boolean deleteAccountById(Long id);
 }

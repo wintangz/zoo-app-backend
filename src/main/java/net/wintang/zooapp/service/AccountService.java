@@ -7,7 +7,6 @@ import net.wintang.zooapp.repository.IAccountRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -37,8 +36,9 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public Account createNewAccount(Account account) {
-        return accountRepository.save(account);
+    public ResponseEntity<ResponseObject> createNewAccount(Account account) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ResponseObject("Ok", "Create successfully", accountRepository.save(account)));
     }
 
     @Override

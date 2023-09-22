@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/account")
+@RequestMapping("/api/accounts")
 public class AccountController {
     private final IAccountService accountService;
 
@@ -22,14 +22,12 @@ public class AccountController {
         return accountService.findAllAccounts();
     }
 
-    @PostMapping("/create")
+    @PostMapping("")
     public ResponseEntity<ResponseObject> createNewAccount(@RequestBody Account account) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-                new ResponseObject("Ok", "Create successfully", accountService.createNewAccount(account))
-        );
+        return accountService.createNewAccount(account);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ResponseObject> updateAccountById(@PathVariable Long id, @RequestBody Account account) {
         account.setId(id);
         Account updatedAccount = accountService.updateAccountById(account);
@@ -42,7 +40,7 @@ public class AccountController {
             );
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ResponseObject> deleteAccountById(@PathVariable Long id) {
         if(accountService.deleteAccountById(id)) {
             return ResponseEntity.status(HttpStatus.OK).body(

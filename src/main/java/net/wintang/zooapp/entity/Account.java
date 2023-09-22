@@ -13,6 +13,7 @@ public class Account {
     @SequenceGenerator(name = "seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq")
     private Long id;
+    @Column(unique = true)
     private String username;
     private String password;
     private String role;
