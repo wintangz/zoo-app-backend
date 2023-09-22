@@ -4,6 +4,7 @@ import net.wintang.zooapp.ResponseObject;
 import net.wintang.zooapp.entity.Account;
 import net.wintang.zooapp.model.AccountDTO;
 import net.wintang.zooapp.repository.IAccountRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ import java.util.List;
 @Service
 public class AccountService implements IAccountService {
     private final IAccountRepository accountRepository;
+
+    @Autowired
     public AccountService(IAccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
