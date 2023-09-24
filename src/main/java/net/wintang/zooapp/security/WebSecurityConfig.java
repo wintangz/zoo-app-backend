@@ -1,4 +1,4 @@
-package net.wintang.zooapp;
+package net.wintang.zooapp.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

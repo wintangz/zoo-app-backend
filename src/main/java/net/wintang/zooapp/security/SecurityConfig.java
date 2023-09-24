@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .httpBasic(withDefaults());
         http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+        System.out.println("SecurityConfig");
         return http.build();
     }
 
