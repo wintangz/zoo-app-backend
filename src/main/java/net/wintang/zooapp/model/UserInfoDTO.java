@@ -4,9 +4,11 @@ import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.wintang.zooapp.entity.Role;
 import net.wintang.zooapp.entity.UserEntity;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class UserInfoDTO {
@@ -21,6 +23,7 @@ public class UserInfoDTO {
     private String nationality;
     private String phone;
     private String email;
+    private List<Role> roles;
 
     public UserInfoDTO(UserEntity user) {
         this.id = user.getId();
@@ -34,5 +37,6 @@ public class UserInfoDTO {
         this.nationality = user.getNationality();
         this.phone = user.getPhone();
         this.email = user.getEmail();
+        this.roles = user.getRoles();
     }
 }

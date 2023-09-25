@@ -33,5 +33,5 @@ public class UserEntity {
     @JoinTable(name = "User_Role",
             joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"))
-    private List<Role> roles = new  ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
 }
