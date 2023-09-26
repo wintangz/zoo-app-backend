@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -59,8 +61,11 @@ public class AuthController {
         UserEntity user = new UserEntity();
         user.setUsername(userDTO.getUsername());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        Role roles = roleRepository.findByName("USER").get();
-        user.setRoles(Collections.singletonList(roles));
+        Optional<Role> role = roleRepository.findByName("CUSTOMER");
+        if(role.isPresent()) {
+            Role roles = role.get();
+            user.setRoles(Collections.singletonList(roles));
+        }
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body("Success!!");
     }
