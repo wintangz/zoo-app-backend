@@ -24,8 +24,14 @@ public class UserController {
     }
 
     @PostMapping("/staff")
-    public ResponseEntity<ResponseObject> createNewStaff(@RequestBody UserDTO user) { return userService.createNewStaff(user); }
+    public ResponseEntity<ResponseObject> createNewStaff(@RequestBody UserDTO user) { return userService.createNewTrainer(user); }
 
     @GetMapping("/staff")
     public ResponseEntity<ResponseObject> getAllStaffInfo() { return userService.findAllStaff(); }
+
+    @PostMapping("/trainer")
+    public ResponseEntity<ResponseObject> createNewTrainer(@RequestBody UserDTO user) { return userService.createNewStaff(user); }
+
+    @GetMapping("/trainer")
+    public ResponseEntity<ResponseObject> getAllTrainerInfo() {return userService.findAllTrainer();}
 }

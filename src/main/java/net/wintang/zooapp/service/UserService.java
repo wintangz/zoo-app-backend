@@ -60,6 +60,8 @@ public class UserService implements IUserService {
         );
     }
 
+
+    //Staff
     @Override
     public ResponseEntity<ResponseObject> createNewStaff(UserDTO userDto) {
         if (Boolean.TRUE.equals(userRepository.existsByUsername(userDto.getUsername()))){
@@ -83,6 +85,37 @@ public class UserService implements IUserService {
     @Override
     public ResponseEntity<ResponseObject> findAllStaff() {
         List<UserEntity> list = userRepository.findByRole(2);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
+                        ApplicationConstants.ResponseStatusMessage.SUCCESS,
+                        mapToInfoDTO(list))
+        );
+    }
+
+
+    //Zoo-trainer
+    @Override
+    public ResponseEntity<ResponseObject> createNewTrainer(UserDTO userDto) {
+        if (Boolean.TRUE.equals(userRepository.existsByUsername(userDto.getUsername()))){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("Failed", "Username existed", userDto.getUsername())
+            );
+        }
+        UserEntity user = mapToUserEntity(userDto);
+        Optional<Role> role = roleRepository.findByName("ZOO_TRAINER");
+        if(role.isPresent()) {
+            Role roles = role.get();
+            user.setRoles(Collections.singletonList(roles));
+        }
+        userRepository.save(user);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
+                        ApplicationConstants.ResponseStatusMessage.SUCCESS, userDto)
+        );
+    }
+    @Override
+    public ResponseEntity<ResponseObject> findAllTrainer() {
+        List<UserEntity> list = userRepository.findByRole(3);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
                         ApplicationConstants.ResponseStatusMessage.SUCCESS,
