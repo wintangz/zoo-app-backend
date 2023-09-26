@@ -1,7 +1,6 @@
 package net.wintang.zooapp.controller;
 
-import net.wintang.zooapp.ResponseObject;
-import net.wintang.zooapp.entity.UserEntity;
+import net.wintang.zooapp.util.ResponseObject;
 import net.wintang.zooapp.model.UserDTO;
 import net.wintang.zooapp.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;

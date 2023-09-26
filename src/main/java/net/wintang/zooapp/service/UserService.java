@@ -1,6 +1,7 @@
 package net.wintang.zooapp.service;
 
-import net.wintang.zooapp.ResponseObject;
+import net.wintang.zooapp.util.ApplicationConstants;
+import net.wintang.zooapp.util.ResponseObject;
 import net.wintang.zooapp.entity.Role;
 import net.wintang.zooapp.entity.UserEntity;
 import net.wintang.zooapp.model.UserDTO;
@@ -18,9 +19,8 @@ import java.util.*;
 @Service
 public class UserService implements IUserService {
 
-    private UserRepository userRepository;
-
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
     private UserEntity mapToUserEntity(UserDTO user) {
@@ -54,7 +54,9 @@ public class UserService implements IUserService {
     @Override
     public ResponseEntity<ResponseObject> findAllUsers() {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("Ok", "Success", mapToInfoDTO(userRepository.findAll()))
+                new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
+                        ApplicationConstants.ResponseStatusMessage.SUCCESS,
+                        mapToInfoDTO(userRepository.findAll()))
         );
     }
 
@@ -73,7 +75,8 @@ public class UserService implements IUserService {
         }
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("Ok", "Success", userDto)
+                    new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
+                            ApplicationConstants.ResponseStatusMessage.SUCCESS, userDto)
         );
     }
 
@@ -81,7 +84,8 @@ public class UserService implements IUserService {
     public ResponseEntity<ResponseObject> findAllStaff() {
         List<UserEntity> list = userRepository.findByRole(2);
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("Ok", "Success",
+                new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
+                        ApplicationConstants.ResponseStatusMessage.SUCCESS,
                         mapToInfoDTO(list))
         );
     }

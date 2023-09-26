@@ -1,6 +1,6 @@
 package net.wintang.zooapp.service;
 
-import net.wintang.zooapp.ResponseObject;
+import net.wintang.zooapp.util.ResponseObject;
 import net.wintang.zooapp.entity.Account;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

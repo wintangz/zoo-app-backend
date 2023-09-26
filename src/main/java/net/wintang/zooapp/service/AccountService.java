@@ -1,6 +1,6 @@
 package net.wintang.zooapp.service;
 
-import net.wintang.zooapp.ResponseObject;
+import net.wintang.zooapp.util.ResponseObject;
 import net.wintang.zooapp.entity.Account;
 import net.wintang.zooapp.model.AccountDTO;
 import net.wintang.zooapp.repository.IAccountRepository;
