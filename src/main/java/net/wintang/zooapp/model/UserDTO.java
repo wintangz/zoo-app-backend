@@ -2,7 +2,7 @@ package net.wintang.zooapp.model;
 
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 public class UserDTO {
@@ -12,7 +12,7 @@ public class UserDTO {
     private String firstname;
     private boolean sex;
     private String citizenId;
-    private Date dateOfBirth;
+    private LocalDateTime dateOfBirth;
     private String address;
     private String nationality;
     private String phone;

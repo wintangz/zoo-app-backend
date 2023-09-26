@@ -6,8 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -27,7 +27,7 @@ public class UserEntity {
     @Column(nullable = true)
     private boolean sex;
     private String citizenId;
-    private Date dateOfBirth;
+    private LocalDateTime dateOfBirth;
     private String address;
     private String nationality;
     private String phone;

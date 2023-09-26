@@ -1,13 +1,10 @@
 package net.wintang.zooapp.model;
 
-import jakarta.persistence.Column;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import net.wintang.zooapp.entity.Role;
 import net.wintang.zooapp.entity.UserEntity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -18,7 +15,7 @@ public class UserInfoDTO {
     private String firstname;
     private boolean sex;
     private String citizenId;
-    private Date dateOfBirth;
+    private LocalDateTime dateOfBirth;
     private String address;
     private String nationality;
     private String phone;
