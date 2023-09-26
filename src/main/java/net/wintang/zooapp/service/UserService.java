@@ -13,9 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements IUserService {
@@ -61,7 +60,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> createAStaff(UserDTO userDto) {
+    public ResponseEntity<ResponseObject> createNewStaff(UserDTO userDto) {
         if (Boolean.TRUE.equals(userRepository.existsByUsername(userDto.getUsername()))){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ResponseObject("Failed", "Username existed", userDto.getUsername())
@@ -76,6 +75,15 @@ public class UserService implements IUserService {
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("Ok", "Success", userDto)
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> findAllStaff() {
+        List<UserEntity> list = userRepository.findByRole(2);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("Ok", "Success",
+                        mapToInfoDTO(list))
         );
     }
 }

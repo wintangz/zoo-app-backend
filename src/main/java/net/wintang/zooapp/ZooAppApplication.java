@@ -9,6 +9,4 @@ public class ZooAppApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ZooAppApplication.class, args);
 	}
-
-	//test
 }

@@ -1,13 +1,15 @@
 package net.wintang.zooapp.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "Role")
+@NoArgsConstructor
+@Builder
 @Getter
 @Setter
+@AllArgsConstructor
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

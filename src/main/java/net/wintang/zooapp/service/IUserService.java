@@ -8,5 +8,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface IUserService {
     ResponseEntity<ResponseObject> findAllUsers();
-    ResponseEntity<ResponseObject> createAStaff(UserDTO user);
+    ResponseEntity<ResponseObject> createNewStaff(UserDTO user);
+    ResponseEntity<ResponseObject> findAllStaff();
 }
