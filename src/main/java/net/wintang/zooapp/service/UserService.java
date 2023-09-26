@@ -1,20 +1,22 @@
 package net.wintang.zooapp.service;
 
-import net.wintang.zooapp.util.ApplicationConstants;
-import net.wintang.zooapp.util.ResponseObject;
 import net.wintang.zooapp.entity.Role;
 import net.wintang.zooapp.entity.UserEntity;
 import net.wintang.zooapp.model.UserDTO;
 import net.wintang.zooapp.model.UserInfoDTO;
 import net.wintang.zooapp.repository.RoleRepository;
 import net.wintang.zooapp.repository.UserRepository;
+import net.wintang.zooapp.util.ApplicationConstants;
+import net.wintang.zooapp.util.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
@@ -77,8 +79,8 @@ public class UserService implements IUserService {
         }
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
-                            ApplicationConstants.ResponseStatusMessage.SUCCESS, userDto)
+                new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
+                        ApplicationConstants.ResponseStatusMessage.SUCCESS, userDto)
         );
     }
 
@@ -92,6 +94,48 @@ public class UserService implements IUserService {
         );
     }
 
+    @Override
+    public ResponseEntity<ResponseObject> updateStaff(UserDTO user, int id) {
+        Optional<UserEntity> updateUser = userRepository.findById(id);
+        if(updateUser.isPresent()) {
+            UserEntity newUser = updateUser.get();
+
+            //Check Input and Update to newUser
+            if(user.getUsername() != null && !user.getUsername().isEmpty())
+                newUser.setUsername(user.getUsername());
+            if(user.getPassword() != null && !user.getPassword().isEmpty())
+                newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            if(user.getLastname() != null && !user.getLastname().isEmpty())
+                newUser.setLastname(user.getLastname());
+            if(user.getFirstname() != null && !user.getFirstname().isEmpty())
+                newUser.setFirstname(user.getFirstname());
+            if(user.isSex() != newUser.isSex())
+                newUser.setSex(user.isSex());
+            if(user.getCitizenId() != null && !user.getCitizenId().isEmpty())
+                newUser.setCitizenId(user.getCitizenId());
+            if(user.getEmail() != null && !user.getEmail().isEmpty())
+                newUser.setEmail(user.getEmail());
+            if(user.getPhone() != null && !user.getPhone().isEmpty())
+                newUser.setPhone(user.getPhone());
+            if(user.getAddress() != null && !user.getAddress().isEmpty())
+                newUser.setAddress(user.getAddress());
+            if(user.getNationality() != null && !user.getNationality().isEmpty())
+                newUser.setNationality(user.getNationality());
+            if(user.getDateOfBirth() != null)
+                newUser.setDateOfBirth(user.getDateOfBirth());
+
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
+                    ApplicationConstants.ResponseStatusMessage.SUCCESS,
+                            mapToInfoDTO(Collections.singletonList(userRepository.save(newUser))))
+            );
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatusMessage.FAILED,
+                        ApplicationConstants.ResponseStatusMessage.NOT_MODIFIED,
+                        null)
+        );
+    }
 
     //Zoo-trainer
     @Override
@@ -113,6 +157,7 @@ public class UserService implements IUserService {
                         ApplicationConstants.ResponseStatusMessage.SUCCESS, userDto)
         );
     }
+
     @Override
     public ResponseEntity<ResponseObject> findAllTrainer() {
         List<UserEntity> list = userRepository.findByRole(3);
