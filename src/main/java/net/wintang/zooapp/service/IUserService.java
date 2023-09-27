@@ -10,9 +10,7 @@ public interface IUserService {
     ResponseEntity<ResponseObject> findAllUsers();
     ResponseEntity<ResponseObject> createNewStaff(UserDTO user);
     ResponseEntity<ResponseObject> findAllStaff();
-
     ResponseEntity<ResponseObject> findAllTrainer();
-
     ResponseEntity<ResponseObject> createNewTrainer(UserDTO user);
-
+    ResponseEntity<ResponseObject> updateStaff(UserDTO userDto, int id);
 }
