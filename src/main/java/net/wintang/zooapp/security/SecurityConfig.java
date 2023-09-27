@@ -1,5 +1,6 @@
 package net.wintang.zooapp.security;
 
+import net.wintang.zooapp.util.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,9 +40,13 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("api/auth/**").permitAll()
-                        .requestMatchers("api/users").hasAuthority("ADMIN")
-                        .requestMatchers("api/users/staff").hasAuthority("ADMIN")
-                        .requestMatchers("api/users/trainers").hasAnyAuthority("ADMIN", "STAFF")
+                        .requestMatchers("api/users").hasAuthority(ApplicationConstants.SecurityConstants.ADMIN)
+                        .requestMatchers("api/users/staff/**").hasAuthority(ApplicationConstants.SecurityConstants.ADMIN)
+                        .requestMatchers("api/users/trainers/**").hasAnyAuthority(ApplicationConstants.SecurityConstants.ADMIN,
+                                ApplicationConstants.SecurityConstants.STAFF)
+                        .requestMatchers("api/news").hasAuthority(ApplicationConstants.SecurityConstants.STAFF)
+                        .requestMatchers("api/animals").hasAnyAuthority(ApplicationConstants.SecurityConstants.ADMIN
+                                , ApplicationConstants.SecurityConstants.STAFF, ApplicationConstants.SecurityConstants.ZOO_TRAINER)
                         .anyRequest().authenticated())
                 .httpBasic(withDefaults());
         http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
