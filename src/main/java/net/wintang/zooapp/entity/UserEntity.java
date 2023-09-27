@@ -17,7 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-@DynamicUpdate //only update not null field
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

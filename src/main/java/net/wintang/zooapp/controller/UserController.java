@@ -29,9 +29,9 @@ public class UserController {
     @GetMapping("/staff")
     public ResponseEntity<ResponseObject> getAllStaffInfo() { return userService.findAllStaff(); }
 
-    @PostMapping("/trainer")
+    @PostMapping("/trainers")
     public ResponseEntity<ResponseObject> createNewTrainer(@RequestBody UserDTO user) { return userService.createNewStaff(user); }
 
-    @GetMapping("/trainer")
+    @GetMapping("/trainers")
     public ResponseEntity<ResponseObject> getAllTrainerInfo() {return userService.findAllTrainer();}
 }
