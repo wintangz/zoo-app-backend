@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final IUserService userService;
+    private IUserService userService;
 
     @Autowired
     public UserController(IUserService userService) {
@@ -24,19 +24,14 @@ public class UserController {
     }
 
     @PostMapping("/staff")
-    public ResponseEntity<ResponseObject> createNewStaff(@RequestBody UserDTO user) { return userService.createNewStaff(user); }
+    public ResponseEntity<ResponseObject> createNewStaff(@RequestBody UserDTO user) { return userService.createNewTrainer(user); }
 
     @GetMapping("/staff")
     public ResponseEntity<ResponseObject> getAllStaffInfo() { return userService.findAllStaff(); }
 
-    @PutMapping("/staff/{id}")
-    public ResponseEntity<ResponseObject> updateStaff(@RequestBody UserDTO userDto, @PathVariable int id) {
-        return userService.updateStaff(userDto, id);
-    }
+    @PostMapping("/trainer")
+    public ResponseEntity<ResponseObject> createNewTrainer(@RequestBody UserDTO user) { return userService.createNewStaff(user); }
 
-    @PostMapping("/trainers")
-    public ResponseEntity<ResponseObject> createNewTrainer(@RequestBody UserDTO user) { return userService.createNewTrainer(user); }
-
-    @GetMapping("/trainers")
+    @GetMapping("/trainer")
     public ResponseEntity<ResponseObject> getAllTrainerInfo() {return userService.findAllTrainer();}
 }
