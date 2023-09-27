@@ -137,6 +137,12 @@ public class UserService implements IUserService {
         );
     }
 
+    @Override
+    public ResponseEntity<ResponseObject> deleteStaff(int id) {
+        return null;
+    }
+
+
     //Zoo-trainer
     @Override
     public ResponseEntity<ResponseObject> createNewTrainer(UserDTO userDto) {

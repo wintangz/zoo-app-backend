@@ -13,4 +13,5 @@ public interface IUserService {
     ResponseEntity<ResponseObject> findAllTrainer();
     ResponseEntity<ResponseObject> createNewTrainer(UserDTO user);
     ResponseEntity<ResponseObject> updateStaff(UserDTO userDto, int id);
+    ResponseEntity<ResponseObject> deleteStaff(int id);
 }
