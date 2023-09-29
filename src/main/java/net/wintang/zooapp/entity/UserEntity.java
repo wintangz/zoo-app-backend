@@ -39,4 +39,12 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"))
     private List<Role> roles = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "authorId",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+
+    private List<News> news = new ArrayList<>();
 }
