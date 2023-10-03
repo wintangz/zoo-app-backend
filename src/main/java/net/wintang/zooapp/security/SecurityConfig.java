@@ -44,10 +44,9 @@ public class SecurityConfig {
                         .requestMatchers("api/users/staff/**").hasAuthority(ApplicationConstants.SecurityConstants.ADMIN)
                         .requestMatchers("api/users/trainers/**").hasAnyAuthority(ApplicationConstants.SecurityConstants.ADMIN,
                                 ApplicationConstants.SecurityConstants.STAFF)
-                        .requestMatchers("api/news").hasAuthority(ApplicationConstants.SecurityConstants.STAFF)
-                        .requestMatchers("api/animals").hasAnyAuthority(ApplicationConstants.SecurityConstants.ADMIN
-                                , ApplicationConstants.SecurityConstants.STAFF, ApplicationConstants.SecurityConstants.ZOO_TRAINER)
-                        .anyRequest().authenticated())
+                        .requestMatchers("api/animals").hasAnyAuthority(ApplicationConstants.SecurityConstants.ADMIN,
+                                ApplicationConstants.SecurityConstants.STAFF, ApplicationConstants.SecurityConstants.ZOO_TRAINER)
+                        .anyRequest().permitAll())
                 .httpBasic(withDefaults());
         http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
         System.out.println("SecurityConfig");

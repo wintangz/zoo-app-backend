@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,11 +39,4 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"))
     private List<Role> roles = new ArrayList<>();
 
-    @OneToMany(
-            mappedBy = "authorId",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-
-    private List<News> news = new ArrayList<>();
 }

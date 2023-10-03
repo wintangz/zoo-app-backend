@@ -10,19 +10,21 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/news")
 public class NewsController {
+
     private final INewsService newsService;
+
     @Autowired
-    public NewsController(INewsService newsService){
+    public NewsController(INewsService newsService) {
         this.newsService = newsService;
     }
 
     @GetMapping
-    public ResponseEntity<ResponseObject> getAllNews(){
+    public ResponseEntity<ResponseObject> getAllNews() {
         return newsService.findAllNews();
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<ResponseObject> createNews(@RequestBody NewsDTO news){
-        return newsService.createNewNews(news);
+    @PostMapping
+    public ResponseEntity<ResponseObject> postNews(@RequestBody NewsDTO newsDto) {
+        return newsService.createNewNews(newsDto);
     }
 }
