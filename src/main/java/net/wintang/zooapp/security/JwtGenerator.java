@@ -7,9 +7,11 @@ import io.jsonwebtoken.security.Keys;
 import net.wintang.zooapp.util.ApplicationConstants;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.util.Collection;
 import java.util.Date;
 
 @Component
@@ -18,11 +20,13 @@ public class JwtGenerator {
     SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
+        Collection<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + ApplicationConstants.SecurityConstants.JWT_EXPIRATION);
         System.out.println("Generating Token");
         return Jwts.builder()
                 .setSubject(username)
+                .claim("roles", roles)
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)
                 .signWith(key)
