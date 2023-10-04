@@ -27,4 +27,7 @@ public class NewsController {
     public ResponseEntity<ResponseObject> postNews(@RequestBody NewsDTO newsDto) {
         return newsService.createNewNews(newsDto);
     }
+
+    @GetMapping("/recommend")
+    public ResponseEntity<ResponseObject> getRecommend() { return newsService.find3LatestNews(); }
 }
