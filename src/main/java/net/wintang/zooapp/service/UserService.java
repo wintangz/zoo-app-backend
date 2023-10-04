@@ -1,7 +1,7 @@
 package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.entity.Role;
-import net.wintang.zooapp.entity.UserEntity;
+import net.wintang.zooapp.entity.User;
 import net.wintang.zooapp.model.UserDTO;
 import net.wintang.zooapp.model.UserInfoDTO;
 import net.wintang.zooapp.repository.RoleRepository;
@@ -25,8 +25,8 @@ public class UserService implements IUserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
-    private UserEntity mapToUserEntity(UserDTO user) {
-        return UserEntity.builder()
+    private User mapToUserEntity(UserDTO user) {
+        return User.builder()
                 .username(user.getUsername())
                 .password(passwordEncoder.encode(user.getPassword()))
                 .lastname(user.getLastname())
@@ -49,7 +49,7 @@ public class UserService implements IUserService {
         this.roleRepository = roleRepository;
     }
 
-    private List<UserInfoDTO> mapToInfoDTO(List<UserEntity> users) {
+    private List<UserInfoDTO> mapToInfoDTO(List<User> users) {
         return users.stream().map(UserInfoDTO::new).toList();
     }
 
@@ -71,7 +71,7 @@ public class UserService implements IUserService {
                     new ResponseObject("Failed", "Username existed", userDto.getUsername())
             );
         }
-        UserEntity user = mapToUserEntity(userDto);
+        User user = mapToUserEntity(userDto);
         Optional<Role> role = roleRepository.findByName("STAFF");
         if(role.isPresent()) {
             Role roles = role.get();
@@ -86,7 +86,7 @@ public class UserService implements IUserService {
 
     @Override
     public ResponseEntity<ResponseObject> findAllStaff() {
-        List<UserEntity> list = userRepository.findByRole(2);
+        List<User> list = userRepository.findByRole(2);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
                         ApplicationConstants.ResponseStatusMessage.SUCCESS,
@@ -96,9 +96,9 @@ public class UserService implements IUserService {
 
     @Override
     public ResponseEntity<ResponseObject> updateStaff(UserDTO user, int id) {
-        Optional<UserEntity> updateUser = userRepository.findById(id);
+        Optional<User> updateUser = userRepository.findById(id);
         if(updateUser.isPresent()) {
-            UserEntity newUser = updateUser.get();
+            User newUser = updateUser.get();
 
             //Check Input and Update to newUser
             if(user.getUsername() != null && !user.getUsername().isEmpty())
@@ -151,7 +151,7 @@ public class UserService implements IUserService {
                     new ResponseObject("Failed", "Username existed", userDto.getUsername())
             );
         }
-        UserEntity user = mapToUserEntity(userDto);
+        User user = mapToUserEntity(userDto);
         Optional<Role> role = roleRepository.findByName("ZOO_TRAINER");
         if(role.isPresent()) {
             Role roles = role.get();
@@ -166,7 +166,7 @@ public class UserService implements IUserService {
 
     @Override
     public ResponseEntity<ResponseObject> findAllTrainer() {
-        List<UserEntity> list = userRepository.findByRole(3);
+        List<User> list = userRepository.findByRole(3);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
                         ApplicationConstants.ResponseStatusMessage.SUCCESS,

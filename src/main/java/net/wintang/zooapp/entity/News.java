@@ -32,8 +32,8 @@ public class News {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "authorId")
-    private UserEntity author;
+    @JoinColumn(name = "author_id")
+    private User author;
 
     private String imgUrl;
 

@@ -1,7 +1,7 @@
 package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.entity.News;
-import net.wintang.zooapp.entity.UserEntity;
+import net.wintang.zooapp.entity.User;
 import net.wintang.zooapp.model.NewsDTO;
 import net.wintang.zooapp.repository.NewsRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
@@ -33,7 +33,7 @@ public class NewsService implements INewsService {
                 .content(newsDto.getContent())
                 .imgUrl(newsDto.getImgUrl())
                 .thumbnailUrl(newsDto.getThumbnailUrl())
-                .author(UserEntity.builder().id(newsDto.getAuthor()).build())
+                .author(User.builder().id(newsDto.getAuthor()).build())
                 .build();
     }
 

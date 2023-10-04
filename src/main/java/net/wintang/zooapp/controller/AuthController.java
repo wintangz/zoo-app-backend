@@ -1,7 +1,7 @@
 package net.wintang.zooapp.controller;
 
 import net.wintang.zooapp.entity.Role;
-import net.wintang.zooapp.entity.UserEntity;
+import net.wintang.zooapp.entity.User;
 import net.wintang.zooapp.model.AuthResponseDTO;
 import net.wintang.zooapp.model.UserDTO;
 import net.wintang.zooapp.repository.RoleRepository;
@@ -56,7 +56,7 @@ public class AuthController {
         if(Boolean.TRUE.equals(userRepository.existsByUsername(userDTO.getUsername()))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username is taken!!");
         }
-        UserEntity user = new UserEntity();
+        User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         Optional<Role> role = roleRepository.findByName("CUSTOMER");

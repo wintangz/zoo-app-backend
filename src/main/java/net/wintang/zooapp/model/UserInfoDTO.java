@@ -2,7 +2,7 @@ package net.wintang.zooapp.model;
 
 import lombok.Data;
 import net.wintang.zooapp.entity.Role;
-import net.wintang.zooapp.entity.UserEntity;
+import net.wintang.zooapp.entity.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,7 +22,7 @@ public class UserInfoDTO {
     private String email;
     private List<Role> roles;
 
-    public UserInfoDTO(UserEntity user) {
+    public UserInfoDTO(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.lastname = user.getLastname();
