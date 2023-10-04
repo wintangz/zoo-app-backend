@@ -1,7 +1,5 @@
 package net.wintang.zooapp.model;
 
-import jakarta.persistence.Lob;
-import lombok.Builder;
 import lombok.Data;
 import net.wintang.zooapp.entity.AnimalSpecies;
 
