@@ -6,6 +6,8 @@ import net.wintang.zooapp.entity.AnimalSpecies;
 @Data
 public class AnimalSpeciesDTO {
 
+    private int id;
+
     private String name;
 
     private String species;
@@ -27,6 +29,7 @@ public class AnimalSpeciesDTO {
     private String avatarUrl;
 
     public AnimalSpeciesDTO(AnimalSpecies animalSpecies) {
+        this.id = animalSpecies.getId();
         this.name = animalSpecies.getName();
         this.species = animalSpecies.getSpecies();
         this.genus = animalSpecies.getGenus();
