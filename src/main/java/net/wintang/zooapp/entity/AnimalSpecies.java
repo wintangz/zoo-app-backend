@@ -34,7 +34,9 @@ public class AnimalSpecies {
     @Lob
     private String description;
 
+    @Lob
     private String imgUrl;
 
+    @Lob
     private String avatarUrl;
 }

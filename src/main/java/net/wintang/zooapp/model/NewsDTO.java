@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class NewsDTO {
     private String title;
+    private String shortDescription;
     private String content;
     private int author;
     private String imgUrl;
@@ -21,6 +22,7 @@ public class NewsDTO {
 
     public NewsDTO(News news) {
         this.title = news.getTitle();
+        this.shortDescription = news.getShortDescription();
         this.content = news.getContent();
         this.author = news.getAuthor().getId();
         this.imgUrl = news.getImgUrl();

@@ -23,11 +23,14 @@ public class News {
     @Nationalized
     private String title;
 
+    @Nationalized
+    private String shortDescription;
+
     @Lob
     @Nationalized
     private String content;
 
-    @Column(insertable = false, updatable = false, nullable = true)
+    @Column(insertable = false, updatable = false, nullable = true, columnDefinition = "default GETDATE()")
     private LocalDateTime createdDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,8 +38,12 @@ public class News {
     @JoinColumn(name = "author_id")
     private User author;
 
+    @Lob
+    @Nationalized
     private String imgUrl;
 
+    @Lob
+    @Nationalized
     private String thumbnailUrl;
 
 }
