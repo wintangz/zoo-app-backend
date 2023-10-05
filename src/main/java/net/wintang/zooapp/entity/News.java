@@ -30,7 +30,7 @@ public class News {
     @Nationalized
     private String content;
 
-    @Column(insertable = false, updatable = false, nullable = true, columnDefinition = "default GETDATE()")
+    @Column(insertable = false, updatable = false, nullable = true)
     private LocalDateTime createdDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
