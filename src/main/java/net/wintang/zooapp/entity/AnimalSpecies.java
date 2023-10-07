@@ -1,14 +1,14 @@
 package net.wintang.zooapp.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "species")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
@@ -25,8 +25,6 @@ public class AnimalSpecies {
 
     private String family;
 
-    private String habitat;
-
     private String diet;
 
     private String conversationStatus;
@@ -39,4 +37,9 @@ public class AnimalSpecies {
 
     @Lob
     private String avatarUrl;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JoinColumn(name = "habitat_id")
+    private Habitat habitat;
 }

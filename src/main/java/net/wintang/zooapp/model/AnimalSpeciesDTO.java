@@ -34,11 +34,11 @@ public class AnimalSpeciesDTO {
         this.species = animalSpecies.getSpecies();
         this.genus = animalSpecies.getGenus();
         this.family = animalSpecies.getFamily();
-        this.habitat = animalSpecies.getHabitat();
         this.diet = animalSpecies.getDiet();
         this.conversationStatus = animalSpecies.getConversationStatus();
         this.description = animalSpecies.getDescription();
         this.imgUrl = animalSpecies.getImgUrl();
         this.avatarUrl = animalSpecies.getAvatarUrl();
+        this.habitat = animalSpecies.getHabitat().getName();
     }
 }
