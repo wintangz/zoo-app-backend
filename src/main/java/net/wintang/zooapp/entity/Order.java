@@ -33,6 +33,8 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private User customer;
 
+    private boolean status;
+
     public Order(OrderDTO orderDto) {
         this.total = orderDto.getTotal();
         this.paymentMethod = orderDto.getPaymentMethod();

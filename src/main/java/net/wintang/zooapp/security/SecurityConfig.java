@@ -56,7 +56,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:3000"); // Replace with your React app's origin
+        configuration.addAllowedOrigin("*"); // Replace with your React app's origin
         configuration.addAllowedMethod("*"); // You can customize allowed methods
         configuration.addAllowedHeader("*"); // You can customize allowed headers
 
