@@ -22,7 +22,7 @@ public class Habitat {
 
     private String info;
 
-    @Column(insertable = false, updatable = false, nullable = true, columnDefinition = "datetime2(6) default GETDATE()")
+    @Column(insertable = false, updatable = false, nullable = true)
     private LocalDateTime createdDate;
 
     @Lob
