@@ -8,7 +8,7 @@ import net.wintang.zooapp.model.UserDTO;
 import net.wintang.zooapp.repository.RoleRepository;
 import net.wintang.zooapp.repository.UserRepository;
 import net.wintang.zooapp.security.JwtGenerator;
-import net.wintang.zooapp.util.ResponseObject;
+import net.wintang.zooapp.util.TokenExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -62,6 +62,20 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtGenerator.generateToken(authentication);
         return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String authorization) {
+        // Validate and invalidate the token
+        TokenExtractor tokenExtractor = new TokenExtractor();
+        String token = tokenExtractor.extractToken(authorization);
+        if (token != null && jwtGenerator.validateToken(token)) {
+            jwtGenerator.invalidateToken(token);
+            SecurityContextHolder.clearContext();
+            return ResponseEntity.ok("Logout successful");
+        } else {
+            return ResponseEntity.status(401).body("Invalid token");
+        }
     }
 
     @PostMapping("/register")

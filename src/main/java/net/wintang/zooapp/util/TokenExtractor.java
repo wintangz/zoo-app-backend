@@ -6,7 +6,7 @@ import java.util.Base64;
 
 public class TokenExtractor {
 
-    private String getToken(String bearerToken) {
+    public String extractToken(String bearerToken) {
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7, bearerToken.length());
         }
@@ -14,7 +14,7 @@ public class TokenExtractor {
     }
     public String getUsername(String bearerToken) {
         //extract token here
-        String token = getToken(bearerToken);
+        String token = extractToken(bearerToken);
         String[] chunks = token.split("\\.");
         Base64.Decoder decoder = Base64.getUrlDecoder();
         String payload = new String(decoder.decode(chunks[1]));
