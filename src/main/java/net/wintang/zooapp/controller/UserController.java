@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping("/staff")
-    public ResponseEntity<ResponseObject> createNewStaff(@RequestBody UserDTO user) { return userService.createNewTrainer(user); }
+    public ResponseEntity<ResponseObject> createNewStaff(@RequestBody UserDTO user) { return userService.createNewStaff(user); }
 
     @GetMapping("/staff")
     public ResponseEntity<ResponseObject> getAllStaffInfo() { return userService.findAllStaff(); }
@@ -34,8 +34,13 @@ public class UserController {
         return userService.updateStaff(user, id);
     }
 
+    @DeleteMapping("/staff/{id}")
+    public ResponseEntity<ResponseObject> deleteStaff(@PathVariable int id) {
+        return userService.deleteStaff(id);
+    }
+
     @PostMapping("/trainers")
-    public ResponseEntity<ResponseObject> createNewTrainer(@RequestBody UserDTO user) { return userService.createNewStaff(user); }
+    public ResponseEntity<ResponseObject> createNewTrainer(@RequestBody UserDTO user) { return userService.createNewTrainer(user); }
 
     @GetMapping("/trainers")
     public ResponseEntity<ResponseObject> getAllTrainerInfo() {return userService.findAllTrainer();}

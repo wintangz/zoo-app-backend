@@ -1,5 +1,6 @@
 package net.wintang.zooapp.model;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +13,9 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class UserDTO {
+    @NotEmpty(message = "Username cannot be empty.")
     private String username;
+    @NotEmpty(message = "Password cannot be empty")
     private String password;
     private String lastname;
     private String firstname;

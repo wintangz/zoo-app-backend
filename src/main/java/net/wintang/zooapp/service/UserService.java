@@ -139,7 +139,19 @@ public class UserService implements IUserService {
 
     @Override
     public ResponseEntity<ResponseObject> deleteStaff(int id) {
-        return null;
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
+                            ApplicationConstants.ResponseStatusMessage.SUCCESS,
+                            null)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject(ApplicationConstants.ResponseStatusMessage.FAILED,
+                        ApplicationConstants.ResponseStatusMessage.FAILED,
+                        null)
+        );
     }
 
 

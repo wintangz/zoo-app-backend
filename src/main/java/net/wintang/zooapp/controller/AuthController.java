@@ -1,5 +1,6 @@
 package net.wintang.zooapp.controller;
 
+import jakarta.validation.Valid;
 import net.wintang.zooapp.entity.Role;
 import net.wintang.zooapp.entity.User;
 import net.wintang.zooapp.model.AuthResponseDTO;
@@ -7,7 +8,9 @@ import net.wintang.zooapp.model.UserDTO;
 import net.wintang.zooapp.repository.RoleRepository;
 import net.wintang.zooapp.repository.UserRepository;
 import net.wintang.zooapp.security.JwtGenerator;
+import net.wintang.zooapp.util.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,19 +18,21 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    private AuthenticationManager authenticationManager;
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private PasswordEncoder passwordEncoder;
-    private JwtGenerator jwtGenerator;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtGenerator jwtGenerator;
 
     @Autowired
     public AuthController(AuthenticationManager authenticationManager,
@@ -43,7 +48,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(@RequestBody UserDTO userDTO){
+    public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody UserDTO userDTO, BindingResult result){
+        if (result.hasErrors()) {
+            List<String> errors = result.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toList();
+            AuthResponseDTO response = new AuthResponseDTO();
+            response.setErrors(errors);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
