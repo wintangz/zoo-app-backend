@@ -1,6 +1,6 @@
 package net.wintang.zooapp.controller;
 
-import net.wintang.zooapp.model.OrderDTO;
+import net.wintang.zooapp.dto.OrderDTO;
 import net.wintang.zooapp.service.IOrderService;
 import net.wintang.zooapp.util.ResponseObject;
 import net.wintang.zooapp.util.TokenExtractor;

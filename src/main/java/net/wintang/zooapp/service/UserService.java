@@ -1,9 +1,10 @@
 package net.wintang.zooapp.service;
 
+import net.wintang.zooapp.dto.request.UserRequestDTO;
 import net.wintang.zooapp.entity.Role;
 import net.wintang.zooapp.entity.User;
-import net.wintang.zooapp.model.UserDTO;
-import net.wintang.zooapp.model.UserInfoDTO;
+import net.wintang.zooapp.dto.UserDTO;
+import net.wintang.zooapp.dto.response.UserResponseDTO;
 import net.wintang.zooapp.repository.RoleRepository;
 import net.wintang.zooapp.repository.UserRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
@@ -25,22 +26,6 @@ public class UserService implements IUserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
-    private User mapToUserEntity(UserDTO user) {
-        return User.builder()
-                .username(user.getUsername())
-                .password(passwordEncoder.encode(user.getPassword()))
-                .lastname(user.getLastname())
-                .firstname(user.getFirstname())
-                .sex(user.isSex())
-                .citizenId(user.getCitizenId())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .address(user.getAddress())
-                .nationality(user.getNationality())
-                .dateOfBirth(user.getDateOfBirth())
-                .build();
-    }
-
     @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
                        RoleRepository roleRepository) {
@@ -49,8 +34,29 @@ public class UserService implements IUserService {
         this.roleRepository = roleRepository;
     }
 
-    private List<UserInfoDTO> mapToInfoDTO(List<User> users) {
-        return users.stream().map(UserInfoDTO::new).toList();
+    private List<UserResponseDTO> mapToInfoDTO(List<User> users) {
+        return users.stream().map(UserResponseDTO::new).toList();
+    }
+
+    private User mapToUserEntity(UserRequestDTO user) {
+        return User.builder()
+                .username(user.getUsername())
+                .password(passwordEncoder.encode(user.getPassword()))
+                .lastname(user.getLastname())
+                .firstname(user.getFirstname())
+                .sex(user.isSex())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .address(user.getAddress())
+                .nationality(user.getNationality())
+                .dateOfBirth(user.getDateOfBirth())
+                .roles(user.getRoles())
+                .build();
+    }
+
+    private Role getRoles(String roleName) {
+        Optional<Role> role = roleRepository.findByName(roleName);
+        return role.orElse(null);
     }
 
     @Override
@@ -65,22 +71,22 @@ public class UserService implements IUserService {
 
     //Staff
     @Override
-    public ResponseEntity<ResponseObject> createNewStaff(UserDTO userDto) {
+    public ResponseEntity<ResponseObject> createStaff(UserRequestDTO userDto) {
+
         if (Boolean.TRUE.equals(userRepository.existsByUsername(userDto.getUsername()))){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseObject("Failed", "Username existed", userDto.getUsername())
+                    new ResponseObject(ApplicationConstants.ResponseStatusMessage.FAILED,
+                            ApplicationConstants.ResponseStatusMessage.EXISTED,
+                            userDto.getUsername())
             );
         }
+
+        userDto.setRoles(Collections.singletonList(getRoles("STAFF")));
         User user = mapToUserEntity(userDto);
-        Optional<Role> role = roleRepository.findByName("STAFF");
-        if(role.isPresent()) {
-            Role roles = role.get();
-            user.setRoles(Collections.singletonList(roles));
-        }
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
-                        ApplicationConstants.ResponseStatusMessage.SUCCESS, userDto)
+                        ApplicationConstants.ResponseStatusMessage.SUCCESS, user)
         );
     }
 
@@ -111,8 +117,6 @@ public class UserService implements IUserService {
                 newUser.setFirstname(user.getFirstname());
             if(user.isSex() != newUser.isSex())
                 newUser.setSex(user.isSex());
-            if(user.getCitizenId() != null && !user.getCitizenId().isEmpty())
-                newUser.setCitizenId(user.getCitizenId());
             if(user.getEmail() != null && !user.getEmail().isEmpty())
                 newUser.setEmail(user.getEmail());
             if(user.getPhone() != null && !user.getPhone().isEmpty())
@@ -154,21 +158,20 @@ public class UserService implements IUserService {
         );
     }
 
-
-    //Zoo-trainer
     @Override
-    public ResponseEntity<ResponseObject> createNewTrainer(UserDTO userDto) {
+    public ResponseEntity<ResponseObject> createZooTrainer(UserRequestDTO userDto) {
+
         if (Boolean.TRUE.equals(userRepository.existsByUsername(userDto.getUsername()))){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseObject("Failed", "Username existed", userDto.getUsername())
+                    new ResponseObject(ApplicationConstants.ResponseStatusMessage.FAILED,
+                            ApplicationConstants.ResponseStatusMessage.EXISTED,
+                            userDto.getUsername())
             );
         }
+
         User user = mapToUserEntity(userDto);
-        Optional<Role> role = roleRepository.findByName("ZOO_TRAINER");
-        if(role.isPresent()) {
-            Role roles = role.get();
-            user.setRoles(Collections.singletonList(roles));
-        }
+        user.setRoles(Collections.singletonList(getRoles("ZOO_TRAINER")));
+
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,

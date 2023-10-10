@@ -1,13 +1,10 @@
 package net.wintang.zooapp.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,7 +26,6 @@ public class User {
     private String firstname;
     @Column(nullable = true)
     private boolean sex;
-    private String citizenId;
     private LocalDateTime dateOfBirth;
     private String address;
     private String nationality;

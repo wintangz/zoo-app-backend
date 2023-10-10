@@ -1,7 +1,7 @@
 package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.entity.Ticket;
-import net.wintang.zooapp.model.TicketDTO;
+import net.wintang.zooapp.dto.response.TicketResponseDTO;
 import net.wintang.zooapp.repository.TicketRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
 import net.wintang.zooapp.util.ResponseObject;
@@ -41,11 +41,11 @@ public class TicketService implements ITicketService {
         );
     }
 
-    private List<TicketDTO> mapToDTO(List<Ticket> tickets) {
-        List<TicketDTO> result = new ArrayList<>();
+    private List<TicketResponseDTO> mapToDTO(List<Ticket> tickets) {
+        List<TicketResponseDTO> result = new ArrayList<>();
         for (Ticket ticket:tickets) {
             if(ticket.isStatus()){
-                result.add(new TicketDTO(ticket));
+                result.add(new TicketResponseDTO(ticket));
             }
         }
         return result;

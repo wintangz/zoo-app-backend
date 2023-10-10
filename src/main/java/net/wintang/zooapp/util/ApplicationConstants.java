@@ -13,6 +13,7 @@ public class ApplicationConstants {
         public static final String SUCCESS = "Success";
         public static final String FAILED = "Failed";
         public static final String NOT_MODIFIED = "Nothing changed";
+        public static final String EXISTED = "Existed";
     }
 
     public static class SecurityConstants {

@@ -1,4 +1,4 @@
-package net.wintang.zooapp.model;
+package net.wintang.zooapp.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +8,7 @@ import net.wintang.zooapp.entity.Ticket;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TicketDTO {
+public class TicketResponseDTO {
     private int id;
 
     private String name;
@@ -21,7 +21,7 @@ public class TicketDTO {
 
     private String imgUrl;
 
-    public TicketDTO(Ticket ticket) {
+    public TicketResponseDTO(Ticket ticket) {
         this.id = ticket.getId();
         this.name = ticket.getName();
         this.price = ticket.getPrice();

@@ -1,6 +1,6 @@
 package net.wintang.zooapp.controller;
 
-import net.wintang.zooapp.model.NewsDTO;
+import net.wintang.zooapp.dto.NewsDTO;
 import net.wintang.zooapp.service.INewsService;
 import net.wintang.zooapp.util.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;

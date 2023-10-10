@@ -2,7 +2,7 @@ package net.wintang.zooapp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import net.wintang.zooapp.model.OrderDTO;
+import net.wintang.zooapp.dto.OrderDTO;
 
 import java.time.LocalDateTime;
 

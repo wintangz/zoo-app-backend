@@ -1,9 +1,7 @@
 package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.entity.AnimalSpecies;
-import net.wintang.zooapp.entity.News;
-import net.wintang.zooapp.model.AnimalSpeciesDTO;
-import net.wintang.zooapp.model.NewsDTO;
+import net.wintang.zooapp.dto.AnimalSpeciesDTO;
 import net.wintang.zooapp.repository.AnimalSpeciesRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
 import net.wintang.zooapp.util.ResponseObject;

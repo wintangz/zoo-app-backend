@@ -2,7 +2,7 @@ package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.entity.Order;
 import net.wintang.zooapp.entity.User;
-import net.wintang.zooapp.model.OrderDTO;
+import net.wintang.zooapp.dto.OrderDTO;
 import net.wintang.zooapp.repository.OrderDetailRepository;
 import net.wintang.zooapp.repository.OrderRepository;
 import net.wintang.zooapp.repository.UserRepository;
