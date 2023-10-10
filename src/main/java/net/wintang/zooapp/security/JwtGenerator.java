@@ -17,7 +17,7 @@ import java.util.*;
 public class JwtGenerator {
 
     SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private Set<ExpiredToken> invalidatedTokens = new HashSet<>();
+    private Set<String> invalidatedTokens = new HashSet<>();
 
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
@@ -45,7 +45,7 @@ public class JwtGenerator {
 
     public boolean validateToken(String token) {
         cleanUpExpiredTokens(); // Clean up expired tokens before validation
-        if (invalidatedTokens.contains(new ExpiredToken(token))) {
+        if (invalidatedTokens.contains(token)) {
             return false; // Token is in the blacklist
         }
         try {
@@ -57,43 +57,16 @@ public class JwtGenerator {
     }
 
     public void invalidateToken(String token) {
-        invalidatedTokens.add(new ExpiredToken(token));
+        invalidatedTokens.add(token);
     }
 
     private void cleanUpExpiredTokens() {
-        Iterator<ExpiredToken> iterator = invalidatedTokens.iterator();
-        while (iterator.hasNext()) {
-            ExpiredToken expiredToken = iterator.next();
-            if (expiredToken.isExpired()) {
-                iterator.remove(); // Remove expired token from the blacklist
-            }
-        }
+        // Remove expired token from the blacklist
+        invalidatedTokens.removeIf(this::isExpired);
     }
 
-    private static class ExpiredToken {
-        private final String token;
-        private final Date expiration;
-
-        public ExpiredToken(String token) {
-            this.token = token;
-            this.expiration = Jwts.parser().setSigningKey(Keys.secretKeyFor(SignatureAlgorithm.HS256)).parseClaimsJws(token).getBody().getExpiration();
-        }
-
-        public boolean isExpired() {
-            return expiration.before(new Date());
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null || getClass() != obj.getClass()) return false;
-            ExpiredToken that = (ExpiredToken) obj;
-            return Objects.equals(token, that.token);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(token);
-        }
+    private boolean isExpired(String token) {
+        Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration();
+        return expiration.before(new Date());
     }
 }
