@@ -25,6 +25,7 @@ public class SecurityConfig {
 
     private JwtAuthEntryPoint jwtAuthEntryPoint;
     private final CustomUserDetailsService userDetailsService;
+
     @Autowired
     public SecurityConfig(CustomUserDetailsService userDetailsService, JwtAuthEntryPoint jwtAuthEntryPoint) {
         this.userDetailsService = userDetailsService;
@@ -41,7 +42,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("api/auth/**").permitAll()
                         .requestMatchers("api/users").hasAuthority(ApplicationConstants.SecurityConstants.ADMIN)
+                        .requestMatchers("api/users/staff").hasAuthority(ApplicationConstants.SecurityConstants.ADMIN)
                         .requestMatchers("api/users/staff/**").hasAuthority(ApplicationConstants.SecurityConstants.ADMIN)
+                        .requestMatchers("api/users/trainers").hasAnyAuthority(ApplicationConstants.SecurityConstants.ADMIN,
+                                ApplicationConstants.SecurityConstants.STAFF)
                         .requestMatchers("api/users/trainers/**").hasAnyAuthority(ApplicationConstants.SecurityConstants.ADMIN,
                                 ApplicationConstants.SecurityConstants.STAFF)
                         .requestMatchers("api/animals").hasAnyAuthority(ApplicationConstants.SecurityConstants.ADMIN,
@@ -49,7 +53,6 @@ public class SecurityConfig {
                         .anyRequest().permitAll())
                 .httpBasic(withDefaults());
         http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
-        System.out.println("SecurityConfig");
         return http.build();
     }
 
@@ -72,7 +75,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder(){
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

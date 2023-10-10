@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @PostMapping("/{role}")
-    public ResponseEntity<ResponseObject> createUserByRole(@Valid @RequestBody UserRequestDTO user, @PathVariable String role, BindingResult bindingResult) {
+    public ResponseEntity<ResponseObject> createUserByRole(@Valid @RequestBody UserRequestDTO user, BindingResult bindingResult, @PathVariable String role) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
