@@ -7,6 +7,7 @@ import net.wintang.zooapp.entity.Role;
 import net.wintang.zooapp.entity.User;
 import net.wintang.zooapp.repository.RoleRepository;
 import net.wintang.zooapp.repository.UserRepository;
+import net.wintang.zooapp.security.JwtGenerator;
 import net.wintang.zooapp.util.ApplicationConstants;
 import net.wintang.zooapp.util.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +28,15 @@ public class UserService implements IUserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
+    private final JwtGenerator jwtGenerator;
+
     @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-                       RoleRepository roleRepository) {
+                       RoleRepository roleRepository, JwtGenerator jwtGenerator) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.jwtGenerator = jwtGenerator;
     }
 
     private List<UserResponseDTO> mapToResponseDTO(List<User> users) {
@@ -104,6 +108,18 @@ public class UserService implements IUserService {
 
     @Override
     public ResponseEntity<ResponseObject> createUser(UserRequestDTO userDto) {
+        List<Role> createRoles = userDto.getRoles();
+        for (Role createRole : createRoles) {
+            if (createRole.getName().equals("STAFF") && !jwtGenerator.hasAuthority("ADMIN")
+                    || createRole.getName().equals("ZOO_TRAINER") && !jwtGenerator.hasAuthority("STAFF")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                                ApplicationConstants.ResponseMessage.NOT_MODIFIED,
+                                userDto.getUsername())
+                );
+            }
+        }
+
         if (Boolean.TRUE.equals(userRepository.existsByUsername(userDto.getUsername()))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,

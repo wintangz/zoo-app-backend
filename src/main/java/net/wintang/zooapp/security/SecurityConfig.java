@@ -41,13 +41,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("api/auth/**").permitAll()
-                        .requestMatchers("api/users").hasAuthority(ApplicationConstants.SecurityConstants.ADMIN)
-                        .requestMatchers("api/users/staff").hasAuthority(ApplicationConstants.SecurityConstants.ADMIN)
-                        .requestMatchers("api/users/staff/**").hasAuthority(ApplicationConstants.SecurityConstants.ADMIN)
-                        .requestMatchers("api/users/zoo-trainer").hasAnyAuthority(ApplicationConstants.SecurityConstants.ADMIN,
-                                ApplicationConstants.SecurityConstants.STAFF)
-                        .requestMatchers("api/users/zoo-trainer/**").hasAnyAuthority(ApplicationConstants.SecurityConstants.ADMIN,
-                                ApplicationConstants.SecurityConstants.STAFF)
+                        .requestMatchers("api/users").permitAll()
                         .requestMatchers("api/animals").hasAnyAuthority(ApplicationConstants.SecurityConstants.ADMIN,
                                 ApplicationConstants.SecurityConstants.STAFF, ApplicationConstants.SecurityConstants.ZOO_TRAINER)
                         .anyRequest().permitAll())

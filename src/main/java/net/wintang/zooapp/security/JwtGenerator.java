@@ -8,6 +8,8 @@ import net.wintang.zooapp.util.ApplicationConstants;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -41,6 +43,26 @@ public class JwtGenerator {
                 .parseClaimsJws(token)
                 .getBody();
         return claims.getSubject();
+    }
+
+    public boolean hasAuthority(String requiredAuthority) {
+        // Get the currently authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Check if the user is authenticated
+        if (authentication != null && authentication.isAuthenticated()) {
+            // Extract user details from the authentication object
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                UserDetails userDetails = (UserDetails) principal;
+
+                // Check if the user has the required authority
+                return userDetails.getAuthorities().stream()
+                        .anyMatch(authority -> authority.getAuthority().equals(requiredAuthority));
+            }
+        }
+
+        return false;
     }
 
     public boolean validateToken(String token) {
