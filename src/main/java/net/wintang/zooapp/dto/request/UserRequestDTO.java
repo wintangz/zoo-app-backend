@@ -49,6 +49,6 @@ public class UserRequestDTO {
     @Email(message = "Invalid email")
     private String email;
 
-    @NotEmpty(message = "Roles cannot be empty")
+    @Null(message = "Roles are null")
     private List<Role> roles;
 }

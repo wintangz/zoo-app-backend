@@ -81,7 +81,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> findAllUsers() {
+    public ResponseEntity<ResponseObject> getAllUsers() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
@@ -90,9 +90,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> findUserById(int id) {
+    public ResponseEntity<ResponseObject> getUserById(int id) {
         User user = userRepository.findById(id).orElse(new User());
-        if (user.getUsername().isEmpty()) {
+        if (user.getUsername() == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
                             ApplicationConstants.ResponseMessage.NOT_MODIFIED,
@@ -107,19 +107,34 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> createUser(UserRequestDTO userDto) {
-        List<Role> createRoles = userDto.getRoles();
-        for (Role createRole : createRoles) {
-            if (createRole.getName().equals("STAFF") && !jwtGenerator.hasAuthority("ADMIN")
-                    || createRole.getName().equals("ZOO_TRAINER") && !jwtGenerator.hasAuthority("STAFF")) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                        new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
-                                ApplicationConstants.ResponseMessage.NOT_MODIFIED,
-                                userDto.getUsername())
-                );
-            }
-        }
+    public ResponseEntity<ResponseObject> getCustomers() {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        mapToResponseDTO(userRepository.findByRole(4)))
+        );
+    }
 
+    @Override
+    public ResponseEntity<ResponseObject> getStaff() {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        mapToResponseDTO(userRepository.findByRole(2)))
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> getZooTrainers() {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        mapToResponseDTO(userRepository.findByRole(3)))
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> createCustomer(UserRequestDTO userDto) {
         if (Boolean.TRUE.equals(userRepository.existsByUsername(userDto.getUsername()))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
@@ -128,6 +143,43 @@ public class UserService implements IUserService {
             );
         }
         User user = mapToUserEntity(userDto);
+        user.setRoles(Collections.singletonList(new Role(4, "CUSTOMER")));
+        userRepository.save(user);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS, user)
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> createStaff(UserRequestDTO userDto) {
+        if (Boolean.TRUE.equals(userRepository.existsByUsername(userDto.getUsername()))) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                            ApplicationConstants.ResponseMessage.EXISTED,
+                            userDto.getUsername())
+            );
+        }
+        User user = mapToUserEntity(userDto);
+        user.setRoles(Collections.singletonList(new Role(2, "STAFF")));
+        userRepository.save(user);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS, user)
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> createZooTrainer(UserRequestDTO userDto) {
+        if (Boolean.TRUE.equals(userRepository.existsByUsername(userDto.getUsername()))) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                            ApplicationConstants.ResponseMessage.EXISTED,
+                            userDto.getUsername())
+            );
+        }
+        User user = mapToUserEntity(userDto);
+        user.setRoles(Collections.singletonList(new Role(3, "ZOO_TRAINER")));
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,

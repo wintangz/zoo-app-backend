@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import static org.springframework.security.config.Customizer.withDefaults;
+import static net.wintang.zooapp.util.ApplicationConstants.SecurityConstants.Roles;
 
 @Configuration
 @EnableWebSecurity
@@ -41,9 +42,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("api/auth/**").permitAll()
-                        .requestMatchers("api/users").permitAll()
-                        .requestMatchers("api/animals").hasAnyAuthority(ApplicationConstants.SecurityConstants.ADMIN,
-                                ApplicationConstants.SecurityConstants.STAFF, ApplicationConstants.SecurityConstants.ZOO_TRAINER)
+                        .requestMatchers("api/users").hasAuthority(Roles.ADMIN)
+                        .requestMatchers("api/users/staff").hasAuthority(Roles.ADMIN)
+                        .requestMatchers("api/users/zoo-trainers").hasAuthority(Roles.STAFF)
+                        .requestMatchers("api/animals").hasAnyAuthority(Roles.ADMIN,
+                                Roles.STAFF, Roles.ZOO_TRAINER)
                         .anyRequest().permitAll())
                 .httpBasic(withDefaults());
         http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);

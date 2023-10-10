@@ -19,6 +19,7 @@ public class UserResponseDTO {
     private String nationality;
     private String phone;
     private String email;
+    private LocalDateTime createdDate;
     private List<Role> roles;
 
     public UserResponseDTO(User user) {
@@ -32,6 +33,7 @@ public class UserResponseDTO {
         this.nationality = user.getNationality();
         this.phone = user.getPhone();
         this.email = user.getEmail();
+        this.createdDate = user.getCreatedDate();
         this.roles = user.getRoles();
     }
 }

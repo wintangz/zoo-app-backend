@@ -1,8 +1,6 @@
 package net.wintang.zooapp.controller;
 
 import jakarta.validation.Valid;
-import net.wintang.zooapp.entity.Role;
-import net.wintang.zooapp.entity.User;
 import net.wintang.zooapp.dto.AuthResponseDTO;
 import net.wintang.zooapp.dto.UserDTO;
 import net.wintang.zooapp.repository.RoleRepository;
@@ -21,9 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -48,7 +44,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody UserDTO userDTO, BindingResult result){
+    public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody UserDTO userDTO, BindingResult result) {
         if (result.hasErrors()) {
             List<String> errors = result.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -76,22 +72,5 @@ public class AuthController {
         } else {
             return ResponseEntity.status(401).body("Invalid token");
         }
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {
-        if(Boolean.TRUE.equals(userRepository.existsByUsername(userDTO.getUsername()))) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username is taken!!");
-        }
-        User user = new User();
-        user.setUsername(userDTO.getUsername());
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        Optional<Role> role = roleRepository.findByName("CUSTOMER");
-        if(role.isPresent()) {
-            Role roles = role.get();
-            user.setRoles(Collections.singletonList(roles));
-        }
-        userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.OK).body("Success!!");
     }
 }

@@ -26,16 +26,31 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<ResponseObject> getUsers() {
-        return userService.findAllUsers();
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getUsersById(@PathVariable int id) {
-        return userService.findUserById(id);
+        return userService.getUserById(id);
     }
 
-    @PostMapping
-    public ResponseEntity<ResponseObject> createUser(@Valid @RequestBody UserRequestDTO user, BindingResult bindingResult) {
+    @GetMapping("/customers")
+    public ResponseEntity<ResponseObject> getCustomers() {
+        return userService.getCustomers();
+    }
+
+    @GetMapping("/zoo-trainers")
+    public ResponseEntity<ResponseObject> getZooTrainers() {
+        return userService.getZooTrainers();
+    }
+
+    @GetMapping("/staff")
+    public ResponseEntity<ResponseObject> getStaff() {
+        return userService.getStaff();
+    }
+
+    @PostMapping("/customers")
+    public ResponseEntity<ResponseObject> createCustomer(@Valid @RequestBody UserRequestDTO user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -43,7 +58,31 @@ public class UserController {
                             bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList(),
                             null));
         }
-        return userService.createUser(user);
+        return userService.createCustomer(user);
+    }
+
+    @PostMapping("/staff")
+    public ResponseEntity<ResponseObject> createStaff(@Valid @RequestBody UserRequestDTO user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                            bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList(),
+                            null));
+        }
+        return userService.createStaff(user);
+    }
+
+    @PostMapping("/zoo-trainers")
+    public ResponseEntity<ResponseObject> createZooTrainer(@Valid @RequestBody UserRequestDTO user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                            bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList(),
+                            null));
+        }
+        return userService.createZooTrainer(user);
     }
 
     @PutMapping("/{id}")

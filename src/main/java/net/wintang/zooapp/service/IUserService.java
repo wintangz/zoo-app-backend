@@ -8,11 +8,22 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface IUserService {
-    ResponseEntity<ResponseObject> findAllUsers();
 
-    ResponseEntity<ResponseObject> createUser(UserRequestDTO user);
+    ResponseEntity<ResponseObject> getAllUsers();
 
-    ResponseEntity<ResponseObject> findUserById(int id);
+    ResponseEntity<ResponseObject> getUserById(int id);
+
+    ResponseEntity<ResponseObject> getCustomers();
+
+    ResponseEntity<ResponseObject> getStaff();
+
+    ResponseEntity<ResponseObject> getZooTrainers();
+
+    ResponseEntity<ResponseObject> createCustomer(UserRequestDTO userDto);
+
+    ResponseEntity<ResponseObject> createStaff(UserRequestDTO userDto);
+
+    ResponseEntity<ResponseObject> createZooTrainer(UserRequestDTO userDto);
 
     ResponseEntity<ResponseObject> updateUser(UserUpdateDTO userDto, int id);
 
