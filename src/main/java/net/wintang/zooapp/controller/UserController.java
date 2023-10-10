@@ -2,6 +2,7 @@ package net.wintang.zooapp.controller;
 
 import jakarta.validation.Valid;
 import net.wintang.zooapp.dto.request.UserRequestDTO;
+import net.wintang.zooapp.dto.request.UserUpdateDTO;
 import net.wintang.zooapp.service.IUserService;
 import net.wintang.zooapp.util.ApplicationConstants;
 import net.wintang.zooapp.util.ResponseObject;
@@ -28,13 +29,13 @@ public class UserController {
         return userService.findAllUsers();
     }
 
-    @GetMapping("/{role}")
-    public ResponseEntity<ResponseObject> getUsersByRole(@PathVariable String role) {
-        return userService.findUsersByRole(role);
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseObject> getUsersById(@PathVariable int id) {
+        return userService.findUserById(id);
     }
 
-    @PostMapping("/{role}")
-    public ResponseEntity<ResponseObject> createUserByRole(@Valid @RequestBody UserRequestDTO user, BindingResult bindingResult, @PathVariable String role) {
+    @PostMapping
+    public ResponseEntity<ResponseObject> createUser(@Valid @RequestBody UserRequestDTO user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -42,16 +43,23 @@ public class UserController {
                             bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList(),
                             null));
         }
-        return userService.createUserByRole(user, role);
+        return userService.createUser(user);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseObject> updateUser(@RequestBody UserRequestDTO user, @PathVariable int id) {
-        return userService.updateStaff(user, id);
+    public ResponseEntity<ResponseObject> updateUser(@Valid @RequestBody UserUpdateDTO user, BindingResult bindingResult, @PathVariable int id) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                            bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList(),
+                            null));
+        }
+        return userService.updateUser(user, id);
     }
 
-    @DeleteMapping("/{role}/{id}")
-    public ResponseEntity<ResponseObject> deleteUser(@PathVariable String role, @PathVariable int id) {
-        return userService.deleteUserByRoleAndId(role, id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseObject> deleteUser(@PathVariable int id) {
+        return userService.deleteUserById(id);
     }
 }

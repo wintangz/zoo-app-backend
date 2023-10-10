@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,16 +21,29 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String username;
+
     private String password;
+
+    @Nationalized
     private String lastname;
+
+    @Nationalized
     private String firstname;
-    @Column(nullable = true)
+
     private boolean sex;
+
     private LocalDateTime dateOfBirth;
+
+    @Nationalized
     private String address;
+
+    @Nationalized
     private String nationality;
+
     private String phone;
+
     private String email;
 
     @ManyToMany(fetch = FetchType.EAGER)

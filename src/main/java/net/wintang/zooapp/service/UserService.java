@@ -1,6 +1,7 @@
 package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.dto.request.UserRequestDTO;
+import net.wintang.zooapp.dto.request.UserUpdateDTO;
 import net.wintang.zooapp.dto.response.UserResponseDTO;
 import net.wintang.zooapp.entity.Role;
 import net.wintang.zooapp.entity.User;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -53,6 +55,22 @@ public class UserService implements IUserService {
                 .build();
     }
 
+    private User mapToUserEntity(UserUpdateDTO user, User oldUser) {
+        User.UserBuilder userBuilder = User.builder();
+        userBuilder.username(user.getUsername() != null ? user.getUsername() : oldUser.getUsername());
+        userBuilder.password(user.getPassword() != null ? passwordEncoder.encode(user.getPassword()) : oldUser.getPassword());
+        userBuilder.lastname(user.getLastname() != null ? user.getLastname() : oldUser.getLastname());
+        userBuilder.firstname(user.getFirstname() != null ? user.getFirstname() : oldUser.getFirstname());
+        userBuilder.sex(user.getSex() != null ? Boolean.parseBoolean(user.getSex()) : oldUser.isSex());
+        userBuilder.email(user.getEmail() != null ? user.getEmail() : oldUser.getEmail());
+        userBuilder.phone(user.getPhone() != null ? user.getPhone() : oldUser.getPhone());
+        userBuilder.address(user.getAddress() != null ? user.getAddress() : oldUser.getAddress());
+        userBuilder.nationality(user.getNationality() != null ? user.getNationality() : oldUser.getNationality());
+        userBuilder.dateOfBirth(user.getDateOfBirth() != null ? user.getDateOfBirth() : oldUser.getDateOfBirth());
+        userBuilder.roles(new ArrayList<>(user.getRoles() != null ? user.getRoles() : oldUser.getRoles()));
+        return userBuilder.build();
+    }
+
     private Role getRoles(String roleName) {
         Optional<Role> role = roleRepository.findByName(roleName);
         return role.orElse(null);
@@ -68,19 +86,24 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> findUsersByRole(String role) {
-        role = role.replace("-", "_");
-        int roleId = roleRepository.findByName(role).map(Role::getId).orElse(0);
+    public ResponseEntity<ResponseObject> findUserById(int id) {
+        User user = userRepository.findById(id).orElse(new User());
+        if (user.getUsername().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                            ApplicationConstants.ResponseMessage.NOT_MODIFIED,
+                            null)
+            );
+        }
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        mapToResponseDTO(userRepository.findByRole(roleId)))
+                        mapToResponseDTO(Collections.singletonList(user)).get(0))
         );
     }
 
     @Override
-    public ResponseEntity<ResponseObject> createUserByRole(UserRequestDTO userDto, String role) {
-
+    public ResponseEntity<ResponseObject> createUser(UserRequestDTO userDto) {
         if (Boolean.TRUE.equals(userRepository.existsByUsername(userDto.getUsername()))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
@@ -88,8 +111,6 @@ public class UserService implements IUserService {
                             userDto.getUsername())
             );
         }
-        Role roleObject = roleRepository.findByName(role.replace("-", "_").toUpperCase()).orElse(new Role());
-        userDto.setRoles(Collections.singletonList(roleObject));
         User user = mapToUserEntity(userDto);
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -99,53 +120,41 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> updateStaff(UserRequestDTO user, int id) {
-        Optional<User> updateUser = userRepository.findById(id);
-        if (updateUser.isPresent()) {
-            User newUser = updateUser.get();
-            newUser.setUsername(user.getUsername());
-            newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            newUser.setLastname(user.getLastname());
-            newUser.setFirstname(user.getFirstname());
-            newUser.setSex(user.isSex());
-            newUser.setEmail(user.getEmail());
-            newUser.setPhone(user.getPhone());
-            newUser.setAddress(user.getAddress());
-            newUser.setNationality(user.getNationality());
-            newUser.setDateOfBirth(user.getDateOfBirth());
-
+    public ResponseEntity<ResponseObject> updateUser(UserUpdateDTO newUser, int id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User existingUser = optionalUser.get();
+            User updatedUser = mapToUserEntity(newUser, existingUser);
+            updatedUser.setId(id);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                             ApplicationConstants.ResponseMessage.SUCCESS,
-                            mapToResponseDTO(Collections.singletonList(userRepository.save(newUser))))
+                            mapToResponseDTO(Collections.singletonList(userRepository.save(updatedUser))))
             );
         }
-        return ResponseEntity.status(HttpStatus.OK).body(
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
                         ApplicationConstants.ResponseMessage.NOT_MODIFIED,
-                        null)
+                        id)
         );
     }
 
     @Override
-    public ResponseEntity<ResponseObject> deleteUserByRoleAndId(String role, int id) {
-
+    public ResponseEntity<ResponseObject> deleteUserById(int id) {
         if (userRepository.existsById(id)) {
-            User user = userRepository.findById(id).orElse(new User());
-            if (user.getRoles().stream().anyMatch(r -> role.toUpperCase().replace("-", "_").equals(r.getName()))) {
-                userRepository.deleteById(id);
-                return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
-                                ApplicationConstants.ResponseMessage.SUCCESS,
-                                id)
-                );
-            }
+            userRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                            ApplicationConstants.ResponseMessage.SUCCESS,
+                            id)
+            );
+
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
                         ApplicationConstants.ResponseMessage.NOT_MODIFIED,
-                        null)
+                        id)
         );
     }
 }

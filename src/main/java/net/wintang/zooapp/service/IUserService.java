@@ -1,6 +1,7 @@
 package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.dto.request.UserRequestDTO;
+import net.wintang.zooapp.dto.request.UserUpdateDTO;
 import net.wintang.zooapp.util.ResponseObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -9,11 +10,12 @@ import org.springframework.stereotype.Service;
 public interface IUserService {
     ResponseEntity<ResponseObject> findAllUsers();
 
-    ResponseEntity<ResponseObject> findUsersByRole(String role);
+    ResponseEntity<ResponseObject> createUser(UserRequestDTO user);
 
-    ResponseEntity<ResponseObject> createUserByRole(UserRequestDTO user, String role);
+    ResponseEntity<ResponseObject> findUserById(int id);
 
-    ResponseEntity<ResponseObject> updateStaff(UserRequestDTO userDto, int id);
+    ResponseEntity<ResponseObject> updateUser(UserUpdateDTO userDto, int id);
 
-    ResponseEntity<ResponseObject> deleteUserByRoleAndId(String role, int id);
+    ResponseEntity<ResponseObject> deleteUserById(int id);
+
 }

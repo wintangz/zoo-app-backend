@@ -23,7 +23,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private JwtAuthEntryPoint jwtAuthEntryPoint;
+    private final JwtAuthEntryPoint jwtAuthEntryPoint;
     private final CustomUserDetailsService userDetailsService;
 
     @Autowired
@@ -44,9 +44,9 @@ public class SecurityConfig {
                         .requestMatchers("api/users").hasAuthority(ApplicationConstants.SecurityConstants.ADMIN)
                         .requestMatchers("api/users/staff").hasAuthority(ApplicationConstants.SecurityConstants.ADMIN)
                         .requestMatchers("api/users/staff/**").hasAuthority(ApplicationConstants.SecurityConstants.ADMIN)
-                        .requestMatchers("api/users/trainers").hasAnyAuthority(ApplicationConstants.SecurityConstants.ADMIN,
+                        .requestMatchers("api/users/zoo-trainer").hasAnyAuthority(ApplicationConstants.SecurityConstants.ADMIN,
                                 ApplicationConstants.SecurityConstants.STAFF)
-                        .requestMatchers("api/users/trainers/**").hasAnyAuthority(ApplicationConstants.SecurityConstants.ADMIN,
+                        .requestMatchers("api/users/zoo-trainer/**").hasAnyAuthority(ApplicationConstants.SecurityConstants.ADMIN,
                                 ApplicationConstants.SecurityConstants.STAFF)
                         .requestMatchers("api/animals").hasAnyAuthority(ApplicationConstants.SecurityConstants.ADMIN,
                                 ApplicationConstants.SecurityConstants.STAFF, ApplicationConstants.SecurityConstants.ZOO_TRAINER)
