@@ -2,10 +2,9 @@ package net.wintang.zooapp.controller;
 
 import jakarta.validation.Valid;
 import net.wintang.zooapp.dto.request.UserRequestDTO;
+import net.wintang.zooapp.service.IUserService;
 import net.wintang.zooapp.util.ApplicationConstants;
 import net.wintang.zooapp.util.ResponseObject;
-import net.wintang.zooapp.dto.UserDTO;
-import net.wintang.zooapp.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -29,34 +28,30 @@ public class UserController {
         return userService.findAllUsers();
     }
 
-    @PostMapping("/staff")
-    public ResponseEntity<ResponseObject> createUserStaff(@Valid @RequestBody UserRequestDTO user, BindingResult bindingResult) {
+    @GetMapping("/{role}")
+    public ResponseEntity<ResponseObject> getUsersByRole(@PathVariable String role) {
+        return userService.findUsersByRole(role);
+    }
+
+    @PostMapping("/{role}")
+    public ResponseEntity<ResponseObject> createUserByRole(@Valid @RequestBody UserRequestDTO user, @PathVariable String role, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(new ResponseObject(ApplicationConstants.ResponseStatusMessage.FAILED,
-                            bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList().toString(),
+                    .body(new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                            bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList(),
                             null));
         }
-        return userService.createStaff(user);
+        return userService.createUserByRole(user, role);
     }
 
-    @GetMapping("/staff")
-    public ResponseEntity<ResponseObject> getUsersStaff() { return userService.findAllStaff(); }
-
-    @PutMapping("/staff/{id}")
-    public ResponseEntity<ResponseObject> updateUserStaff(@RequestBody UserDTO user,@PathVariable int id) {
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseObject> updateUser(@RequestBody UserRequestDTO user, @PathVariable int id) {
         return userService.updateStaff(user, id);
     }
 
-    @DeleteMapping("/staff/{id}")
-    public ResponseEntity<ResponseObject> deleteStaff(@PathVariable int id) {
-        return userService.deleteStaff(id);
+    @DeleteMapping("/{role}/{id}")
+    public ResponseEntity<ResponseObject> deleteUser(@PathVariable String role, @PathVariable int id) {
+        return userService.deleteUserByRoleAndId(role, id);
     }
-
-    @PostMapping("/trainers")
-    public ResponseEntity<ResponseObject> createNewTrainer(@Valid @RequestBody UserRequestDTO user) { return userService.createZooTrainer(user); }
-
-    @GetMapping("/trainers")
-    public ResponseEntity<ResponseObject> getAllTrainerInfo() {return userService.findAllTrainer();}
 }

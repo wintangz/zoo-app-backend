@@ -1,10 +1,9 @@
 package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.dto.request.UserRequestDTO;
+import net.wintang.zooapp.dto.response.UserResponseDTO;
 import net.wintang.zooapp.entity.Role;
 import net.wintang.zooapp.entity.User;
-import net.wintang.zooapp.dto.UserDTO;
-import net.wintang.zooapp.dto.response.UserResponseDTO;
 import net.wintang.zooapp.repository.RoleRepository;
 import net.wintang.zooapp.repository.UserRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
@@ -34,7 +33,7 @@ public class UserService implements IUserService {
         this.roleRepository = roleRepository;
     }
 
-    private List<UserResponseDTO> mapToInfoDTO(List<User> users) {
+    private List<UserResponseDTO> mapToResponseDTO(List<User> users) {
         return users.stream().map(UserResponseDTO::new).toList();
     }
 
@@ -62,130 +61,91 @@ public class UserService implements IUserService {
     @Override
     public ResponseEntity<ResponseObject> findAllUsers() {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
-                        ApplicationConstants.ResponseStatusMessage.SUCCESS,
-                        mapToInfoDTO(userRepository.findAll()))
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        mapToResponseDTO(userRepository.findAll()))
         );
     }
 
-
-    //Staff
     @Override
-    public ResponseEntity<ResponseObject> createStaff(UserRequestDTO userDto) {
+    public ResponseEntity<ResponseObject> findUsersByRole(String role) {
+        role = role.replace("-", "_");
+        int roleId = roleRepository.findByName(role).map(Role::getId).orElse(0);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        mapToResponseDTO(userRepository.findByRole(roleId)))
+        );
+    }
 
-        if (Boolean.TRUE.equals(userRepository.existsByUsername(userDto.getUsername()))){
+    @Override
+    public ResponseEntity<ResponseObject> createUserByRole(UserRequestDTO userDto, String role) {
+
+        if (Boolean.TRUE.equals(userRepository.existsByUsername(userDto.getUsername()))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseObject(ApplicationConstants.ResponseStatusMessage.FAILED,
-                            ApplicationConstants.ResponseStatusMessage.EXISTED,
+                    new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                            ApplicationConstants.ResponseMessage.EXISTED,
                             userDto.getUsername())
             );
         }
-
-        userDto.setRoles(Collections.singletonList(getRoles("STAFF")));
+        Role roleObject = roleRepository.findByName(role.replace("-", "_").toUpperCase()).orElse(new Role());
+        userDto.setRoles(Collections.singletonList(roleObject));
         User user = mapToUserEntity(userDto);
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
-                        ApplicationConstants.ResponseStatusMessage.SUCCESS, user)
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS, user)
         );
     }
 
     @Override
-    public ResponseEntity<ResponseObject> findAllStaff() {
-        List<User> list = userRepository.findByRole(2);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
-                        ApplicationConstants.ResponseStatusMessage.SUCCESS,
-                        mapToInfoDTO(list))
-        );
-    }
-
-    @Override
-    public ResponseEntity<ResponseObject> updateStaff(UserDTO user, int id) {
+    public ResponseEntity<ResponseObject> updateStaff(UserRequestDTO user, int id) {
         Optional<User> updateUser = userRepository.findById(id);
-        if(updateUser.isPresent()) {
+        if (updateUser.isPresent()) {
             User newUser = updateUser.get();
-
-            //Check Input and Update to newUser
-            if(user.getUsername() != null && !user.getUsername().isEmpty())
-                newUser.setUsername(user.getUsername());
-            if(user.getPassword() != null && !user.getPassword().isEmpty())
-                newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            if(user.getLastname() != null && !user.getLastname().isEmpty())
-                newUser.setLastname(user.getLastname());
-            if(user.getFirstname() != null && !user.getFirstname().isEmpty())
-                newUser.setFirstname(user.getFirstname());
-            if(user.isSex() != newUser.isSex())
-                newUser.setSex(user.isSex());
-            if(user.getEmail() != null && !user.getEmail().isEmpty())
-                newUser.setEmail(user.getEmail());
-            if(user.getPhone() != null && !user.getPhone().isEmpty())
-                newUser.setPhone(user.getPhone());
-            if(user.getAddress() != null && !user.getAddress().isEmpty())
-                newUser.setAddress(user.getAddress());
-            if(user.getNationality() != null && !user.getNationality().isEmpty())
-                newUser.setNationality(user.getNationality());
-            if(user.getDateOfBirth() != null)
-                newUser.setDateOfBirth(user.getDateOfBirth());
+            newUser.setUsername(user.getUsername());
+            newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            newUser.setLastname(user.getLastname());
+            newUser.setFirstname(user.getFirstname());
+            newUser.setSex(user.isSex());
+            newUser.setEmail(user.getEmail());
+            newUser.setPhone(user.getPhone());
+            newUser.setAddress(user.getAddress());
+            newUser.setNationality(user.getNationality());
+            newUser.setDateOfBirth(user.getDateOfBirth());
 
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
-                    ApplicationConstants.ResponseStatusMessage.SUCCESS,
-                            mapToInfoDTO(Collections.singletonList(userRepository.save(newUser))))
+                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                            ApplicationConstants.ResponseMessage.SUCCESS,
+                            mapToResponseDTO(Collections.singletonList(userRepository.save(newUser))))
             );
         }
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatusMessage.FAILED,
-                        ApplicationConstants.ResponseStatusMessage.NOT_MODIFIED,
+                new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                        ApplicationConstants.ResponseMessage.NOT_MODIFIED,
                         null)
         );
     }
 
     @Override
-    public ResponseEntity<ResponseObject> deleteStaff(int id) {
+    public ResponseEntity<ResponseObject> deleteUserByRoleAndId(String role, int id) {
+
         if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
-                            ApplicationConstants.ResponseStatusMessage.SUCCESS,
-                            null)
-            );
+            User user = userRepository.findById(id).orElse(new User());
+            if (user.getRoles().stream().anyMatch(r -> role.toUpperCase().replace("-", "_").equals(r.getName()))) {
+                userRepository.deleteById(id);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS,
+                                id)
+                );
+            }
         }
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseObject(ApplicationConstants.ResponseStatusMessage.FAILED,
-                        ApplicationConstants.ResponseStatusMessage.FAILED,
+                new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                        ApplicationConstants.ResponseMessage.NOT_MODIFIED,
                         null)
-        );
-    }
-
-    @Override
-    public ResponseEntity<ResponseObject> createZooTrainer(UserRequestDTO userDto) {
-
-        if (Boolean.TRUE.equals(userRepository.existsByUsername(userDto.getUsername()))){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseObject(ApplicationConstants.ResponseStatusMessage.FAILED,
-                            ApplicationConstants.ResponseStatusMessage.EXISTED,
-                            userDto.getUsername())
-            );
-        }
-
-        User user = mapToUserEntity(userDto);
-        user.setRoles(Collections.singletonList(getRoles("ZOO_TRAINER")));
-
-        userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
-                        ApplicationConstants.ResponseStatusMessage.SUCCESS, userDto)
-        );
-    }
-
-    @Override
-    public ResponseEntity<ResponseObject> findAllTrainer() {
-        List<User> list = userRepository.findByRole(3);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
-                        ApplicationConstants.ResponseStatusMessage.SUCCESS,
-                        mapToInfoDTO(list))
         );
     }
 }

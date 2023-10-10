@@ -26,8 +26,8 @@ public class TicketService implements ITicketService {
     @Override
     public ResponseEntity<ResponseObject> findAllTickets() {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
-                        ApplicationConstants.ResponseStatusMessage.SUCCESS,
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
                         mapToDTO(ticketRepository.findAll()))
         );
     }
@@ -35,8 +35,8 @@ public class TicketService implements ITicketService {
     @Override
     public ResponseEntity<ResponseObject> createNewTicket(Ticket ticket) {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
-                        ApplicationConstants.ResponseStatusMessage.SUCCESS,
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
                         ticketRepository.save(ticket))
         );
     }

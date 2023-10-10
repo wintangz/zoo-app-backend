@@ -21,8 +21,8 @@ public class HabitatService implements IHabitatService {
     @Override
     public ResponseEntity<ResponseObject> findAllHabitats() {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
-                        ApplicationConstants.ResponseStatusMessage.SUCCESS,
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
                         (habitatRepository.findAll()))
         );
     }

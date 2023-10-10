@@ -44,13 +44,13 @@ public class OrderService implements IOrderService {
         if(order.getCustomer() != null) {
             orderRepository.save(order);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
-                            ApplicationConstants.ResponseStatusMessage.SUCCESS, orderDto)
+                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                            ApplicationConstants.ResponseMessage.SUCCESS, orderDto)
             );
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                new ResponseObject(ApplicationConstants.ResponseStatusMessage.FAILED,
-                        ApplicationConstants.ResponseStatusMessage.FAILED, orderDto)
+                new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                        ApplicationConstants.ResponseMessage.NOT_MODIFIED, orderDto)
         );
     }
 

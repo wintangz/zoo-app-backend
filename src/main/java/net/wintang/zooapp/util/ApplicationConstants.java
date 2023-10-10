@@ -5,15 +5,22 @@ public class ApplicationConstants {
     private ApplicationConstants() {
     }
 
-    public static class ResponseStatusMessage {
+    public static class ResponseStatus {
 
-        private ResponseStatusMessage() {}
+        private ResponseStatus() {}
 
         public static final String OK = "Ok";
-        public static final String SUCCESS = "Success";
         public static final String FAILED = "Failed";
         public static final String NOT_MODIFIED = "Nothing changed";
         public static final String EXISTED = "Existed";
+    }
+
+    public static class ResponseMessage {
+
+        private ResponseMessage() {}
+        public static final String NOT_MODIFIED = "Nothing changed";
+        public static final String EXISTED = "Existed";
+        public static final String SUCCESS = "Success";
     }
 
     public static class SecurityConstants {

@@ -29,8 +29,8 @@ public class AnimalSpeciesService implements IAnimalSpeciesService {
     @Override
     public ResponseEntity<ResponseObject> getAllSpecies() {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
-                        ApplicationConstants.ResponseStatusMessage.SUCCESS,
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
                         mapToDTO(animalSpeciesRepository.findAll()))
         );
     }

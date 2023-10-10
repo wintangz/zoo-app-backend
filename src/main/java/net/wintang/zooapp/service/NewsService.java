@@ -40,8 +40,8 @@ public class NewsService implements INewsService {
     @Override
     public ResponseEntity<ResponseObject> findAllNews() {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
-                        ApplicationConstants.ResponseStatusMessage.SUCCESS,
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
                         mapToDTO(newsRepository.findAll()))
         );
     }
@@ -51,8 +51,8 @@ public class NewsService implements INewsService {
         News news = mapToNewsEntity(newsDto);
         newsRepository.save(news);
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
-                        ApplicationConstants.ResponseStatusMessage.SUCCESS, newsDto)
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS, newsDto)
         );
     }
 
@@ -61,8 +61,8 @@ public class NewsService implements INewsService {
         List<NewsDTO> news = mapToDTO(newsRepository.findAll());
         List<NewsDTO> recommend = List.of(news.get(news.size()-1), news.get(news.size()-2), news.get(news.size()-3));
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatusMessage.OK,
-                        ApplicationConstants.ResponseStatusMessage.SUCCESS,
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
                         recommend)
         );
     }
