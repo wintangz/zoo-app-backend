@@ -32,16 +32,16 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> getAllOrders() {
+    public ResponseEntity<ResponseObject> getOrders() {
         return null;
     }
 
     @Override
-    public ResponseEntity<ResponseObject> createNewOrder(OrderDTO orderDto, String username) {
+    public ResponseEntity<ResponseObject> createOrder(OrderDTO orderDto, String username) {
         Order order = mapToEntity(orderDto);
         Optional<User> customer = userRepository.findByUsername(username);
         customer.ifPresent(order::setCustomer);
-        if(order.getCustomer() != null) {
+        if (order.getCustomer() != null) {
             orderRepository.save(order);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject(ApplicationConstants.ResponseStatus.OK,

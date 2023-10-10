@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/api/orders")
 public class PaymentController {
 
     private final IOrderService orderService;
@@ -23,6 +23,6 @@ public class PaymentController {
     public ResponseEntity<ResponseObject> createOrder(@RequestHeader("Authorization") String token, @RequestBody OrderDTO order) {
         TokenExtractor tokenExtractor = new TokenExtractor();
         String username = tokenExtractor.getUsername(token);
-        return orderService.createNewOrder(order, username);
+        return orderService.createOrder(order, username);
     }
 }

@@ -5,7 +5,7 @@ import net.wintang.zooapp.util.ResponseObject;
 import org.springframework.http.ResponseEntity;
 
 public interface IOrderService {
-    ResponseEntity<ResponseObject> getAllOrders();
+    ResponseEntity<ResponseObject> getOrders();
 
-    ResponseEntity<ResponseObject> createNewOrder(OrderDTO order, String username);
+    ResponseEntity<ResponseObject> createOrder(OrderDTO order, String username);
 }

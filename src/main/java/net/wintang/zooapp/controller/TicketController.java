@@ -19,12 +19,12 @@ public class TicketController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseObject> getAllTickets() {
-        return ticketService.findAllTickets();
+    public ResponseEntity<ResponseObject> getTickets() {
+        return ticketService.getTickets();
     }
 
     @PostMapping
-    public ResponseEntity<ResponseObject> createNewTicket(@RequestBody Ticket ticket) {
-        return ticketService.createNewTicket(ticket);
+    public ResponseEntity<ResponseObject> createTicket(@RequestBody Ticket ticket) {
+        return ticketService.createTicket(ticket);
     }
 }

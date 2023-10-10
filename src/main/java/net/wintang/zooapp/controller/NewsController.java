@@ -19,15 +19,17 @@ public class NewsController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseObject> getAllNews() {
-        return newsService.findAllNews();
+    public ResponseEntity<ResponseObject> getNews() {
+        return newsService.getNews();
     }
 
     @PostMapping
     public ResponseEntity<ResponseObject> postNews(@RequestBody NewsDTO newsDto) {
-        return newsService.createNewNews(newsDto);
+        return newsService.createNews(newsDto);
     }
 
     @GetMapping("/recommend")
-    public ResponseEntity<ResponseObject> getRecommend() { return newsService.find3LatestNews(); }
+    public ResponseEntity<ResponseObject> getRecommend() {
+        return newsService.get3LatestNews();
+    }
 }

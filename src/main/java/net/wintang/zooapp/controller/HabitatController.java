@@ -20,7 +20,7 @@ public class HabitatController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseObject> getAllHabitats() {
-        return habitatService.findAllHabitats();
+    public ResponseEntity<ResponseObject> getHabitats() {
+        return habitatService.getHabitats();
     }
 }

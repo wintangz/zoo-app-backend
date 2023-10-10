@@ -24,7 +24,7 @@ public class TicketService implements ITicketService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> findAllTickets() {
+    public ResponseEntity<ResponseObject> getTickets() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
@@ -33,7 +33,7 @@ public class TicketService implements ITicketService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> createNewTicket(Ticket ticket) {
+    public ResponseEntity<ResponseObject> createTicket(Ticket ticket) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
@@ -43,8 +43,8 @@ public class TicketService implements ITicketService {
 
     private List<TicketResponseDTO> mapToDTO(List<Ticket> tickets) {
         List<TicketResponseDTO> result = new ArrayList<>();
-        for (Ticket ticket:tickets) {
-            if(ticket.isStatus()){
+        for (Ticket ticket : tickets) {
+            if (ticket.isStatus()) {
                 result.add(new TicketResponseDTO(ticket));
             }
         }

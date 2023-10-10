@@ -5,7 +5,7 @@ import net.wintang.zooapp.util.ResponseObject;
 import org.springframework.http.ResponseEntity;
 
 public interface ITicketService {
-    ResponseEntity<ResponseObject> findAllTickets();
+    ResponseEntity<ResponseObject> getTickets();
 
-    ResponseEntity<ResponseObject> createNewTicket(Ticket ticket);
+    ResponseEntity<ResponseObject> createTicket(Ticket ticket);
 }
