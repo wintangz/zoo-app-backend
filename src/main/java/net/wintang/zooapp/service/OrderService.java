@@ -12,7 +12,7 @@ import net.wintang.zooapp.repository.OrderRepository;
 import net.wintang.zooapp.repository.TicketRepository;
 import net.wintang.zooapp.repository.UserRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
-import net.wintang.zooapp.util.ResponseObject;
+import net.wintang.zooapp.dto.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -102,7 +102,7 @@ public class OrderService implements IOrderService {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                             ApplicationConstants.ResponseMessage.SUCCESS,
-                            new OrderResponseDTO(totalOrderPrice))
+                            new OrderResponseDTO(totalOrderPrice, order.getId()))
             );
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(

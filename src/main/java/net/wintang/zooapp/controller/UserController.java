@@ -5,7 +5,7 @@ import net.wintang.zooapp.dto.request.UserRequestDTO;
 import net.wintang.zooapp.dto.request.UserUpdateDTO;
 import net.wintang.zooapp.service.IUserService;
 import net.wintang.zooapp.util.ApplicationConstants;
-import net.wintang.zooapp.util.ResponseObject;
+import net.wintang.zooapp.dto.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;

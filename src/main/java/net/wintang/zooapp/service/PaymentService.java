@@ -2,8 +2,11 @@ package net.wintang.zooapp.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import net.wintang.zooapp.dto.response.OrderResponseDTO;
+import net.wintang.zooapp.entity.Order;
+import net.wintang.zooapp.repository.OrderRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
-import net.wintang.zooapp.util.ResponseObject;
+import net.wintang.zooapp.dto.ResponseObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,13 @@ import java.util.*;
 @Service
 public class PaymentService implements IPaymentService {
 
+    private final OrderRepository orderRepository;
+
+    @Autowired
+    public PaymentService(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
+
     public ResponseEntity<ResponseObject> getPaymentUrl(OrderResponseDTO order, HttpServletRequest req) throws UnsupportedEncodingException, SignatureException, NoSuchAlgorithmException, InvalidKeyException {
 
         Random random = new Random();
@@ -31,7 +41,7 @@ public class PaymentService implements IPaymentService {
         String vnp_Command = "pay";
         String vnp_OrderInfo = "Pay for your Zoo tickets";
         String orderType = "250000";
-        String vnp_TxnRef = "23355";
+        String vnp_TxnRef = String.valueOf(order.getId());
         String vnp_IpAddr = req.getRemoteAddr();
         String vnp_TmnCode = "FV7L6BYI";
 
@@ -46,7 +56,7 @@ public class PaymentService implements IPaymentService {
         vnp_Params.put("vnp_OrderInfo", vnp_OrderInfo);
         vnp_Params.put("vnp_OrderType", orderType);
         vnp_Params.put("vnp_Locale", "vn");
-        vnp_Params.put("vnp_ReturnUrl", "http://localhost:3000/order");
+        vnp_Params.put("vnp_ReturnUrl", "http://localhost:8080/api/orders/payment");
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
 
@@ -59,28 +69,28 @@ public class PaymentService implements IPaymentService {
         //Add Params of 2.1.0 Version
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
         //Billing
-        vnp_Params.put("vnp_Bill_Mobile", "Mobile Phone");
-        vnp_Params.put("vnp_Bill_Email", "kyodonzzz@gmail.com");
-        String fullName = ("WIN TANG").trim();
-        if (fullName != null && !fullName.isEmpty()) {
-            int idx = fullName.indexOf(' ');
-            String firstName = fullName.substring(0, idx);
-            String lastName = fullName.substring(fullName.lastIndexOf(' ') + 1);
-            vnp_Params.put("vnp_Bill_FirstName", firstName);
-            vnp_Params.put("vnp_Bill_LastName", lastName);
-
-        }
-        vnp_Params.put("vnp_Bill_Address", "Quan 1");
-        vnp_Params.put("vnp_Bill_City", "Ho Chi Minh");
-        vnp_Params.put("vnp_Bill_Country", "Viet Nam");
+//        vnp_Params.put("vnp_Bill_Mobile", "Mobile Phone");
+        vnp_Params.put("vnp_Bill_Email", String.valueOf(order.getId()));
+//        String fullName = ("Tang Tuong Vinh").trim();
+//        if (fullName != null && !fullName.isEmpty()) {
+//            int idx = fullName.indexOf(' ');
+//            String firstName = fullName.substring(0, idx);
+//            String lastName = fullName.substring(fullName.lastIndexOf(' ') + 1);
+//            vnp_Params.put("vnp_Bill_FirstName", firstName);
+//            vnp_Params.put("vnp_Bill_LastName", lastName);
+//
+//        }
+//        vnp_Params.put("vnp_Bill_Address", "Quan 1");
+//        vnp_Params.put("vnp_Bill_City", "Ho Chi Minh");
+//        vnp_Params.put("vnp_Bill_Country", "Viet Nam");
         // Invoice
-        vnp_Params.put("vnp_Inv_Phone", "SDT");
-        vnp_Params.put("vnp_Inv_Email", "MAIL");
-        vnp_Params.put("vnp_Inv_Customer", "KH");
-        vnp_Params.put("vnp_Inv_Address", "DIA CHI");
-        vnp_Params.put("vnp_Inv_Company", "CTY");
-        vnp_Params.put("vnp_Inv_Taxcode", "MST");
-        vnp_Params.put("vnp_Inv_Type", "LOAI");
+//        vnp_Params.put("vnp_Inv_Phone", "SDT");
+//        vnp_Params.put("vnp_Inv_Email", "MAIL");
+        vnp_Params.put("vnp_Inv_Customer", String.valueOf(order.getId()));
+//        vnp_Params.put("vnp_Inv_Address", "DIA CHI");
+//        vnp_Params.put("vnp_Inv_Company", "CTY");
+//        vnp_Params.put("vnp_Inv_Taxcode", "MST");
+//        vnp_Params.put("vnp_Inv_Type", "LOAI");
         //Build data to hash and querystring
         List fieldNames = new ArrayList(vnp_Params.keySet());
         Collections.sort(fieldNames);
@@ -88,8 +98,8 @@ public class PaymentService implements IPaymentService {
         StringBuilder query = new StringBuilder();
         Iterator itr = fieldNames.iterator();
         while (itr.hasNext()) {
-            String fieldName = (String) itr.next();
-            String fieldValue = (String) vnp_Params.get(fieldName);
+            String fieldName = String.valueOf(itr.next());
+            String fieldValue = String.valueOf(vnp_Params.get(fieldName));
             if ((fieldValue != null) && (fieldValue.length() > 0)) {
                 //Build hash data
                 hashData.append(fieldName);
@@ -134,5 +144,12 @@ public class PaymentService implements IPaymentService {
         Mac mac = Mac.getInstance("HmacSHA512");
         mac.init(secretKeySpec);
         return toHexString(mac.doFinal(data.getBytes()));
+    }
+
+    @Override
+    public void setPaymentStatus(String id) {
+        Order order = orderRepository.findById(Integer.parseInt(id)).orElseThrow();
+        order.setStatus(true);
+        orderRepository.save(order);
     }
 }

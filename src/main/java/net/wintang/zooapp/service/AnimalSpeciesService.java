@@ -4,7 +4,7 @@ import net.wintang.zooapp.entity.AnimalSpecies;
 import net.wintang.zooapp.dto.AnimalSpeciesDTO;
 import net.wintang.zooapp.repository.AnimalSpeciesRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
-import net.wintang.zooapp.util.ResponseObject;
+import net.wintang.zooapp.dto.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

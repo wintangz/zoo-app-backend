@@ -2,7 +2,7 @@ package net.wintang.zooapp.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import net.wintang.zooapp.dto.response.OrderResponseDTO;
-import net.wintang.zooapp.util.ResponseObject;
+import net.wintang.zooapp.dto.ResponseObject;
 import org.springframework.http.ResponseEntity;
 
 import java.io.UnsupportedEncodingException;
@@ -12,4 +12,6 @@ import java.security.SignatureException;
 
 public interface IPaymentService {
     ResponseEntity<ResponseObject> getPaymentUrl(OrderResponseDTO order, HttpServletRequest req) throws UnsupportedEncodingException, SignatureException, NoSuchAlgorithmException, InvalidKeyException;
+
+    void setPaymentStatus(String id);
 }

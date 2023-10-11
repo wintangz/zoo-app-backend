@@ -1,7 +1,7 @@
 package net.wintang.zooapp.controller;
 
 import net.wintang.zooapp.service.IAnimalSpeciesService;
-import net.wintang.zooapp.util.ResponseObject;
+import net.wintang.zooapp.dto.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

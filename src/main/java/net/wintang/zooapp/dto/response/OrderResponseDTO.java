@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 public class OrderResponseDTO {
 
     private float total;
+
+    private int id;
 }

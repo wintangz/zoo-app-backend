@@ -1,4 +1,4 @@
-package net.wintang.zooapp.util;
+package net.wintang.zooapp.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

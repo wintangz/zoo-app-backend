@@ -1,7 +1,7 @@
 package net.wintang.zooapp.controller;
 
 import net.wintang.zooapp.service.IAnimalService;
-import net.wintang.zooapp.util.ResponseObject;
+import net.wintang.zooapp.dto.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,5 +19,7 @@ public class AnimalController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseObject> getAllAnimals() { return animalService.findAllAnimals(); }
+    public ResponseEntity<ResponseObject> getAllAnimals() {
+        return animalService.findAllAnimals();
+    }
 }
