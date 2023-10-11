@@ -24,6 +24,7 @@ public class ApplicationConstants {
         public static final String NOT_MODIFIED = "Nothing changed";
         public static final String EXISTED = "Existed";
         public static final String SUCCESS = "Success";
+        public static final String INVALID = "Invalid";
     }
 
     public static class SecurityConstants {
@@ -32,6 +33,10 @@ public class ApplicationConstants {
         }
 
         public static class Roles {
+
+
+            private Roles() {
+            }
 
             public static final String ADMIN = "ADMIN";
             public static final String STAFF = "STAFF";

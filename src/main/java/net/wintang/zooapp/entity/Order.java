@@ -3,7 +3,6 @@ package net.wintang.zooapp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import net.wintang.zooapp.dto.OrderDTO;
-import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +19,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Transient
     private LocalDateTime createdDate;
 
     private float total;

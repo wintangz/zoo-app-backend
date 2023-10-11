@@ -46,6 +46,7 @@ public class User {
 
     private String email;
 
+    @Transient
     private LocalDateTime createdDate;
 
     @ManyToMany(fetch = FetchType.EAGER)
