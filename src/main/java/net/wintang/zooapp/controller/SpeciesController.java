@@ -1,7 +1,7 @@
 package net.wintang.zooapp.controller;
 
-import net.wintang.zooapp.service.IAnimalSpeciesService;
-import net.wintang.zooapp.dto.ResponseObject;
+import net.wintang.zooapp.service.ISpeciesService;
+import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/species")
-public class AnimalSpeciesController {
+public class SpeciesController {
 
-    private final IAnimalSpeciesService animalSpeciesService;
+    private final ISpeciesService animalSpeciesService;
 
     @Autowired
-    public AnimalSpeciesController(IAnimalSpeciesService animalSpeciesService) {
+    public SpeciesController(ISpeciesService animalSpeciesService) {
         this.animalSpeciesService = animalSpeciesService;
     }
 

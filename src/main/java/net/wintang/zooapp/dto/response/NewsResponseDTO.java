@@ -1,4 +1,4 @@
-package net.wintang.zooapp.dto;
+package net.wintang.zooapp.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NewsDTO {
+public class NewsResponseDTO {
     private String title;
     private String shortDescription;
     private String content;
@@ -18,9 +18,10 @@ public class NewsDTO {
     private String imgUrl;
     private String thumbnailUrl;
     private LocalDateTime createdDate;
+    private boolean status;
 
 
-    public NewsDTO(News news) {
+    public NewsResponseDTO(News news) {
         this.title = news.getTitle();
         this.shortDescription = news.getShortDescription();
         this.content = news.getContent();
@@ -28,5 +29,6 @@ public class NewsDTO {
         this.imgUrl = news.getImgUrl();
         this.thumbnailUrl = news.getThumbnailUrl();
         this.createdDate = news.getCreatedDate();
+        this.status = news.isStatus();
     }
 }

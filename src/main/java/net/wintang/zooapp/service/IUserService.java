@@ -2,7 +2,7 @@ package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.dto.request.UserRequestDTO;
 import net.wintang.zooapp.dto.request.UserUpdateDTO;
-import net.wintang.zooapp.dto.ResponseObject;
+import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 

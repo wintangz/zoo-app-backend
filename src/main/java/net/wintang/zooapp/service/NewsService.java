@@ -2,10 +2,10 @@ package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.entity.News;
 import net.wintang.zooapp.entity.User;
-import net.wintang.zooapp.dto.NewsDTO;
+import net.wintang.zooapp.dto.response.NewsResponseDTO;
 import net.wintang.zooapp.repository.NewsRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
-import net.wintang.zooapp.dto.ResponseObject;
+import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,17 +23,17 @@ public class NewsService implements INewsService {
         this.newsRepository = newsRepository;
     }
 
-    private List<NewsDTO> mapToDTO(List<News> newsList) {
-        return newsList.stream().map(NewsDTO::new).toList();
+    private List<NewsResponseDTO> mapToDTO(List<News> newsList) {
+        return newsList.stream().map(NewsResponseDTO::new).toList();
     }
 
-    private News mapToNewsEntity(NewsDTO newsDto) {
+    private News mapToNewsEntity(NewsResponseDTO newsResponseDto) {
         return News.builder()
-                .title(newsDto.getTitle())
-                .content(newsDto.getContent())
-                .imgUrl(newsDto.getImgUrl())
-                .thumbnailUrl(newsDto.getThumbnailUrl())
-                .author(User.builder().id(newsDto.getAuthor()).build())
+                .title(newsResponseDto.getTitle())
+                .content(newsResponseDto.getContent())
+                .imgUrl(newsResponseDto.getImgUrl())
+                .thumbnailUrl(newsResponseDto.getThumbnailUrl())
+                .author(User.builder().id(newsResponseDto.getAuthor()).build())
                 .build();
     }
 
@@ -47,19 +47,19 @@ public class NewsService implements INewsService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> createNews(NewsDTO newsDto) {
-        News news = mapToNewsEntity(newsDto);
+    public ResponseEntity<ResponseObject> createNews(NewsResponseDTO newsResponseDto) {
+        News news = mapToNewsEntity(newsResponseDto);
         newsRepository.save(news);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
-                        ApplicationConstants.ResponseMessage.SUCCESS, newsDto)
+                        ApplicationConstants.ResponseMessage.SUCCESS, newsResponseDto)
         );
     }
 
     @Override
     public ResponseEntity<ResponseObject> get3LatestNews() {
-        List<NewsDTO> news = mapToDTO(newsRepository.findAll());
-        List<NewsDTO> recommend = List.of(news.get(news.size() - 1), news.get(news.size() - 2), news.get(news.size() - 3));
+        List<NewsResponseDTO> news = mapToDTO(newsRepository.findAll());
+        List<NewsResponseDTO> recommend = List.of(news.get(news.size() - 1), news.get(news.size() - 2), news.get(news.size() - 3));
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,

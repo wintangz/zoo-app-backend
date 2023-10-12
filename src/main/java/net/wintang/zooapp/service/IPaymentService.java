@@ -2,7 +2,7 @@ package net.wintang.zooapp.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import net.wintang.zooapp.dto.response.OrderResponseDTO;
-import net.wintang.zooapp.dto.ResponseObject;
+import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.http.ResponseEntity;
 
 import java.io.UnsupportedEncodingException;

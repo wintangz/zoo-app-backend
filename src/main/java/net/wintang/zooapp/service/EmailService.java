@@ -58,6 +58,7 @@ public class EmailService implements IEmailService {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setFrom(sender);
             mailMessage.setSubject("Thanks for your order: #" + orderId + ". Your tickets are ready!");
+            mailMessage.setCc("Chúng em muốn ra hội đồng.");
             mailMessage.setTo(customer.getEmail());
             mailMessage.setText("We’ve received your order. Thank you for choosing our Zoo!" +
                     "\nYour bill: " +

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Nationalized;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -31,6 +33,8 @@ public class Ticket {
     @Nationalized
     private String imgUrl;
 
-    private boolean status;
+    @Column(insertable = false, updatable = false)
+    private LocalDateTime createdDate;
 
+    private boolean status;
 }

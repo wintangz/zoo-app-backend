@@ -1,6 +1,5 @@
 package net.wintang.zooapp.service;
 
-import net.wintang.zooapp.dto.OrderDTO;
 import net.wintang.zooapp.dto.request.OrderRequestDTO;
 import net.wintang.zooapp.dto.response.OrderResponseDTO;
 import net.wintang.zooapp.entity.Order;
@@ -12,7 +11,7 @@ import net.wintang.zooapp.repository.OrderRepository;
 import net.wintang.zooapp.repository.TicketRepository;
 import net.wintang.zooapp.repository.UserRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
-import net.wintang.zooapp.dto.ResponseObject;
+import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -108,12 +107,5 @@ public class OrderService implements IOrderService {
                         ApplicationConstants.ResponseMessage.NOT_MODIFIED,
                         new OrderResponseDTO())
         );
-    }
-
-    private Order mapToEntity(OrderDTO orderDto) {
-        return Order.builder()
-                .total(orderDto.getTotal())
-                .paymentMethod(orderDto.getPaymentMethod())
-                .build();
     }
 }

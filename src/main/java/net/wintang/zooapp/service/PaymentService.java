@@ -1,14 +1,11 @@
 package net.wintang.zooapp.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import net.wintang.zooapp.dto.request.OrderRequestDTO;
 import net.wintang.zooapp.dto.response.OrderResponseDTO;
 import net.wintang.zooapp.entity.Order;
-import net.wintang.zooapp.entity.OrderDetail;
-import net.wintang.zooapp.entity.Ticket;
 import net.wintang.zooapp.repository.OrderRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
-import net.wintang.zooapp.dto.ResponseObject;
+import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

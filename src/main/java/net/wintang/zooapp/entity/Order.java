@@ -2,7 +2,6 @@ package net.wintang.zooapp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import net.wintang.zooapp.dto.OrderDTO;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +19,6 @@ public class Order {
     private int id;
 
     @Transient
-    @Column(columnDefinition = "datetime2(6) default getdate()")
     private LocalDateTime createdDate;
 
     private float total;
@@ -31,11 +29,6 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private User customer;
 
+    @Column(columnDefinition = "bit default 0")
     private boolean status;
-
-    public Order(OrderDTO orderDto) {
-        this.total = orderDto.getTotal();
-        this.paymentMethod = orderDto.getPaymentMethod();
-        this.customer = orderDto.getCustomer();
-    }
 }

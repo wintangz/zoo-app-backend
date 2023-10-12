@@ -1,7 +1,7 @@
 package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.entity.Ticket;
-import net.wintang.zooapp.dto.ResponseObject;
+import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.http.ResponseEntity;
 
 public interface ITicketService {

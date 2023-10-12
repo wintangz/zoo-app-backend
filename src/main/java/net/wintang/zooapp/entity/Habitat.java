@@ -33,5 +33,6 @@ public class Habitat {
     @Nationalized
     private String bannerUrl;
 
+    @Column(columnDefinition = "bit default 1")
     private boolean status;
 }

@@ -1,8 +1,8 @@
 package net.wintang.zooapp.controller;
 
-import net.wintang.zooapp.dto.NewsDTO;
+import net.wintang.zooapp.dto.response.NewsResponseDTO;
 import net.wintang.zooapp.service.INewsService;
-import net.wintang.zooapp.dto.ResponseObject;
+import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +24,8 @@ public class NewsController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseObject> postNews(@RequestBody NewsDTO newsDto) {
-        return newsService.createNews(newsDto);
+    public ResponseEntity<ResponseObject> postNews(@RequestBody NewsResponseDTO newsResponseDto) {
+        return newsService.createNews(newsResponseDto);
     }
 
     @GetMapping("/recommend")

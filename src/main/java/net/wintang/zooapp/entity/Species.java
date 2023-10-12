@@ -5,6 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "species")
 @Getter
@@ -12,11 +14,12 @@ import org.hibernate.annotations.OnDeleteAction;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class AnimalSpecies {
+public class Species {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(unique = true)
     private String name;
 
     private String species;
@@ -42,4 +45,10 @@ public class AnimalSpecies {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "habitat_id")
     private Habitat habitat;
+
+    @Column(insertable = false, updatable = false)
+    private LocalDateTime createdDate;
+
+    @Column(columnDefinition = "bit default 1")
+    private boolean status;
 }

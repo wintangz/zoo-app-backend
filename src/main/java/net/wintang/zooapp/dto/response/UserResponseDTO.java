@@ -20,6 +20,7 @@ public class UserResponseDTO {
     private String phone;
     private String email;
     private LocalDateTime createdDate;
+    private boolean status;
     private List<Role> roles;
 
     public UserResponseDTO(User user) {
@@ -34,6 +35,7 @@ public class UserResponseDTO {
         this.phone = user.getPhone();
         this.email = user.getEmail();
         this.createdDate = user.getCreatedDate();
+        this.status = user.isStatus();
         this.roles = user.getRoles();
     }
 }

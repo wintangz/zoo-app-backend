@@ -1,7 +1,7 @@
 package net.wintang.zooapp.controller;
 
 import jakarta.validation.Valid;
-import net.wintang.zooapp.dto.AuthResponseDTO;
+import net.wintang.zooapp.dto.response.AuthResponseDTO;
 import net.wintang.zooapp.dto.UserDTO;
 import net.wintang.zooapp.repository.RoleRepository;
 import net.wintang.zooapp.repository.UserRepository;

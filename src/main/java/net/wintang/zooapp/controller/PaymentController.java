@@ -7,7 +7,7 @@ import net.wintang.zooapp.dto.response.OrderResponseDTO;
 import net.wintang.zooapp.service.IEmailService;
 import net.wintang.zooapp.service.IOrderService;
 import net.wintang.zooapp.service.IPaymentService;
-import net.wintang.zooapp.dto.ResponseObject;
+import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.util.ApplicationConstants;
 import net.wintang.zooapp.util.TokenExtractor;
 import org.springframework.beans.factory.annotation.Autowired;

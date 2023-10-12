@@ -46,4 +46,6 @@ public class News {
     @Nationalized
     private String thumbnailUrl;
 
+    @Column(columnDefinition = "bit default 1")
+    private boolean status;
 }

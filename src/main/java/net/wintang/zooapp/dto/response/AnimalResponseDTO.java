@@ -1,4 +1,4 @@
-package net.wintang.zooapp.dto;
+package net.wintang.zooapp.dto.response;
 
 import lombok.Data;
 import net.wintang.zooapp.entity.Animal;
@@ -6,7 +6,7 @@ import net.wintang.zooapp.entity.Animal;
 import java.time.LocalDateTime;
 
 @Data
-public class AnimalDTO {
+public class AnimalResponseDTO {
     private int id;
 
     private String name;
@@ -23,6 +23,8 @@ public class AnimalDTO {
 
     private LocalDateTime arrivalDate;
 
+    private LocalDateTime createdDate;
+
     private LocalDateTime dateOfBirth;
 
     private LocalDateTime dateOfDeath;
@@ -31,7 +33,11 @@ public class AnimalDTO {
 
     private String healthStatus;
 
-    public AnimalDTO(Animal animal) {
+    private boolean status;
+
+    private String species;
+
+    public AnimalResponseDTO(Animal animal) {
         this.id = animal.getId();
         this.name = animal.getName();
         this.sex = animal.isSex();
@@ -40,9 +46,12 @@ public class AnimalDTO {
         this.weight = animal.getWeight();
         this.imgUrl = animal.getImgUrl();
         this.arrivalDate = animal.getArrivalDate();
+        this.createdDate = animal.getCreatedDate();
         this.dateOfBirth = animal.getDateOfBirth();
         this.dateOfDeath = animal.getDateOfDeath();
         this.origin = animal.getOrigin();
         this.healthStatus = animal.getHealthStatus();
+        this.status = animal.isStatus();
+        this.species = animal.getSpecies().getName();
     }
 }

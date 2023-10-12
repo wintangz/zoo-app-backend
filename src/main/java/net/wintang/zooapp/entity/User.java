@@ -49,6 +49,9 @@ public class User {
     @Transient
     private LocalDateTime createdDate;
 
+    @Column(columnDefinition = "bit default 1")
+    private boolean status;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
