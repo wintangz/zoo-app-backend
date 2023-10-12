@@ -1,8 +1,11 @@
 package net.wintang.zooapp.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import net.wintang.zooapp.dto.request.OrderRequestDTO;
 import net.wintang.zooapp.dto.response.OrderResponseDTO;
 import net.wintang.zooapp.entity.Order;
+import net.wintang.zooapp.entity.OrderDetail;
+import net.wintang.zooapp.entity.Ticket;
 import net.wintang.zooapp.repository.OrderRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
 import net.wintang.zooapp.dto.ResponseObject;
@@ -151,6 +154,7 @@ public class PaymentService implements IPaymentService {
         Order order = orderRepository.findById(Integer.parseInt(id)).orElseThrow();
         order.setStatus(true);
         orderRepository.save(order);
-        //Create QR-Code and save to OrderDetails
+        //Create QR-Code and save OrderDetails
+
     }
 }

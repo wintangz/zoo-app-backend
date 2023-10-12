@@ -85,14 +85,12 @@ public class OrderService implements IOrderService {
 
             //Save orderDetails
             for (OrderRequestDTO.TicketItem ticketItem : orderDto.getTicketItems()) {
-
-                OrderDetail orderDetail = new OrderDetail();
-
                 int ticketId = ticketItem.getTicketId();
                 Ticket ticket = ticketRepository.findById(ticketId)
                         .orElseThrow();
 
                 for (int i = 0; i < ticketItem.getQuantity(); i++) {
+                    OrderDetail orderDetail = new OrderDetail();
                     orderDetail.setTicket(ticket);
                     orderDetail.setOrder(order);
                     orderDetailRepository.save(orderDetail);
