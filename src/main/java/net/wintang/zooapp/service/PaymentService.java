@@ -151,5 +151,6 @@ public class PaymentService implements IPaymentService {
         Order order = orderRepository.findById(Integer.parseInt(id)).orElseThrow();
         order.setStatus(true);
         orderRepository.save(order);
+        //Create QR-Code and save to OrderDetails
     }
 }

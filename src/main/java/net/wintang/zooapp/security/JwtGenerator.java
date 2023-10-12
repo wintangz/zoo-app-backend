@@ -4,7 +4,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import net.wintang.zooapp.entity.User;
+import net.wintang.zooapp.repository.UserRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,18 +21,26 @@ import java.util.*;
 @Component
 public class JwtGenerator {
 
+    private UserRepository userRepository;
+
+    @Autowired
+    public JwtGenerator(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private Set<String> invalidatedTokens = new HashSet<>();
 
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
         Collection<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+        User user = userRepository.findByUsername(username).orElse(new User());
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + ApplicationConstants.SecurityConstants.JWT_EXPIRATION);
         System.out.println("Generating Token");
         return Jwts.builder()
                 .setSubject(username)
-                .claim("roles", roles)
+                .claim("roles", roles).claim("userId", user.getId())
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)
                 .signWith(key)
