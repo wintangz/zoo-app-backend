@@ -20,14 +20,12 @@ public class Order {
     private int id;
 
     @Transient
+    @Column(columnDefinition = "datetime2(6) default getdate()")
     private LocalDateTime createdDate;
 
     private float total;
 
     private String paymentMethod;
-
-    @Lob
-    private String qrCodeUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
@@ -38,7 +36,6 @@ public class Order {
     public Order(OrderDTO orderDto) {
         this.total = orderDto.getTotal();
         this.paymentMethod = orderDto.getPaymentMethod();
-        this.qrCodeUrl = orderDto.getQrCodeUrl();
         this.customer = orderDto.getCustomer();
     }
 }

@@ -115,7 +115,6 @@ public class OrderService implements IOrderService {
     private Order mapToEntity(OrderDTO orderDto) {
         return Order.builder()
                 .total(orderDto.getTotal())
-                .qrCodeUrl(orderDto.getQrCodeUrl())
                 .paymentMethod(orderDto.getPaymentMethod())
                 .build();
     }

@@ -23,6 +23,9 @@ public class OrderDetail {
     @JoinColumn(name = "ticket_id")
     private Ticket ticket;
 
+    @Lob
+    private String qrCodeUrl;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;

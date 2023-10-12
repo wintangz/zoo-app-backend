@@ -65,6 +65,7 @@ public class EmailService implements IEmailService {
                     "\nYour tickets: " +
                     "\n" + orderDetailRepository.findAllByOrderId(orderId));
             javaMailSender.send(mailMessage);
+            System.out.println("Sent Email to someone");
             return "Mail Sent Successfully...";
         } catch (Exception e) {
             return "Error while Sending Mail";

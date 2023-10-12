@@ -20,8 +20,6 @@ public class OrderDTO {
 
     private String paymentMethod;
 
-    private String qrCodeUrl;
-
     private String username;
 
     private User customer;
