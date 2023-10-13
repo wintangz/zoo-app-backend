@@ -49,7 +49,6 @@ public class User {
     @Transient
     private LocalDateTime createdDate;
 
-    @Column(columnDefinition = "bit default 1")
     private boolean status;
 
     @ManyToMany(fetch = FetchType.EAGER)
