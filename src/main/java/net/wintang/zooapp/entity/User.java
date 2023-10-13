@@ -46,6 +46,9 @@ public class User {
 
     private String email;
 
+    @Lob
+    private String avatarUrl;
+
     @Transient
     private LocalDateTime createdDate;
 

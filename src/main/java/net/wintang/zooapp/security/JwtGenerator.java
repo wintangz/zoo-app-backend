@@ -79,7 +79,7 @@ public class JwtGenerator {
     public boolean validateToken(String token) {
         cleanUpExpiredTokens(); // Clean up expired tokens before validation
         if (invalidatedTokens.contains(token)) {
-            return false; // Token is in the blacklist
+            return false; // Token is in the invalidatedTokens list
         }
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);

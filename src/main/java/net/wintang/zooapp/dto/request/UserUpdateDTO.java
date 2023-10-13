@@ -1,9 +1,11 @@
 package net.wintang.zooapp.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -44,6 +46,8 @@ public class UserUpdateDTO {
 
     @Email(message = "Invalid email")
     private String email;
+
+    private String avatarUrl;
 
     private List<Role> roles;
 }

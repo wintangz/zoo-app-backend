@@ -1,5 +1,6 @@
 package net.wintang.zooapp.service;
 
+import net.wintang.zooapp.dto.mapper.UserMapper;
 import net.wintang.zooapp.dto.request.UserRequestDTO;
 import net.wintang.zooapp.dto.request.UserUpdateDTO;
 import net.wintang.zooapp.dto.response.UserResponseDTO;
@@ -16,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -25,55 +25,22 @@ import java.util.Optional;
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
-
-    private final JwtGenerator jwtGenerator;
+    private final UserMapper userMapper;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-                       RoleRepository roleRepository, JwtGenerator jwtGenerator) {
+    public UserService(UserRepository userRepository,
+                       RoleRepository roleRepository,
+                       UserMapper userMapper) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
-        this.jwtGenerator = jwtGenerator;
+        this.userMapper = userMapper;
     }
 
     private List<UserResponseDTO> mapToResponseDTO(List<User> users) {
         return users.stream().map(UserResponseDTO::new).toList();
     }
 
-    private User mapToUserEntity(UserRequestDTO user) {
-        return User.builder()
-                .username(user.getUsername())
-                .password(passwordEncoder.encode(user.getPassword()))
-                .lastname(user.getLastname())
-                .firstname(user.getFirstname())
-                .sex(user.isSex())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .address(user.getAddress())
-                .nationality(user.getNationality())
-                .dateOfBirth(user.getDateOfBirth())
-                .roles(user.getRoles())
-                .build();
-    }
-
-    private User mapToUserEntity(UserUpdateDTO user, User oldUser) {
-        User.UserBuilder userBuilder = User.builder();
-        userBuilder.username(user.getUsername() != null ? user.getUsername() : oldUser.getUsername());
-        userBuilder.password(user.getPassword() != null ? passwordEncoder.encode(user.getPassword()) : oldUser.getPassword());
-        userBuilder.lastname(user.getLastname() != null ? user.getLastname() : oldUser.getLastname());
-        userBuilder.firstname(user.getFirstname() != null ? user.getFirstname() : oldUser.getFirstname());
-        userBuilder.sex(user.getSex() != null ? Boolean.parseBoolean(user.getSex()) : oldUser.isSex());
-        userBuilder.email(user.getEmail() != null ? user.getEmail() : oldUser.getEmail());
-        userBuilder.phone(user.getPhone() != null ? user.getPhone() : oldUser.getPhone());
-        userBuilder.address(user.getAddress() != null ? user.getAddress() : oldUser.getAddress());
-        userBuilder.nationality(user.getNationality() != null ? user.getNationality() : oldUser.getNationality());
-        userBuilder.dateOfBirth(user.getDateOfBirth() != null ? user.getDateOfBirth() : oldUser.getDateOfBirth());
-        userBuilder.roles(new ArrayList<>(user.getRoles() != null ? user.getRoles() : oldUser.getRoles()));
-        return userBuilder.build();
-    }
 
     private Role getRoles(String roleName) {
         Optional<Role> role = roleRepository.findByName(roleName);
@@ -142,7 +109,7 @@ public class UserService implements IUserService {
                             userDto.getUsername())
             );
         }
-        User user = mapToUserEntity(userDto);
+        User user = userMapper.mapToUserEntity(userDto);
         user.setRoles(Collections.singletonList(new Role(4, "CUSTOMER")));
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -160,7 +127,7 @@ public class UserService implements IUserService {
                             userDto.getUsername())
             );
         }
-        User user = mapToUserEntity(userDto);
+        User user = userMapper.mapToUserEntity(userDto);
         user.setRoles(Collections.singletonList(new Role(2, "STAFF")));
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -178,7 +145,7 @@ public class UserService implements IUserService {
                             userDto.getUsername())
             );
         }
-        User user = mapToUserEntity(userDto);
+        User user = userMapper.mapToUserEntity(userDto);
         user.setRoles(Collections.singletonList(new Role(3, "ZOO_TRAINER")));
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -192,7 +159,7 @@ public class UserService implements IUserService {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User existingUser = optionalUser.get();
-            User updatedUser = mapToUserEntity(newUser, existingUser);
+            User updatedUser = userMapper.mapToUserEntity(newUser, existingUser);
             updatedUser.setId(id);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject(ApplicationConstants.ResponseStatus.OK,
