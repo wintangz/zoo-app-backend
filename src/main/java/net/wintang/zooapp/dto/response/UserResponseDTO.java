@@ -22,6 +22,7 @@ public class UserResponseDTO {
     private LocalDateTime createdDate;
     private boolean status;
     private List<Role> roles;
+    private String avatarUrl;
 
     public UserResponseDTO(User user) {
         this.id = user.getId();
@@ -37,5 +38,6 @@ public class UserResponseDTO {
         this.createdDate = user.getCreatedDate();
         this.status = user.isStatus();
         this.roles = user.getRoles();
+        this.avatarUrl = user.getAvatarUrl();
     }
 }
