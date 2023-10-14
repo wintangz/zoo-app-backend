@@ -3,7 +3,7 @@ package net.wintang.zooapp.service;
 import net.wintang.zooapp.dto.request.AuthRequestDTO;
 import net.wintang.zooapp.dto.response.AuthResponseDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
-import net.wintang.zooapp.entity.User;
+import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.repository.UserRepository;
 import net.wintang.zooapp.security.JwtGenerator;
 import net.wintang.zooapp.util.ApplicationConstants;
@@ -33,9 +33,10 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> checkLogin(AuthRequestDTO userDto) {
+    public ResponseEntity<ResponseObject> checkLogin(AuthRequestDTO userDto) throws NotFoundException {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userRepository.findByUsername(userDto.getUsername()).orElse(new User()).getId(), userDto.getPassword()));
+                new UsernamePasswordAuthenticationToken(userRepository.findByUsername(userDto.getUsername())
+                        .orElseThrow(() -> new NotFoundException(userDto.getUsername())).getId(), userDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtGenerator.generateToken(authentication);
         return ResponseEntity.status(HttpStatus.OK).body(

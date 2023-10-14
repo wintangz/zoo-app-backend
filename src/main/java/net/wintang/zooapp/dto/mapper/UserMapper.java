@@ -2,12 +2,14 @@ package net.wintang.zooapp.dto.mapper;
 
 import net.wintang.zooapp.dto.request.UserRequestDTO;
 import net.wintang.zooapp.dto.request.UserUpdateDTO;
+import net.wintang.zooapp.dto.response.UserResponseDTO;
 import net.wintang.zooapp.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class UserMapper {
@@ -17,6 +19,10 @@ public class UserMapper {
     @Autowired
     public UserMapper(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public List<UserResponseDTO> mapToUserDTO(List<User> users) {
+        return users.stream().map(UserResponseDTO::new).toList();
     }
 
     public User mapToUserEntity(UserRequestDTO user) {

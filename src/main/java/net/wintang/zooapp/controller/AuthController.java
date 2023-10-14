@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import net.wintang.zooapp.dto.request.AuthRequestDTO;
 import net.wintang.zooapp.dto.response.AuthResponseDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
+import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.security.JwtGenerator;
 import net.wintang.zooapp.service.IAuthService;
 import net.wintang.zooapp.util.ApplicationConstants;
@@ -31,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseObject> login(@Valid @RequestBody AuthRequestDTO user, BindingResult result) {
+    public ResponseEntity<ResponseObject> login(@Valid @RequestBody AuthRequestDTO user, BindingResult result) throws NotFoundException {
         if (result.hasErrors()) {
             List<String> errors = result.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)

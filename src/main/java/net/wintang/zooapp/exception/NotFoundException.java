@@ -12,8 +12,7 @@ public class NotFoundException extends Exception {
     private String item;
     private String errorMessage;
 
-    public NotFoundException(String message, Throwable cause, String item) {
-        super(message, cause);
+    public NotFoundException(String item) {
         this.item = item;
         this.errorMessage = this.getItem() + " is not found";
     }

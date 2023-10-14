@@ -4,32 +4,22 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import net.wintang.zooapp.repository.UserRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtGenerator {
-
-    private UserRepository userRepository;
-
-    @Autowired
-    public JwtGenerator(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
     SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private Set<String> invalidatedTokens = new HashSet<>();
 
@@ -54,6 +44,24 @@ public class JwtGenerator {
                 .parseClaimsJws(token)
                 .getBody();
         return claims.getSubject();
+    }
+
+    public Object getRolesFromJwt(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.get("roles");
+    }
+
+    public UserDetails getUserDetailsFromToken(String token) {
+        List<String> roles = (List<String>) getRolesFromJwt(token);
+        Collection<GrantedAuthority> authorities = roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+        String userId = getUserIdFromJwt(token);
+        return new User(userId, "", authorities);
     }
 
     public boolean hasAuthority(String requiredAuthority) {
