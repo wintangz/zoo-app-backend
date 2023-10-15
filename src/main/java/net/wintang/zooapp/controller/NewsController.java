@@ -1,6 +1,7 @@
 package net.wintang.zooapp.controller;
 
 import net.wintang.zooapp.dto.response.NewsResponseDTO;
+import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.service.INewsService;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,11 @@ public class NewsController {
     @GetMapping
     public ResponseEntity<ResponseObject> getNews() {
         return newsService.getNews();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseObject> getNewsById(@PathVariable int id) throws NotFoundException {
+        return newsService.getNewsById(id);
     }
 
     @PostMapping

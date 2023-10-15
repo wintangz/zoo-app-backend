@@ -1,5 +1,6 @@
 package net.wintang.zooapp.service;
 
+import net.wintang.zooapp.dto.mapper.HabitatMapper;
 import net.wintang.zooapp.repository.HabitatRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
 import net.wintang.zooapp.dto.response.ResponseObject;
@@ -13,9 +14,12 @@ public class HabitatService implements IHabitatService {
 
     private final HabitatRepository habitatRepository;
 
+    private final HabitatMapper habitatMapper;
+
     @Autowired
-    public HabitatService(HabitatRepository habitatRepository) {
+    public HabitatService(HabitatRepository habitatRepository, HabitatMapper habitatMapper) {
         this.habitatRepository = habitatRepository;
+        this.habitatMapper = habitatMapper;
     }
 
     @Override
@@ -23,7 +27,7 @@ public class HabitatService implements IHabitatService {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        (habitatRepository.findAll()))
+                        habitatMapper.mapToHabitatDTO(habitatRepository.findAll()))
         );
     }
 }
