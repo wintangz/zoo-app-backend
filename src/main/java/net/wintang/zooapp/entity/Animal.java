@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -37,6 +38,12 @@ public class Animal {
     @ManyToOne
     @JoinColumn(name = "species_id")
     private Species species;
+
+    @ManyToMany
+    @JoinTable(name = "animal_enclosure",
+            joinColumns = @JoinColumn(name = "animal_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "enclosure_id", referencedColumnName = "id"))
+    private List<Enclosure> enclosures;
 
     @Column(columnDefinition = "bit default 0")
     private boolean status;

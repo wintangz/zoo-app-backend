@@ -23,6 +23,9 @@ public class FeedingSchedule {
 
     private LocalDateTime feedingTime;
 
+    @Column(columnDefinition = "bit default 0")
+    private boolean approved;
+
     @ManyToOne
     @JoinColumn(name = "created_by")
     private User zooTrainer;
@@ -38,4 +41,11 @@ public class FeedingSchedule {
     @ManyToOne
     @JoinColumn(name = "animal_id")
     private Animal animal;
+
+    @Column(columnDefinition = "bit default 0")
+    private boolean fed;
+    
+    @ManyToOne
+    @JoinColumn(name = "fed_by")
+    private User feeder;
 }
