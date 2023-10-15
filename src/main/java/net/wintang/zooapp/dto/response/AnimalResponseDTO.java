@@ -41,16 +41,12 @@ public class AnimalResponseDTO {
         this.id = animal.getId();
         this.name = animal.getName();
         this.sex = animal.isSex();
-        this.size = animal.getSize();
-        this.heightLength = animal.isHeightLength();
-        this.weight = animal.getWeight();
         this.imgUrl = animal.getImgUrl();
         this.arrivalDate = animal.getArrivalDate();
         this.createdDate = animal.getCreatedDate();
         this.dateOfBirth = animal.getDateOfBirth();
         this.dateOfDeath = animal.getDateOfDeath();
         this.origin = animal.getOrigin();
-        this.healthStatus = animal.getHealthStatus();
         this.status = animal.isStatus();
         this.species = animal.getSpecies().getName();
     }

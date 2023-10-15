@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NewsResponseDTO {
+    private int id;
     private String title;
     private String shortDescription;
     private String content;
@@ -22,6 +23,7 @@ public class NewsResponseDTO {
 
 
     public NewsResponseDTO(News news) {
+        this.id = news.getId();
         this.title = news.getTitle();
         this.shortDescription = news.getShortDescription();
         this.content = news.getContent();

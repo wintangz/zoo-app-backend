@@ -1,15 +1,13 @@
 package net.wintang.zooapp.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,12 +21,6 @@ public class Animal {
 
     private boolean sex;
 
-    private float size;
-
-    private boolean heightLength;
-
-    private float weight;
-
     private String imgUrl;
 
     private LocalDateTime arrivalDate;
@@ -41,8 +33,6 @@ public class Animal {
     private LocalDateTime dateOfDeath;
 
     private String origin;
-
-    private String healthStatus;
 
     @ManyToOne
     @JoinColumn(name = "species_id")

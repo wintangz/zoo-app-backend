@@ -20,14 +20,6 @@ public class AnimalRequestDTO {
 
     private boolean sex;
 
-    @Min(value = 0, message = "Please provide size")
-    private float size;
-
-    private boolean heightLength;
-
-    @Min(value = 0, message = "Please provide weight")
-    private float weight;
-
     @NotBlank(message = "ImgUrl cannot be empty")
     private String imgUrl;
 
@@ -39,9 +31,6 @@ public class AnimalRequestDTO {
 
     @NotBlank(message = "Origin cannot be empty")
     private String origin;
-
-    @NotBlank(message = "Health Status cannot be empty")
-    private String healthStatus;
 
     @NotBlank(message = "Species cannot be empty")
     private String species;
