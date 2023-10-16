@@ -1,5 +1,6 @@
 package net.wintang.zooapp.dto.mapper;
 
+import net.wintang.zooapp.dto.request.NewsRequestDTO;
 import net.wintang.zooapp.dto.response.NewsResponseDTO;
 import net.wintang.zooapp.entity.News;
 import net.wintang.zooapp.entity.User;
@@ -14,13 +15,14 @@ public class NewsMapper {
         return newsList.stream().map(NewsResponseDTO::new).toList();
     }
 
-    public News mapToNewsEntity(NewsResponseDTO newsResponseDto) {
+    public News mapToNewsEntity(NewsRequestDTO newsRequestDTO) {
         return News.builder()
-                .title(newsResponseDto.getTitle())
-                .content(newsResponseDto.getContent())
-                .imgUrl(newsResponseDto.getImgUrl())
-                .thumbnailUrl(newsResponseDto.getThumbnailUrl())
-                .author(User.builder().id(newsResponseDto.getAuthor()).build())
+                .title(newsRequestDTO.getTitle())
+                .shortDescription(newsRequestDTO.getShortDescription())
+                .content(newsRequestDTO.getContent())
+                .type(newsRequestDTO.getType())
+                .imgUrl(newsRequestDTO.getImgUrl())
+                .thumbnailUrl(newsRequestDTO.getThumbnailUrl())
                 .build();
     }
 }

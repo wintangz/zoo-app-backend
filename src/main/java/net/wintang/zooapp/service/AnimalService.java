@@ -4,15 +4,19 @@ import net.wintang.zooapp.dto.mapper.AnimalMapper;
 import net.wintang.zooapp.dto.request.AnimalRequestDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.entity.Animal;
+import net.wintang.zooapp.entity.AnimalTrainerAssignor;
 import net.wintang.zooapp.entity.User;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.repository.AnimalRepository;
+import net.wintang.zooapp.repository.AnimalTrainerAssignorRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 
 @Service
 public class AnimalService implements IAnimalService {
@@ -21,9 +25,12 @@ public class AnimalService implements IAnimalService {
 
     private final AnimalMapper animalMapper;
 
-    public AnimalService(AnimalRepository animalRepository, AnimalMapper animalMapper) {
+    private final AnimalTrainerAssignorRepository animalTrainerAssignorRepository;
+
+    public AnimalService(AnimalRepository animalRepository, AnimalMapper animalMapper, AnimalTrainerAssignorRepository animalTrainerAssignorRepository) {
         this.animalRepository = animalRepository;
         this.animalMapper = animalMapper;
+        this.animalTrainerAssignorRepository = animalTrainerAssignorRepository;
     }
 
     @Override
@@ -46,7 +53,7 @@ public class AnimalService implements IAnimalService {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        animalDto)
+                        animalMapper.mapToAnimalDTO(Collections.singletonList(animal)))
         );
     }
 
@@ -61,5 +68,22 @@ public class AnimalService implements IAnimalService {
                         ApplicationConstants.ResponseMessage.SUCCESS,
                         id)
         );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> assignZooTrainerToAnimal(int animalId, int zooTrainerId) throws NotFoundException {
+        if (animalRepository.existsById(animalId)) {
+            UserDetails authenticatedUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            User assignor = User.builder().id(Integer.parseInt(authenticatedUser.getUsername())).build();
+            User zooTrainer = User.builder().id(zooTrainerId).build();
+            Animal animal = Animal.builder().id(animalId).build();
+            AnimalTrainerAssignor animalTrainerAssignor = AnimalTrainerAssignor.builder()
+                    .assignedBy(assignor)
+                    .animal(animal)
+                    .trainer(zooTrainer)
+                    .build();
+            animalTrainerAssignorRepository.save(animalTrainerAssignor);
+        }
+        throw new NotFoundException("Animal: " + animalId);
     }
 }

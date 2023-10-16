@@ -1,8 +1,10 @@
 package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.dto.mapper.NewsMapper;
+import net.wintang.zooapp.dto.request.NewsRequestDTO;
 import net.wintang.zooapp.entity.News;
 import net.wintang.zooapp.dto.response.NewsResponseDTO;
+import net.wintang.zooapp.entity.User;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.repository.NewsRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
@@ -10,6 +12,8 @@ import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,12 +50,16 @@ public class NewsService implements INewsService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> createNews(NewsResponseDTO newsResponseDto) {
-        News news = newsMapper.mapToNewsEntity(newsResponseDto);
+    public ResponseEntity<ResponseObject> createNews(NewsRequestDTO newsRequestDTO) {
+        News news = newsMapper.mapToNewsEntity(newsRequestDTO);
+        User author = new User();
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        author.setId(Integer.parseInt(userDetails.getUsername()));
+        news.setAuthor(author);
         newsRepository.save(news);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
-                        ApplicationConstants.ResponseMessage.SUCCESS, newsResponseDto)
+                        ApplicationConstants.ResponseMessage.SUCCESS, newsRequestDTO)
         );
     }
 

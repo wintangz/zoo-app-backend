@@ -1,11 +1,13 @@
 package net.wintang.zooapp.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "animal_trainer_assignor", schema = "dbo")
 public class AnimalTrainerAssignor {

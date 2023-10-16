@@ -11,4 +11,6 @@ public interface IAnimalService {
     ResponseEntity<ResponseObject> createAnimal(AnimalRequestDTO animalDto);
 
     ResponseEntity<ResponseObject> deleteAnimalById(int id) throws NotFoundException;
+
+    ResponseEntity<ResponseObject> assignZooTrainerToAnimal(int id, int zooTrainerId) throws NotFoundException;
 }

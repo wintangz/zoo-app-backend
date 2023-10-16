@@ -45,7 +45,7 @@ public class Animal {
             inverseJoinColumns = @JoinColumn(name = "enclosure_id", referencedColumnName = "id"))
     private List<Enclosure> enclosures;
 
-    @Column(columnDefinition = "bit default 0")
+    @Column(insertable = false, columnDefinition = "bit default 0")
     private boolean status;
 
     @OneToOne

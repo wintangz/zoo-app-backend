@@ -1,5 +1,6 @@
 package net.wintang.zooapp.controller;
 
+import net.wintang.zooapp.dto.request.NewsRequestDTO;
 import net.wintang.zooapp.dto.response.NewsResponseDTO;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.service.INewsService;
@@ -30,8 +31,8 @@ public class NewsController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseObject> postNews(@RequestBody NewsResponseDTO newsResponseDto) {
-        return newsService.createNews(newsResponseDto);
+    public ResponseEntity<ResponseObject> postNews(@RequestBody NewsRequestDTO newsRequestDto) {
+        return newsService.createNews(newsRequestDto);
     }
 
     @GetMapping("/recommend")

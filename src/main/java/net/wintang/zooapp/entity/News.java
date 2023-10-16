@@ -30,6 +30,9 @@ public class News {
     @Nationalized
     private String content;
 
+    @Nationalized
+    private String type;
+
     @Column(insertable = false, updatable = false, nullable = true)
     private LocalDateTime createdDate;
 
@@ -46,6 +49,6 @@ public class News {
     @Nationalized
     private String thumbnailUrl;
 
-    @Column(columnDefinition = "bit default 1")
+    @Column(insertable = false, columnDefinition = "bit default 1")
     private boolean status;
 }

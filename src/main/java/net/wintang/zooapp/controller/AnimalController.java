@@ -33,6 +33,11 @@ public class AnimalController {
         return animalService.createAnimal(animal);
     }
 
+    @PostMapping("/{id}/zoo-trainers/{zooTrainerId}")
+    public ResponseEntity<ResponseObject> assignZooTrainerToAnimal(@PathVariable int id, @PathVariable int zooTrainerId) throws NotFoundException {
+        return animalService.assignZooTrainerToAnimal(id, zooTrainerId);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseObject> deleteAnimalById(@PathVariable int id) throws NotFoundException {
         return animalService.deleteAnimalById(id);

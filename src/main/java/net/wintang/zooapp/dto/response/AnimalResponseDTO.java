@@ -13,12 +13,6 @@ public class AnimalResponseDTO {
 
     private boolean sex;
 
-    private float size;
-
-    private boolean heightLength;
-
-    private float weight;
-
     private String imgUrl;
 
     private LocalDateTime arrivalDate;
@@ -30,8 +24,6 @@ public class AnimalResponseDTO {
     private LocalDateTime dateOfDeath;
 
     private String origin;
-
-    private String healthStatus;
 
     private boolean status;
 

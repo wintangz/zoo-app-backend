@@ -25,8 +25,6 @@ public class AnimalRequestDTO {
 
     private LocalDateTime arrivalDate;
 
-    private LocalDateTime createdDate;
-
     private LocalDateTime dateOfBirth;
 
     @NotBlank(message = "Origin cannot be empty")

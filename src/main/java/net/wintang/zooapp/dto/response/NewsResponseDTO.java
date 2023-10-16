@@ -15,6 +15,7 @@ public class NewsResponseDTO {
     private String title;
     private String shortDescription;
     private String content;
+    private String type;
     private int author;
     private String imgUrl;
     private String thumbnailUrl;

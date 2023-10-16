@@ -1,5 +1,6 @@
 package net.wintang.zooapp.service;
 
+import net.wintang.zooapp.dto.request.NewsRequestDTO;
 import net.wintang.zooapp.dto.response.NewsResponseDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.exception.NotFoundException;
@@ -10,7 +11,7 @@ public interface INewsService {
 
     ResponseEntity<ResponseObject> getNewsById(int id) throws NotFoundException;
 
-    ResponseEntity<ResponseObject> createNews(NewsResponseDTO newsResponseDto);
+    ResponseEntity<ResponseObject> createNews(NewsRequestDTO newsRequestDTO);
 
     ResponseEntity<ResponseObject> get3LatestNews();
 }
