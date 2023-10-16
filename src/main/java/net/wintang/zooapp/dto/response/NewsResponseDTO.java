@@ -16,7 +16,8 @@ public class NewsResponseDTO {
     private String shortDescription;
     private String content;
     private String type;
-    private int author;
+    private String authorFirstname;
+    private String authorLastname;
     private String imgUrl;
     private String thumbnailUrl;
     private LocalDateTime createdDate;
@@ -28,7 +29,8 @@ public class NewsResponseDTO {
         this.title = news.getTitle();
         this.shortDescription = news.getShortDescription();
         this.content = news.getContent();
-        this.author = news.getAuthor().getId();
+        this.authorFirstname = news.getAuthor().getFirstname();
+        this.authorLastname = news.getAuthor().getLastname();
         this.imgUrl = news.getImgUrl();
         this.thumbnailUrl = news.getThumbnailUrl();
         this.createdDate = news.getCreatedDate();
