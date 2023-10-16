@@ -3,6 +3,8 @@ package net.wintang.zooapp.controller;
 import jakarta.validation.Valid;
 import net.wintang.zooapp.dto.request.UserRequestDTO;
 import net.wintang.zooapp.dto.request.UserUpdateDTO;
+import net.wintang.zooapp.exception.NotFoundException;
+import net.wintang.zooapp.exception.PermissionDeniedException;
 import net.wintang.zooapp.service.IUserService;
 import net.wintang.zooapp.util.ApplicationConstants;
 import net.wintang.zooapp.dto.response.ResponseObject;
@@ -30,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> getUsersById(@PathVariable int id) {
+    public ResponseEntity<ResponseObject> getUsersById(@PathVariable int id) throws NotFoundException {
         return userService.getUserById(id);
     }
 
@@ -86,7 +88,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseObject> updateUser(@Valid @RequestBody UserUpdateDTO user, BindingResult bindingResult, @PathVariable int id) {
+    public ResponseEntity<ResponseObject> updateUserById(@Valid @RequestBody UserUpdateDTO user, BindingResult bindingResult, @PathVariable int id) throws NotFoundException, PermissionDeniedException {
         if (bindingResult.hasErrors()) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -94,11 +96,11 @@ public class UserController {
                             bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList(),
                             null));
         }
-        return userService.updateUser(user, id);
+        return userService.updateUserById(user, id);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseObject> deleteUser(@PathVariable int id) {
+    public ResponseEntity<ResponseObject> deleteUserById(@PathVariable int id) {
         return userService.deleteUserById(id);
     }
 }

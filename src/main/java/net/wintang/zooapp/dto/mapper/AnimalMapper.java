@@ -29,7 +29,6 @@ public class AnimalMapper {
 
     public Animal mapToAnimalEntity(AnimalRequestDTO dto) {
         return Animal.builder()
-                .id(dto.getCreatedBy())
                 .name(dto.getName())
                 .sex(dto.isSex())
                 .arrivalDate(dto.getArrivalDate())
@@ -37,7 +36,6 @@ public class AnimalMapper {
                 .origin(dto.getOrigin())
                 .species(speciesRepository.findByName(dto.getSpecies()))
                 .imgUrl(dto.getImgUrl())
-                .createdBy(userRepository.findById(dto.getCreatedBy()).orElseThrow())
                 .build();
     }
 }

@@ -2,6 +2,7 @@ package net.wintang.zooapp.controller;
 
 import jakarta.validation.Valid;
 import net.wintang.zooapp.dto.request.AnimalRequestDTO;
+import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.service.IAnimalService;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,10 @@ public class AnimalController {
             //do something here
         }
         return animalService.createAnimal(animal);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseObject> deleteAnimalById(@PathVariable int id) throws NotFoundException {
+        return animalService.deleteAnimalById(id);
     }
 }

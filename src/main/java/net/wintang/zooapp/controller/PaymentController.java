@@ -46,8 +46,8 @@ public class PaymentController {
         }
 
         TokenExtractor tokenExtractor = new TokenExtractor();
-        String username = tokenExtractor.getUsername(token);
-        return paymentService.getPaymentUrl((OrderResponseDTO) orderService.createOrder(order, username).getBody().getData(), req);
+        String id = tokenExtractor.getUsername(token);
+        return paymentService.getPaymentUrl((OrderResponseDTO) orderService.createOrder(order, id).getBody().getData(), req);
     }
 
     @GetMapping("/payment")

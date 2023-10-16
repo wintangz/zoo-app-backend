@@ -45,7 +45,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> createOrder(OrderRequestDTO orderDto, String username) {
+    public ResponseEntity<ResponseObject> createOrder(OrderRequestDTO orderDto, String id) {
 
         if (!orderDto.getPaymentMethod().equals("VNPAY")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
@@ -55,7 +55,7 @@ public class OrderService implements IOrderService {
         }
 
         Order order = new Order();
-        Optional<User> customer = userRepository.findByUsername(username);
+        Optional<User> customer = userRepository.findById(Integer.parseInt(id));
         customer.ifPresent(order::setCustomer);
 
         if (order.getCustomer() != null) {

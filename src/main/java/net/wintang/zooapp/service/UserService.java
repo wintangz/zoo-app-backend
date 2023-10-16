@@ -6,11 +6,16 @@ import net.wintang.zooapp.dto.request.UserUpdateDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.entity.Role;
 import net.wintang.zooapp.entity.User;
+import net.wintang.zooapp.exception.NotFoundException;
+import net.wintang.zooapp.exception.PermissionDeniedException;
 import net.wintang.zooapp.repository.UserRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -39,15 +44,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> getUserById(int id) {
-        User user = userRepository.findById(id).orElse(new User());
-        if (user.getUsername() == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
-                            ApplicationConstants.ResponseMessage.NOT_MODIFIED,
-                            null)
-            );
-        }
+    public ResponseEntity<ResponseObject> getUserById(int id) throws NotFoundException {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User: " + id));
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
@@ -137,7 +135,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> updateUser(UserUpdateDTO newUser, int id) {
+    public ResponseEntity<ResponseObject> updateUserById(UserUpdateDTO newUser, int id) throws NotFoundException, PermissionDeniedException {
+        UserDetails authenticatedUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (Integer.parseInt(authenticatedUser.getUsername()) != id && !authenticatedUser.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+            throw new PermissionDeniedException();
+        }
+
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User existingUser = optionalUser.get();
@@ -149,11 +152,7 @@ public class UserService implements IUserService {
                             userMapper.mapToUserDTO(Collections.singletonList(userRepository.save(updatedUser))))
             );
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
-                        ApplicationConstants.ResponseMessage.NOT_MODIFIED,
-                        id)
-        );
+        throw new NotFoundException("User: " + id);
     }
 
     @Override

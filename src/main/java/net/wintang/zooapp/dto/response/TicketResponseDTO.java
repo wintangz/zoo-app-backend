@@ -21,6 +21,8 @@ public class TicketResponseDTO {
 
     private String imgUrl;
 
+    private boolean status;
+
     public TicketResponseDTO(Ticket ticket) {
         this.id = ticket.getId();
         this.name = ticket.getName();
@@ -28,5 +30,6 @@ public class TicketResponseDTO {
         this.type = ticket.getType();
         this.description = ticket.getDescription();
         this.imgUrl = ticket.getImgUrl();
+        this.status = ticket.isStatus();
     }
 }

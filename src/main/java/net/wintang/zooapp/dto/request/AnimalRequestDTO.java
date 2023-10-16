@@ -34,7 +34,4 @@ public class AnimalRequestDTO {
 
     @NotBlank(message = "Species cannot be empty")
     private String species;
-
-    @Min(value = 1, message = "Please provide Id")
-    private int createdBy;
 }
