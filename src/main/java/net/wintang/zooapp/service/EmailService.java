@@ -103,12 +103,12 @@ public class EmailService implements IEmailService {
                     .append("<br>Your tickets:<br/>")
                     .append("<div style='text-align: center'>");
             ticketsWithImgUrl.forEach((ticketId, imgUrl) ->
-                emailContent.append("<h2>Ticket no.")
-                        .append(ticketId)
-                        .append("</h2><br/>")
-                        .append("<img src='")
-                        .append(imgUrl)
-                        .append("' alt='qrcode' />");
+                    emailContent.append("<h2>Ticket no.")
+                            .append(ticketId)
+                            .append("</h2><br/>")
+                            .append("<img src='")
+                            .append(imgUrl)
+                            .append("' alt='qrcode' />")
             );
             emailContent.append("</div>");
             helper.setText(emailContent.toString(), true);
