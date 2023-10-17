@@ -7,6 +7,7 @@ import net.wintang.zooapp.dto.request.OrderRequestDTO;
 import net.wintang.zooapp.dto.response.OrderResponseDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.exception.NotFoundException;
+import net.wintang.zooapp.exception.PermissionDeniedException;
 import net.wintang.zooapp.service.IEmailService;
 import net.wintang.zooapp.service.IOrderService;
 import net.wintang.zooapp.service.IPaymentService;
@@ -22,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -51,11 +53,11 @@ public class OrderController {
 
     @GetMapping("/payment")
     public ResponseEntity<ResponseObject> Transaction(
-            @RequestParam(value = "vnp_Amount") String amount,
-            @RequestParam(value = "vnp_BankCode") String bankCode,
-            @RequestParam(value = "vnp_OrderInfo") String orderInfo,
-            @RequestParam(value = "vnp_ResponseCode") String resCode,
-            @RequestParam(value = "vnp_TxnRef") String id
+            @RequestParam("vnp_Amount") String amount,
+            @RequestParam("vnp_BankCode") String bankCode,
+            @RequestParam("vnp_OrderInfo") String orderInfo,
+            @RequestParam("vnp_ResponseCode") String resCode,
+            @RequestParam("vnp_TxnRef") String id
     ) throws NotFoundException, SignatureException, NoSuchAlgorithmException, IOException, InvalidKeyException, WriterException {
         ResponseObject response = new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
                 ApplicationConstants.ResponseMessage.INVALID, "");
@@ -72,8 +74,15 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-//    @PostMapping("/verification")
-//    public ResponseEntity<ResponseObject> checkTickets() {
-//        return orderService.verifyTickets;
-//    }
+    @GetMapping("/verification")
+    public ResponseEntity<ResponseObject> checkTickets(
+            @RequestParam("orderId") int orderId,
+            @RequestParam("customerId") int customerId,
+            @RequestParam("ticket") int ticketId,
+            @RequestParam("type") String ticketType,
+            @RequestParam("issuedDate") LocalDateTime issuedDate,
+            @RequestParam("hashData") String hashData
+    ) throws NoSuchAlgorithmException, InvalidKeyException, NotFoundException, PermissionDeniedException {
+        return orderService.verifyTickets(orderId, customerId, ticketId, ticketType, issuedDate, hashData);
+    }
 }

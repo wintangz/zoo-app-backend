@@ -7,11 +7,14 @@ import net.wintang.zooapp.entity.Order;
 import net.wintang.zooapp.entity.OrderDetail;
 import net.wintang.zooapp.entity.Ticket;
 import net.wintang.zooapp.entity.User;
+import net.wintang.zooapp.exception.NotFoundException;
+import net.wintang.zooapp.exception.PermissionDeniedException;
 import net.wintang.zooapp.repository.OrderDetailRepository;
 import net.wintang.zooapp.repository.OrderRepository;
 import net.wintang.zooapp.repository.TicketRepository;
 import net.wintang.zooapp.repository.UserRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
+import net.wintang.zooapp.util.Encryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +22,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -110,5 +117,49 @@ public class OrderService implements IOrderService {
                         ApplicationConstants.ResponseMessage.NOT_MODIFIED,
                         new OrderResponseDTO())
         );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> verifyTickets(int orderId, int customerId, int ticketId, String ticketType, LocalDateTime issuedDate, String hashData) throws NoSuchAlgorithmException, InvalidKeyException, NotFoundException, PermissionDeniedException {
+        String generatedHashData = Encryptor.calculateHMAC(ApplicationConstants.Keys.KEY,
+                "?orderId=" + orderId
+                        + "&customerId=" + customerId
+                        + "&ticket=" + ticketId
+                        + "&type=" + ticketType
+                        + "&issuedDate=" + issuedDate + "&hashData=");
+        if (generatedHashData.equals(hashData)) {
+            Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order ID: " + orderId));
+            if (customerId == order.getCustomer().getId()) {
+                List<OrderDetail> tickets = orderDetailRepository.findAllByOrderId(orderId);
+                boolean ticketExist = false;
+                for (OrderDetail t : tickets) {
+                    if (t.getId() == ticketId && t.getTicket().getType().equals(ticketType)) {
+                        ticketExist = true;
+                        break;
+                    }
+                }
+                if (ticketExist) {
+                    if (!issuedDate.isBefore(LocalDateTime.now().minus(30, ChronoUnit.DAYS))) {
+                        OrderDetail ticket = orderDetailRepository.findById(ticketId).orElseThrow();
+                        if (!ticket.isChecked()) {
+                            ticket.setChecked(true);
+                            UserDetails staff = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                            ticket.setCheckedBy(User.builder().id(Integer.parseInt(staff.getUsername())).build());
+                            orderDetailRepository.save(ticket);
+                            return ResponseEntity.status(HttpStatus.OK).body(
+                                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                            ApplicationConstants.ResponseMessage.SUCCESS,
+                                            "Ticket ID: " + ticketId + " Customer ID: " + customerId)
+                            );
+                        }
+                        throw new PermissionDeniedException("Ticket is used");
+                    }
+                    throw new PermissionDeniedException("Ticket Expired");
+                }
+                throw new NotFoundException("Ticket ID: " + ticketId);
+            }
+            throw new NotFoundException("Customer: " + customerId);
+        }
+        throw new NotFoundException("Validated Details");
     }
 }

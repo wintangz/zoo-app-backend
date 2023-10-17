@@ -1,6 +1,5 @@
 package net.wintang.zooapp.dto.response;
 
-import jakarta.annotation.Nullable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.wintang.zooapp.entity.FeedingSchedule;

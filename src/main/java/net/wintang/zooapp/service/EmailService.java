@@ -70,7 +70,7 @@ public class EmailService implements IEmailService {
         int orderId = Integer.parseInt(id);
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException(id));
         User customer = order.getCustomer();
-        String data = "orderId=" + orderId + "&customerId=" + customer.getId();
+        String data = "?orderId=" + orderId + "&customerId=" + customer.getId();
         List<OrderDetail> tickets = orderDetailRepository.findAllByOrderId(orderId);
         Map<Integer, String> ticketsWithImgUrl = new HashMap<>();
 

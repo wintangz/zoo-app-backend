@@ -12,4 +12,8 @@ public class PermissionDeniedException extends Exception {
     public PermissionDeniedException() {
         this.errorMessage = "You don't have permission to do this";
     }
+
+    public PermissionDeniedException(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
 }
