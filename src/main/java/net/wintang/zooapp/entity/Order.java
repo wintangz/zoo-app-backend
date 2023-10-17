@@ -18,7 +18,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(insertable = false, updatable = false, columnDefinition = "datetime2(6) default getdate()")
+    @Column(insertable = false, updatable = false)
     private LocalDateTime createdDate;
 
     private float total;

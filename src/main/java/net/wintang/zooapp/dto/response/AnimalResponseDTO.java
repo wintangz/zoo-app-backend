@@ -2,8 +2,10 @@ package net.wintang.zooapp.dto.response;
 
 import lombok.Data;
 import net.wintang.zooapp.entity.Animal;
+import net.wintang.zooapp.entity.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class AnimalResponseDTO {
@@ -29,6 +31,10 @@ public class AnimalResponseDTO {
 
     private String species;
 
+    private List<User> trainers;
+
+    private List<User> assignors;
+
     public AnimalResponseDTO(Animal animal) {
         this.id = animal.getId();
         this.name = animal.getName();
@@ -41,5 +47,7 @@ public class AnimalResponseDTO {
         this.origin = animal.getOrigin();
         this.status = animal.isStatus();
         this.species = animal.getSpecies().getName();
+        this.trainers = animal.getZooTrainer();
+        this.assignors = animal.getAssignor();
     }
 }

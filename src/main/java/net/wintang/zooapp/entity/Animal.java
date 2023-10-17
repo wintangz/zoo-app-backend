@@ -40,6 +40,18 @@ public class Animal {
     private Species species;
 
     @ManyToMany
+    @JoinTable(name = "animal_trainer_assignor",
+            joinColumns = @JoinColumn(name = "animal_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "trainer_id", referencedColumnName = "id"))
+    private List<User> zooTrainer;
+
+    @ManyToMany
+    @JoinTable(name = "animal_trainer_assignor",
+            joinColumns = @JoinColumn(name = "animal_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "assigned_by", referencedColumnName = "id"))
+    private List<User> assignor;
+
+    @ManyToMany
     @JoinTable(name = "animal_enclosure",
             joinColumns = @JoinColumn(name = "animal_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "enclosure_id", referencedColumnName = "id"))

@@ -15,12 +15,9 @@ public class AnimalMapper {
 
     private final SpeciesRepository speciesRepository;
 
-    private final UserRepository userRepository;
-
     @Autowired
-    public AnimalMapper(SpeciesRepository speciesRepository, UserRepository userRepository) {
+    public AnimalMapper(SpeciesRepository speciesRepository) {
         this.speciesRepository = speciesRepository;
-        this.userRepository = userRepository;
     }
 
     public Object mapToAnimalDTO(List<Animal> animals) {
