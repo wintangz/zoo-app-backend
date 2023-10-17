@@ -83,6 +83,10 @@ public class AnimalService implements IAnimalService {
                     .trainer(zooTrainer)
                     .build();
             animalTrainerAssignorRepository.save(animalTrainerAssignor);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                            ApplicationConstants.ResponseMessage.SUCCESS,
+                            animalId));
         }
         throw new NotFoundException("Animal: " + animalId);
     }
