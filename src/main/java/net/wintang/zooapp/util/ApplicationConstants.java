@@ -5,6 +5,14 @@ public class ApplicationConstants {
     private ApplicationConstants() {
     }
 
+    public static class Keys {
+
+        private Keys() {
+        }
+
+        public static final String KEY = "ZNODOYKGNATNIW";
+    }
+
     public static class ResponseStatus {
 
         private ResponseStatus() {

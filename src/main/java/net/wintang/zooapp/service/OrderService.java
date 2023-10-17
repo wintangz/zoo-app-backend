@@ -2,6 +2,7 @@ package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.dto.request.OrderRequestDTO;
 import net.wintang.zooapp.dto.response.OrderResponseDTO;
+import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.entity.Order;
 import net.wintang.zooapp.entity.OrderDetail;
 import net.wintang.zooapp.entity.Ticket;
@@ -11,10 +12,11 @@ import net.wintang.zooapp.repository.OrderRepository;
 import net.wintang.zooapp.repository.TicketRepository;
 import net.wintang.zooapp.repository.UserRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
-import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,7 +47,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> createOrder(OrderRequestDTO orderDto, String id) {
+    public ResponseEntity<ResponseObject> createOrder(OrderRequestDTO orderDto) {
 
         if (!orderDto.getPaymentMethod().equals("VNPAY")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
@@ -55,7 +57,8 @@ public class OrderService implements IOrderService {
         }
 
         Order order = new Order();
-        Optional<User> customer = userRepository.findById(Integer.parseInt(id));
+        UserDetails authenticatedUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> customer = userRepository.findById(Integer.parseInt(authenticatedUser.getUsername()));
         customer.ifPresent(order::setCustomer);
 
         if (order.getCustomer() != null) {

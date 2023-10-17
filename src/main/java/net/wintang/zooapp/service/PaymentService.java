@@ -6,13 +6,12 @@ import net.wintang.zooapp.entity.Order;
 import net.wintang.zooapp.repository.OrderRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
 import net.wintang.zooapp.dto.response.ResponseObject;
+import net.wintang.zooapp.util.Encryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -117,7 +116,7 @@ public class PaymentService implements IPaymentService {
         }
         String queryUrl = query.toString();
         System.out.println("HashDATA: " + hashData.toString());
-        String vnp_SecureHash = calculateHMAC("DIPWDUWRWSBLVQWRAGFXYEOVAZBDOYVY", hashData.toString());
+        String vnp_SecureHash = Encryptor.calculateHMAC("DIPWDUWRWSBLVQWRAGFXYEOVAZBDOYVY", hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html" + "?" + queryUrl;
         System.out.println("This is url " + paymentUrl);
@@ -128,22 +127,6 @@ public class PaymentService implements IPaymentService {
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS, paymentUrl)
         );
-    }
-
-    private static String toHexString(byte[] bytes) {
-        Formatter formatter = new Formatter();
-        for (byte b : bytes) {
-            formatter.format("%02x", b);
-        }
-        return formatter.toString();
-    }
-
-    public static String calculateHMAC(String key, String data)
-            throws SignatureException, NoSuchAlgorithmException, InvalidKeyException {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), "HmacSHA512");
-        Mac mac = Mac.getInstance("HmacSHA512");
-        mac.init(secretKeySpec);
-        return toHexString(mac.doFinal(data.getBytes()));
     }
 
     @Override

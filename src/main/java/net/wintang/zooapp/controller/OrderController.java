@@ -1,21 +1,23 @@
 package net.wintang.zooapp.controller;
 
+import com.google.zxing.WriterException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import net.wintang.zooapp.dto.request.OrderRequestDTO;
 import net.wintang.zooapp.dto.response.OrderResponseDTO;
+import net.wintang.zooapp.dto.response.ResponseObject;
+import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.service.IEmailService;
 import net.wintang.zooapp.service.IOrderService;
 import net.wintang.zooapp.service.IPaymentService;
-import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.util.ApplicationConstants;
-import net.wintang.zooapp.util.TokenExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -23,7 +25,7 @@ import java.security.SignatureException;
 
 @RestController
 @RequestMapping("/api/orders")
-public class PaymentController {
+public class OrderController {
 
     private final IOrderService orderService;
 
@@ -32,22 +34,19 @@ public class PaymentController {
     private final IEmailService emailService;
 
     @Autowired
-    public PaymentController(IOrderService orderService, IPaymentService paymentService, IEmailService emailService) {
+    public OrderController(IOrderService orderService, IPaymentService paymentService, IEmailService emailService) {
         this.orderService = orderService;
         this.paymentService = paymentService;
         this.emailService = emailService;
     }
 
     @PostMapping
-    public ResponseEntity<ResponseObject> createOrder(@RequestHeader("Authorization") String token, @Valid @RequestBody OrderRequestDTO order, BindingResult bindingResult, HttpServletRequest req) throws UnsupportedEncodingException, SignatureException, NoSuchAlgorithmException, InvalidKeyException {
+    public ResponseEntity<ResponseObject> createOrder(@Valid @RequestBody OrderRequestDTO order, BindingResult bindingResult, HttpServletRequest req) throws UnsupportedEncodingException, SignatureException, NoSuchAlgorithmException, InvalidKeyException {
 
         if (bindingResult.hasErrors()) {
 
         }
-
-        TokenExtractor tokenExtractor = new TokenExtractor();
-        String id = tokenExtractor.getUsername(token);
-        return paymentService.getPaymentUrl((OrderResponseDTO) orderService.createOrder(order, id).getBody().getData(), req);
+        return paymentService.getPaymentUrl((OrderResponseDTO) orderService.createOrder(order).getBody().getData(), req);
     }
 
     @GetMapping("/payment")
@@ -57,7 +56,7 @@ public class PaymentController {
             @RequestParam(value = "vnp_OrderInfo") String orderInfo,
             @RequestParam(value = "vnp_ResponseCode") String resCode,
             @RequestParam(value = "vnp_TxnRef") String id
-    ) {
+    ) throws NotFoundException, SignatureException, NoSuchAlgorithmException, IOException, InvalidKeyException, WriterException {
         ResponseObject response = new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
                 ApplicationConstants.ResponseMessage.INVALID, "");
 
@@ -72,4 +71,9 @@ public class PaymentController {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+
+//    @PostMapping("/verification")
+//    public ResponseEntity<ResponseObject> checkTickets() {
+//        return orderService.verifyTickets;
+//    }
 }

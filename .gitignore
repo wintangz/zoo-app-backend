@@ -33,3 +33,7 @@ build/
 ### VS Code ###
 .vscode/
 /.jpb/
+
+.env
+connections.resources.xml
+deployment.targets.xml
