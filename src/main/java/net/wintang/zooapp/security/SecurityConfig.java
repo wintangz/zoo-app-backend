@@ -25,11 +25,9 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
-    private final CustomUserDetailsService userDetailsService;
 
     @Autowired
-    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtAuthEntryPoint jwtAuthEntryPoint) {
-        this.userDetailsService = userDetailsService;
+    public SecurityConfig(JwtAuthEntryPoint jwtAuthEntryPoint) {
         this.jwtAuthEntryPoint = jwtAuthEntryPoint;
     }
 
@@ -42,9 +40,12 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("api/auth/**").permitAll()
-                        .requestMatchers("api/animals").hasAnyAuthority(Roles.ADMIN,
+                        .requestMatchers("api/animals/**").hasAnyAuthority(Roles.ADMIN,
                                 Roles.STAFF, Roles.ZOO_TRAINER)
-                        .anyRequest().authenticated())
+                        .requestMatchers("api/users").hasAuthority(Roles.ADMIN)
+                        .requestMatchers("api/users/staff/**").hasAuthority(Roles.ADMIN)
+                        .requestMatchers("api/users/zoo-trainers/**").hasAuthority(Roles.STAFF)
+                        .anyRequest().permitAll())
                 .httpBasic(withDefaults());
         http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
