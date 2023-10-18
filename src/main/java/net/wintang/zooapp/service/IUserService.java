@@ -29,6 +29,6 @@ public interface IUserService {
 
     ResponseEntity<ResponseObject> updateUserById(UserUpdateDTO newUser, int id) throws NotFoundException, PermissionDeniedException;
 
-    ResponseEntity<ResponseObject> deleteUserById(int id);
+    ResponseEntity<ResponseObject> deleteUserById(int id) throws NotFoundException;
 
 }

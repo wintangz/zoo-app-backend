@@ -21,7 +21,7 @@ public class UserMapper {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<UserResponseDTO> mapToUserDTO(List<User> users) {
+    public static List<UserResponseDTO> mapToUserDTO(List<User> users) {
         return users.stream().map(UserResponseDTO::new).toList();
     }
 

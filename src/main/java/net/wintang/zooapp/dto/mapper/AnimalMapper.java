@@ -4,7 +4,6 @@ import net.wintang.zooapp.dto.request.AnimalRequestDTO;
 import net.wintang.zooapp.dto.response.AnimalResponseDTO;
 import net.wintang.zooapp.entity.Animal;
 import net.wintang.zooapp.repository.SpeciesRepository;
-import net.wintang.zooapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

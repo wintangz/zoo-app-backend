@@ -100,7 +100,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseObject> deleteUserById(@PathVariable int id) {
+    public ResponseEntity<ResponseObject> deleteUserById(@PathVariable int id) throws NotFoundException {
         return userService.deleteUserById(id);
     }
 }

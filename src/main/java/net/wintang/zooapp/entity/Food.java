@@ -28,4 +28,8 @@ public class Food {
     @ManyToOne
     @JoinColumn(name = "created_by")
     private User creator;
+
+    public Food(Integer id) {
+        this.id = id;
+    }
 }

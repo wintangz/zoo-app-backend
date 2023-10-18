@@ -39,7 +39,7 @@ public class UserService implements IUserService {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        userMapper.mapToUserDTO(userRepository.findAll()))
+                        UserMapper.mapToUserDTO(userRepository.findAll()))
         );
     }
 
@@ -49,7 +49,7 @@ public class UserService implements IUserService {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        userMapper.mapToUserDTO(Collections.singletonList(user)).get(0))
+                        UserMapper.mapToUserDTO(Collections.singletonList(user)).get(0))
         );
     }
 
@@ -58,7 +58,7 @@ public class UserService implements IUserService {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        userMapper.mapToUserDTO(userRepository.findByRole(4)))
+                        UserMapper.mapToUserDTO(userRepository.findByRole(4)))
         );
     }
 
@@ -67,7 +67,7 @@ public class UserService implements IUserService {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        userMapper.mapToUserDTO(userRepository.findByRole(2)))
+                        UserMapper.mapToUserDTO(userRepository.findByRole(2)))
         );
     }
 
@@ -76,7 +76,7 @@ public class UserService implements IUserService {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        userMapper.mapToUserDTO(userRepository.findByRole(3)))
+                        UserMapper.mapToUserDTO(userRepository.findByRole(3)))
         );
     }
 
@@ -149,14 +149,14 @@ public class UserService implements IUserService {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                             ApplicationConstants.ResponseMessage.SUCCESS,
-                            userMapper.mapToUserDTO(Collections.singletonList(userRepository.save(updatedUser))))
+                            UserMapper.mapToUserDTO(Collections.singletonList(userRepository.save(updatedUser))))
             );
         }
-        throw new NotFoundException("User: " + id);
+        throw new NotFoundException("User ID: " + id);
     }
 
     @Override
-    public ResponseEntity<ResponseObject> deleteUserById(int id) {
+    public ResponseEntity<ResponseObject> deleteUserById(int id) throws NotFoundException {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(
@@ -166,11 +166,6 @@ public class UserService implements IUserService {
             );
 
         }
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
-                        ApplicationConstants.ResponseMessage.NOT_MODIFIED,
-                        id)
-        );
+        throw new NotFoundException("User ID: " + id);
     }
 }
