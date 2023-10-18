@@ -1,6 +1,7 @@
 package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.dto.mapper.FeedingScheduleMapper;
+import net.wintang.zooapp.dto.request.FeedingScheduleConfirmDto;
 import net.wintang.zooapp.dto.request.FeedingScheduleRequestDto;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.entity.FeedingSchedule;
@@ -70,7 +71,18 @@ public class FeedingScheduleService implements IFeedingScheduleService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> confirmFeedingSchedule() {
-        return null;
+    public ResponseEntity<ResponseObject> confirmFeedingSchedule(int id, FeedingScheduleConfirmDto feedingScheduleConfirmDto) throws NotFoundException {
+        UserDetails feeder = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        FeedingSchedule updatedFeedingSchedule = feedingScheduleRepository.findById(id).orElseThrow(() -> new NotFoundException("Feeding Schedule ID: " + id));
+        updatedFeedingSchedule.setConfirmationImgUrl(feedingScheduleConfirmDto.getConfirmationImgUrl());
+        updatedFeedingSchedule.setFeeder(User.builder().id(Integer.parseInt(feeder.getUsername())).build());
+        updatedFeedingSchedule.setFed(true);
+        feedingScheduleRepository.save(updatedFeedingSchedule);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        id)
+        );
+
     }
 }

@@ -44,8 +44,14 @@ public class FeedingSchedule {
 
     @Column(columnDefinition = "bit default 0")
     private boolean fed;
-    
+
     @ManyToOne
     @JoinColumn(name = "fed_by")
     private User feeder;
+
+    @Column(updatable = false, insertable = false)
+    private LocalDateTime fedTime;
+
+    @Lob
+    private String confirmationImgUrl;
 }

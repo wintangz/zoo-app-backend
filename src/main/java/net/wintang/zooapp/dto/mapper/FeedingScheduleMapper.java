@@ -1,5 +1,6 @@
 package net.wintang.zooapp.dto.mapper;
 
+import net.wintang.zooapp.dto.request.FeedingScheduleConfirmDto;
 import net.wintang.zooapp.dto.request.FeedingScheduleRequestDto;
 import net.wintang.zooapp.dto.response.FeedingScheduleResponseDto;
 import net.wintang.zooapp.entity.Animal;

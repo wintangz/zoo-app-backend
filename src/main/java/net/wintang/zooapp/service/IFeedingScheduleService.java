@@ -1,5 +1,6 @@
 package net.wintang.zooapp.service;
 
+import net.wintang.zooapp.dto.request.FeedingScheduleConfirmDto;
 import net.wintang.zooapp.dto.request.FeedingScheduleRequestDto;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.exception.NotFoundException;
@@ -14,6 +15,6 @@ public interface IFeedingScheduleService {
 
     ResponseEntity<ResponseObject> deleteFeedingSchedule();
 
-    ResponseEntity<ResponseObject> confirmFeedingSchedule();
+    ResponseEntity<ResponseObject> confirmFeedingSchedule(int id, FeedingScheduleConfirmDto feedingScheduleConfirmDto) throws NotFoundException;
 
 }

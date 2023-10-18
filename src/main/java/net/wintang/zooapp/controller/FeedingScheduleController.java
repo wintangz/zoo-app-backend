@@ -1,6 +1,7 @@
 package net.wintang.zooapp.controller;
 
 import jakarta.validation.Valid;
+import net.wintang.zooapp.dto.request.FeedingScheduleConfirmDto;
 import net.wintang.zooapp.dto.request.FeedingScheduleRequestDto;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.exception.NotFoundException;
@@ -28,5 +29,10 @@ public class FeedingScheduleController {
     @PostMapping
     public ResponseEntity<ResponseObject> createFeedingSchedule(@Valid @RequestBody FeedingScheduleRequestDto feedingScheduleRequestDto) throws NotFoundException {
         return feedingScheduleService.createFeedingSchedule(feedingScheduleRequestDto);
+    }
+
+    @PutMapping("/{id}/confirmation")
+    public ResponseEntity<ResponseObject> confirmFeedingSchedule(@PathVariable int id, FeedingScheduleConfirmDto feedingScheduleConfirmDto) throws NotFoundException {
+        return feedingScheduleService.confirmFeedingSchedule(id, feedingScheduleConfirmDto);
     }
 }
