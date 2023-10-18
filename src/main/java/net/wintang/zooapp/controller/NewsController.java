@@ -44,4 +44,9 @@ public class NewsController {
     public ResponseEntity<ResponseObject> updateNewsById(@PathVariable int id, @RequestBody NewsRequestDTO newsRequestDTO) throws NotFoundException {
         return newsService.updateNewsById(newsRequestDTO, id);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseObject> deleteNewsById(@PathVariable int id) throws NotFoundException {
+        return newsService.deleteNewsById(id);
+    }
 }

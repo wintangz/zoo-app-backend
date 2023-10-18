@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FeedingScheduleRequestDto implements Serializable {
+public class FeedingScheduleRequestDTO implements Serializable {
 
     @NotNull(message = "Feeding time cannot be null")
     @Future(message = "Feeding time cannot be in the past")

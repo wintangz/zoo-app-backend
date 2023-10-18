@@ -1,8 +1,8 @@
 package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.dto.mapper.FeedingScheduleMapper;
-import net.wintang.zooapp.dto.request.FeedingScheduleConfirmDto;
-import net.wintang.zooapp.dto.request.FeedingScheduleRequestDto;
+import net.wintang.zooapp.dto.request.FeedingScheduleConfirmDTO;
+import net.wintang.zooapp.dto.request.FeedingScheduleRequestDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.entity.FeedingSchedule;
 import net.wintang.zooapp.entity.User;
@@ -46,7 +46,7 @@ public class FeedingScheduleService implements IFeedingScheduleService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> createFeedingSchedule(FeedingScheduleRequestDto feedingScheduleDto) throws NotFoundException {
+    public ResponseEntity<ResponseObject> createFeedingSchedule(FeedingScheduleRequestDTO feedingScheduleDto) throws NotFoundException {
         if (animalRepository.existsById(feedingScheduleDto.getAnimalId()) && animalDietRepository.existsById(feedingScheduleDto.getDietId())) {
             FeedingSchedule feedingSchedule = feedingScheduleMapper.mapToFeedScheduleEntity(feedingScheduleDto);
             UserDetails authenticatedUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -71,7 +71,7 @@ public class FeedingScheduleService implements IFeedingScheduleService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> confirmFeedingSchedule(int id, FeedingScheduleConfirmDto feedingScheduleConfirmDto) throws NotFoundException {
+    public ResponseEntity<ResponseObject> confirmFeedingSchedule(int id, FeedingScheduleConfirmDTO feedingScheduleConfirmDto) throws NotFoundException {
         UserDetails feeder = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         FeedingSchedule updatedFeedingSchedule = feedingScheduleRepository.findById(id).orElseThrow(() -> new NotFoundException("Feeding Schedule ID: " + id));
         updatedFeedingSchedule.setConfirmationImgUrl(feedingScheduleConfirmDto.getConfirmationImgUrl());

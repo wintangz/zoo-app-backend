@@ -15,14 +15,14 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnimalDietResponseDto implements Serializable {
+public class AnimalDietResponseDTO implements Serializable {
     private int id;
     private String type;
     private LocalDateTime createdDate;
     private UserResponseDTO creator;
     private List<Food> foodList;
 
-    public AnimalDietResponseDto(AnimalDiet animalDiet) {
+    public AnimalDietResponseDTO(AnimalDiet animalDiet) {
         this.id = animalDiet.getId();
         this.type = animalDiet.getType();
         this.createdDate = animalDiet.getCreatedDate();

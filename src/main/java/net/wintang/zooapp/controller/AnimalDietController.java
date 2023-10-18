@@ -1,6 +1,6 @@
 package net.wintang.zooapp.controller;
 
-import net.wintang.zooapp.dto.request.AnimalDietRequestDto;
+import net.wintang.zooapp.dto.request.AnimalDietRequestDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.service.IAnimalDietService;
@@ -28,7 +28,7 @@ public class AnimalDietController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseObject> createDiet(@RequestBody AnimalDietRequestDto animalDietRequestDto) {
+    public ResponseEntity<ResponseObject> createDiet(@RequestBody AnimalDietRequestDTO animalDietRequestDto) {
         return animalDietService.createAnimalDiet(animalDietRequestDto);
     }
 

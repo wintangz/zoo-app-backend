@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class FeedingScheduleResponseDto implements Serializable {
+public class FeedingScheduleResponseDTO implements Serializable {
     int id;
     LocalDateTime createdDate;
     LocalDateTime feedingTime;
@@ -21,7 +21,7 @@ public class FeedingScheduleResponseDto implements Serializable {
     boolean fed;
     int feederId;
 
-    public FeedingScheduleResponseDto(FeedingSchedule feedingSchedule) {
+    public FeedingScheduleResponseDTO(FeedingSchedule feedingSchedule) {
         this.id = feedingSchedule.getId();
         this.createdDate = feedingSchedule.getCreatedDate();
         this.feedingTime = feedingSchedule.getFeedingTime();

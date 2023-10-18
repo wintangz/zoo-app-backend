@@ -1,7 +1,7 @@
 package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.dto.mapper.AnimalDietMapper;
-import net.wintang.zooapp.dto.request.AnimalDietRequestDto;
+import net.wintang.zooapp.dto.request.AnimalDietRequestDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.entity.AnimalDiet;
 import net.wintang.zooapp.entity.User;
@@ -42,7 +42,7 @@ public class AnimalDietService implements IAnimalDietService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> createAnimalDiet(AnimalDietRequestDto animalDietRequestDto) {
+    public ResponseEntity<ResponseObject> createAnimalDiet(AnimalDietRequestDTO animalDietRequestDto) {
         UserDetails authenticatedUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println(animalDietRequestDto.getFoodListIds());
         AnimalDiet animalDiet = AnimalDietMapper.mapToDietEntity(animalDietRequestDto);

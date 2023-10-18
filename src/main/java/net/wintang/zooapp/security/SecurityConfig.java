@@ -44,7 +44,7 @@ public class SecurityConfig {
                         .requestMatchers("api/auth/**").permitAll()
                         .requestMatchers("api/animals").hasAnyAuthority(Roles.ADMIN,
                                 Roles.STAFF, Roles.ZOO_TRAINER)
-                        .anyRequest().permitAll())
+                        .anyRequest().authenticated())
                 .httpBasic(withDefaults());
         http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();

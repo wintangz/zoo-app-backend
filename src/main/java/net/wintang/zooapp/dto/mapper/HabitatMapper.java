@@ -9,7 +9,11 @@ import java.util.List;
 @Component
 public class HabitatMapper {
 
-    public List<HabitatResponseDTO> mapToHabitatDTO(List<Habitat> habitats) {
+    public static List<HabitatResponseDTO> mapToHabitatDTO(List<Habitat> habitats) {
         return habitats.stream().map(HabitatResponseDTO::new).toList();
+    }
+
+    public static HabitatResponseDTO mapToHabitatDTO(Habitat habitat) {
+        return new HabitatResponseDTO(habitat);
     }
 }

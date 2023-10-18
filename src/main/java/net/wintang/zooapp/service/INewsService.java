@@ -15,4 +15,6 @@ public interface INewsService {
     ResponseEntity<ResponseObject> get3LatestNews();
 
     ResponseEntity<ResponseObject> updateNewsById(NewsRequestDTO newsRequestDTO, int id) throws NotFoundException;
+
+    ResponseEntity<ResponseObject> deleteNewsById(int id) throws NotFoundException;
 }

@@ -1,8 +1,8 @@
 package net.wintang.zooapp.controller;
 
 import jakarta.validation.Valid;
-import net.wintang.zooapp.dto.request.FeedingScheduleConfirmDto;
-import net.wintang.zooapp.dto.request.FeedingScheduleRequestDto;
+import net.wintang.zooapp.dto.request.FeedingScheduleConfirmDTO;
+import net.wintang.zooapp.dto.request.FeedingScheduleRequestDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.service.IFeedingScheduleService;
@@ -27,12 +27,12 @@ public class FeedingScheduleController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseObject> createFeedingSchedule(@Valid @RequestBody FeedingScheduleRequestDto feedingScheduleRequestDto) throws NotFoundException {
+    public ResponseEntity<ResponseObject> createFeedingSchedule(@Valid @RequestBody FeedingScheduleRequestDTO feedingScheduleRequestDto) throws NotFoundException {
         return feedingScheduleService.createFeedingSchedule(feedingScheduleRequestDto);
     }
 
     @PutMapping("/{id}/confirmation")
-    public ResponseEntity<ResponseObject> confirmFeedingSchedule(@PathVariable int id, FeedingScheduleConfirmDto feedingScheduleConfirmDto) throws NotFoundException {
+    public ResponseEntity<ResponseObject> confirmFeedingSchedule(@PathVariable int id, FeedingScheduleConfirmDTO feedingScheduleConfirmDto) throws NotFoundException {
         return feedingScheduleService.confirmFeedingSchedule(id, feedingScheduleConfirmDto);
     }
 }

@@ -81,4 +81,17 @@ public class NewsService implements INewsService {
                         newsRequestDTO)
         );
     }
+
+    @Override
+    public ResponseEntity<ResponseObject> deleteNewsById(int id) throws NotFoundException {
+        if (newsRepository.existsById(id)) {
+            newsRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                            ApplicationConstants.ResponseMessage.SUCCESS,
+                            id)
+            );
+        }
+        throw new NotFoundException("News ID: " + id);
+    }
 }

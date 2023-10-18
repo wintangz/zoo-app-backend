@@ -1,5 +1,6 @@
 package net.wintang.zooapp.service;
 
+import net.wintang.zooapp.dto.mapper.SpeciesMapper;
 import net.wintang.zooapp.entity.Species;
 import net.wintang.zooapp.dto.response.SpeciesResponseDTO;
 import net.wintang.zooapp.repository.SpeciesRepository;
@@ -22,16 +23,12 @@ public class SpeciesService implements ISpeciesService {
         this.speciesRepository = speciesRepository;
     }
 
-    private List<SpeciesResponseDTO> mapToDTO(List<Species> species) {
-        return species.stream().map(SpeciesResponseDTO::new).toList();
-    }
-
     @Override
     public ResponseEntity<ResponseObject> getAllSpecies() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        mapToDTO(speciesRepository.findAll()))
+                        SpeciesMapper.mapToSpeciesDTO(speciesRepository.findAll()))
         );
     }
 }

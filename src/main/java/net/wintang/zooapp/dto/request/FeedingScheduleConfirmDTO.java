@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FeedingScheduleConfirmDto implements Serializable {
+public class FeedingScheduleConfirmDTO implements Serializable {
     @NotBlank
     String confirmationImgUrl;
 }

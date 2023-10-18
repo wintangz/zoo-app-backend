@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnimalDietRequestDto implements Serializable {
+public class AnimalDietRequestDTO implements Serializable {
 
     @NotBlank(message = "Type cannot be null")
     private String type;

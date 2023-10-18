@@ -34,6 +34,7 @@ public class NewsResponseDTO {
         this.imgUrl = news.getImgUrl();
         this.thumbnailUrl = news.getThumbnailUrl();
         this.createdDate = news.getCreatedDate();
+        this.type = news.getType();
         this.status = news.isStatus();
     }
 }
