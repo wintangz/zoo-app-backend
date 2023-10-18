@@ -12,4 +12,5 @@ public class NewsRequestDTO {
     private String type;
     private String imgUrl;
     private String thumbnailUrl;
+    private boolean status;
 }

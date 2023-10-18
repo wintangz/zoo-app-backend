@@ -39,4 +39,9 @@ public class NewsController {
     public ResponseEntity<ResponseObject> getRecommend() {
         return newsService.get3LatestNews();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseObject> updateNewsById(@PathVariable int id, @RequestBody NewsRequestDTO newsRequestDTO) throws NotFoundException {
+        return newsService.updateNewsById(newsRequestDTO, id);
+    }
 }

@@ -2,13 +2,13 @@ package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.dto.mapper.NewsMapper;
 import net.wintang.zooapp.dto.request.NewsRequestDTO;
-import net.wintang.zooapp.entity.News;
 import net.wintang.zooapp.dto.response.NewsResponseDTO;
+import net.wintang.zooapp.dto.response.ResponseObject;
+import net.wintang.zooapp.entity.News;
 import net.wintang.zooapp.entity.User;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.repository.NewsRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
-import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +23,9 @@ public class NewsService implements INewsService {
 
     private final NewsRepository newsRepository;
 
-    private final NewsMapper newsMapper;
-
     @Autowired
-    public NewsService(NewsRepository newsRepository, NewsMapper newsMapper) {
+    public NewsService(NewsRepository newsRepository) {
         this.newsRepository = newsRepository;
-        this.newsMapper = newsMapper;
     }
 
     @Override
@@ -36,7 +33,7 @@ public class NewsService implements INewsService {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        newsMapper.mapToNewsDTO(newsRepository.findAll()))
+                        NewsMapper.mapToNewsDTO(newsRepository.findAll()))
         );
     }
 
@@ -51,7 +48,7 @@ public class NewsService implements INewsService {
 
     @Override
     public ResponseEntity<ResponseObject> createNews(NewsRequestDTO newsRequestDTO) {
-        News news = newsMapper.mapToNewsEntity(newsRequestDTO);
+        News news = NewsMapper.mapToNewsEntity(newsRequestDTO);
         User author = new User();
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         author.setId(Integer.parseInt(userDetails.getUsername()));
@@ -65,7 +62,7 @@ public class NewsService implements INewsService {
 
     @Override
     public ResponseEntity<ResponseObject> get3LatestNews() {
-        List<NewsResponseDTO> news = newsMapper.mapToNewsDTO(newsRepository.findAll());
+        List<NewsResponseDTO> news = NewsMapper.mapToNewsDTO(newsRepository.findAll());
         List<NewsResponseDTO> recommend = List.of(news.get(news.size() - 1), news.get(news.size() - 2), news.get(news.size() - 3));
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
@@ -74,4 +71,14 @@ public class NewsService implements INewsService {
         );
     }
 
+    @Override
+    public ResponseEntity<ResponseObject> updateNewsById(NewsRequestDTO newsRequestDTO, int id) throws NotFoundException {
+        News oldNews = newsRepository.findById(id).orElseThrow(() -> new NotFoundException("News ID: " + id));
+        newsRepository.save(NewsMapper.mapToNewsEntity(newsRequestDTO, oldNews));
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        newsRequestDTO)
+        );
+    }
 }
