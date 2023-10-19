@@ -12,7 +12,7 @@ public interface IFoodService {
 
     ResponseEntity<ResponseObject> createFood(FoodRequestDTO foodRequestDTO);
 
-    ResponseEntity<ResponseObject> updateFood(int id, FoodRequestDTO foodRequestDTO) throws NotFoundException;
+    ResponseEntity<ResponseObject> updateFoodById(int id, FoodRequestDTO foodRequestDTO) throws NotFoundException;
 
-    ResponseEntity<ResponseObject> deleteFood(int id) throws NotFoundException;
+    ResponseEntity<ResponseObject> deleteFoodById(int id) throws NotFoundException;
 }

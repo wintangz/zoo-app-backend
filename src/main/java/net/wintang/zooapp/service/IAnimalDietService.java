@@ -12,5 +12,7 @@ public interface IAnimalDietService {
 
     ResponseEntity<ResponseObject> createAnimalDiet(AnimalDietRequestDTO animalDietRequestDto);
 
-    ResponseEntity<ResponseObject> deleteAnimalDIet(int id) throws NotFoundException;
+    ResponseEntity<ResponseObject> updateAnimalDietById(int id, AnimalDietRequestDTO animalDietRequestDTO) throws NotFoundException;
+
+    ResponseEntity<ResponseObject> deleteAnimalDietById(int id) throws NotFoundException;
 }

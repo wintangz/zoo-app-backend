@@ -44,7 +44,6 @@ public class AnimalDietService implements IAnimalDietService {
     @Override
     public ResponseEntity<ResponseObject> createAnimalDiet(AnimalDietRequestDTO animalDietRequestDto) {
         UserDetails authenticatedUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println(animalDietRequestDto.getFoodListIds());
         AnimalDiet animalDiet = AnimalDietMapper.mapToDietEntity(animalDietRequestDto);
         animalDiet.setCreator(User.builder().id(Integer.parseInt(authenticatedUser.getUsername())).build());
         animalDietRepository.save(animalDiet);
@@ -56,7 +55,21 @@ public class AnimalDietService implements IAnimalDietService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> deleteAnimalDIet(int id) throws NotFoundException {
+    public ResponseEntity<ResponseObject> updateAnimalDietById(int id, AnimalDietRequestDTO animalDietRequestDTO) throws NotFoundException {
+        AnimalDiet animalDiet = animalDietRepository.findById(id).orElseThrow(() -> new NotFoundException("Diet ID: " + id));
+        AnimalDiet updated = AnimalDietMapper.mapToDietEntity(animalDietRequestDTO);
+        animalDiet.setFoodList(updated.getFoodList());
+        animalDiet.setType(updated.getType());
+        animalDietRepository.save(animalDiet);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        id)
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> deleteAnimalDietById(int id) throws NotFoundException {
         if (animalDietRepository.existsById(id)) {
             animalDietRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(

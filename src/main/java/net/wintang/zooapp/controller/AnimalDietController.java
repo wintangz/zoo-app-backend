@@ -1,5 +1,6 @@
 package net.wintang.zooapp.controller;
 
+import jakarta.validation.Valid;
 import net.wintang.zooapp.dto.request.AnimalDietRequestDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.exception.NotFoundException;
@@ -32,8 +33,13 @@ public class AnimalDietController {
         return animalDietService.createAnimalDiet(animalDietRequestDto);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseObject> updateDietById(@PathVariable int id, @Valid @RequestBody AnimalDietRequestDTO animalDietRequestDTO) throws NotFoundException {
+        return animalDietService.updateAnimalDietById(id, animalDietRequestDTO);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseObject> deleteDietById(@PathVariable int id) throws NotFoundException {
-        return animalDietService.deleteAnimalDIet(id);
+        return animalDietService.deleteAnimalDietById(id);
     }
 }

@@ -51,4 +51,8 @@ public class Species {
 
     @Column(columnDefinition = "bit default 1")
     private boolean status;
+
+    public Species(int id) {
+        this.id = id;
+    }
 }
