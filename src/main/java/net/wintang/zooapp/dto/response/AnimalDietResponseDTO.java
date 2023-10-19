@@ -3,6 +3,7 @@ package net.wintang.zooapp.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.wintang.zooapp.dto.mapper.FoodMapper;
 import net.wintang.zooapp.dto.mapper.UserMapper;
 import net.wintang.zooapp.entity.AnimalDiet;
 import net.wintang.zooapp.entity.Food;
@@ -20,13 +21,13 @@ public class AnimalDietResponseDTO implements Serializable {
     private String type;
     private LocalDateTime createdDate;
     private UserResponseDTO creator;
-    private List<Food> foodList;
+    private List<FoodResponseDTO> foodList;
 
     public AnimalDietResponseDTO(AnimalDiet animalDiet) {
         this.id = animalDiet.getId();
         this.type = animalDiet.getType();
         this.createdDate = animalDiet.getCreatedDate();
-        this.creator = UserMapper.mapToUserDTO(Collections.singletonList(animalDiet.getCreator())).get(0);
-        this.foodList = animalDiet.getFoodList();
+        this.creator = UserMapper.mapToUserDTO(animalDiet.getCreator());
+        this.foodList = FoodMapper.mapToFoodDto(animalDiet.getFoodList());
     }
 }

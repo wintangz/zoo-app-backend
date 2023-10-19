@@ -25,6 +25,10 @@ public class UserMapper {
         return users.stream().map(UserResponseDTO::new).toList();
     }
 
+    public static UserResponseDTO mapToUserDTO(User user) {
+        return new UserResponseDTO(user);
+    }
+
     public User mapToUserEntity(UserRequestDTO user) {
         return User.builder()
                 .username(user.getUsername())

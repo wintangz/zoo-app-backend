@@ -49,7 +49,7 @@ public class UserService implements IUserService {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        UserMapper.mapToUserDTO(Collections.singletonList(user)).get(0))
+                        UserMapper.mapToUserDTO(user))
         );
     }
 
@@ -149,7 +149,7 @@ public class UserService implements IUserService {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                             ApplicationConstants.ResponseMessage.SUCCESS,
-                            UserMapper.mapToUserDTO(Collections.singletonList(userRepository.save(updatedUser))))
+                            UserMapper.mapToUserDTO(userRepository.save(updatedUser)))
             );
         }
         throw new NotFoundException("User ID: " + id);

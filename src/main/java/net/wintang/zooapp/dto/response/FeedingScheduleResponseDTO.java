@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class FeedingScheduleResponseDTO implements Serializable {
+
     int id;
     LocalDateTime createdDate;
     LocalDateTime feedingTime;
