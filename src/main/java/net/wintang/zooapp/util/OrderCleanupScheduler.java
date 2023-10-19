@@ -1,4 +1,5 @@
 package net.wintang.zooapp.util;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
@@ -7,7 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-public class  OrderCleanupScheduler {
+public class OrderCleanupScheduler {
 
     private final EntityManager entityManager;
 
@@ -16,7 +17,7 @@ public class  OrderCleanupScheduler {
         this.entityManager = entityManager;
     }
 
-    @Scheduled(cron = "00 00 20 * * *") // Run daily at 20:00:00
+    @Scheduled(cron = "30 26 21 * * *") // Run daily at 00:00:00
     @Transactional
     public void removeExpiredOrders() {
         Query query = entityManager.createNativeQuery("EXEC RemoveExpiredOrders");

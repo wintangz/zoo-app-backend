@@ -16,7 +16,7 @@ public class AzureStorageService {
 
     public AzureStorageService(@Value("${azure.storage.account-name}") String accountName,
                                @Value("${azure.storage.account-key}") String accountKey,
-                               @Value("qrcodes") String containerName) {
+                               @Value("${azure.storage.container-name}") String containerName) {
         this.accountName = accountName;
         this.accountKey = accountKey;
         this.containerName = containerName;
