@@ -16,24 +16,24 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponseObject> notFoundHandler(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                new ErrorResponseObject("", ex.getErrorMessage()));
+                new ErrorResponseObject("", ex.getErrorMessage(), ""));
     }
 
     @ExceptionHandler(PermissionDeniedException.class)
     public ResponseEntity<ErrorResponseObject> permissionDeniedHandler(PermissionDeniedException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                new ErrorResponseObject("", ex.getErrorMessage()));
+                new ErrorResponseObject("", ex.getErrorMessage(), ""));
     }
 
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<ErrorResponseObject> dataAccessHandler(DataAccessException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                new ErrorResponseObject("", ex.getMessage()));
+                new ErrorResponseObject("", ex.getMessage(), ""));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseObject> methodArgumentNotValidHandler(MethodArgumentNotValidException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                new ErrorResponseObject("", ex.getMessage()));
+                new ErrorResponseObject("", "", ex.getAllErrors()));
     }
 }
