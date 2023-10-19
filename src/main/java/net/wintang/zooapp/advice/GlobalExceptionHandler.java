@@ -1,6 +1,7 @@
 package net.wintang.zooapp.advice;
 
 import net.wintang.zooapp.dto.response.ErrorResponseObject;
+import net.wintang.zooapp.exception.DuplicatedKeyException;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.exception.PermissionDeniedException;
 import org.springframework.dao.DataAccessException;
@@ -20,6 +21,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponseObject> notFoundHandler(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ErrorResponseObject("", ex.getErrorMessage(), ""));
+    }
+
+    @ExceptionHandler(DuplicatedKeyException.class)
+    public ResponseEntity<ErrorResponseObject> duplicatedKeyHandler(DuplicatedKeyException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new ErrorResponseObject("", ex.getErrorMessage(), ""));
     }

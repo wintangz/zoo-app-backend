@@ -61,4 +61,9 @@ public class UserMapper {
         userBuilder.avatarUrl(user.getAvatarUrl() != null ? user.getAvatarUrl() : oldUser.getAvatarUrl());
         return userBuilder.build();
     }
+
+    public User encodePassword(User user, String password) {
+        user.setPassword(passwordEncoder.encode(password));
+        return user;
+    }
 }

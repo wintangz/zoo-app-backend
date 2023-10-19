@@ -27,6 +27,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @Service
 public class EmailService implements IEmailService {
@@ -121,41 +122,21 @@ public class EmailService implements IEmailService {
         }
     }
 
-//    @Override
-//    public String sendEmail(String id) throws NotFoundException, NoSuchAlgorithmException, InvalidKeyException, WriterException {
-//        int orderId = Integer.parseInt(id);
-//        Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException(id));
-//        User customer = order.getCustomer();
-//        String data = "orderId=" + orderId
-//                + "&customerId=" + customer.getId();
-//        List<OrderDetail> tickets = orderDetailRepository.findAllByOrderId(orderId);
-//        StringBuilder ticketsList = new StringBuilder();
-//        List<BufferedImage> qrCodes = new ArrayList<>();
-//        for (OrderDetail t : tickets) {
-//            String ticket = ticketsList.append("\n")
-//                    .append(data)
-//                    .append("&ticket=")
-//                    .append(t.getId())
-//                    .append("&type=")
-//                    .append(t.getTicket().getName()).toString();
-//            String encryptedData = Encryptor.calculateHMAC(ApplicationConstants.Keys.KEY, ticket);
-//            qrCodes.add(QRGeneratorService.generateQRCode(ticket + encryptedData, 512, 512));
-//        }
-//        try {
-//            SimpleMailMessage mailMessage = new SimpleMailMessage();
-//            mailMessage.setFrom(sender);
-//            mailMessage.setSubject("Thanks for your order: #" + orderId + ". Your tickets are ready!");
-//            mailMessage.setCc("Chúng em muốn ra hội đồng.");
-//            mailMessage.setTo(customer.getEmail());
-//            mailMessage.setText("We’ve received your order. Thank you for choosing our Zoo!" +
-//                    "\nYour bill: " +
-//                    "\n" + orderRepository.findById(orderId) +
-//                    "\nYour tickets: " +
-//                    "\n" + qrCodes);
-//            javaMailSender.send(mailMessage);
-//            System.out.println("Sent Email to someone");
-//            return "Mail Sent Successfully...";
-//        } catch (Exception e) {
-//            return "Error while Sending Mail";
-//        }
+    @Override
+    public String sendResetPasswordMail(User user) {
+        try {
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            Random random = new Random();
+            int code = random.nextInt(900000) + 100000;
+            mailMessage.setFrom(sender);
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setText("If you didn't send this request, please ignore this email.\n" +
+                    "Your verification code is " + code);
+            mailMessage.setSubject("Reset password for user " + user.getUsername());
+            javaMailSender.send(mailMessage);
+            return String.valueOf(code);
+        } catch (Exception e) {
+            return "Error while Sending Mail";
+        }
+    }
 }

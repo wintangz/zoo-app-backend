@@ -4,8 +4,10 @@ import net.wintang.zooapp.dto.mapper.UserMapper;
 import net.wintang.zooapp.dto.request.UserRequestDTO;
 import net.wintang.zooapp.dto.request.UserUpdateDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
+import net.wintang.zooapp.dto.response.VerifyEmailResponseDTO;
 import net.wintang.zooapp.entity.Role;
 import net.wintang.zooapp.entity.User;
+import net.wintang.zooapp.exception.DuplicatedKeyException;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.exception.PermissionDeniedException;
 import net.wintang.zooapp.repository.UserRepository;
@@ -26,12 +28,14 @@ public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final IEmailService emailService;
 
     @Autowired
     public UserService(UserRepository userRepository,
-                       UserMapper userMapper) {
+                       UserMapper userMapper, IEmailService emailService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.emailService = emailService;
     }
 
     @Override
@@ -81,57 +85,54 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> createCustomer(UserRequestDTO userDto) {
-        if (Boolean.TRUE.equals(userRepository.existsByUsername(userDto.getUsername()))) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
-                            ApplicationConstants.ResponseMessage.EXISTED,
-                            userDto.getUsername())
-            );
+    public ResponseEntity<ResponseObject> createCustomer(UserRequestDTO userDto) throws DuplicatedKeyException {
+        if (Boolean.FALSE.equals(userRepository.existsByUsername(userDto.getUsername()))) {
+            if (!userRepository.existsByEmail(userDto.getEmail())) {
+                User user = userMapper.mapToUserEntity(userDto);
+                user.setRoles(Collections.singletonList(new Role(4, "CUSTOMER")));
+                userRepository.save(user);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS, userDto)
+                );
+            }
+            throw new DuplicatedKeyException("Email: " + userDto.getEmail());
         }
-        User user = userMapper.mapToUserEntity(userDto);
-        user.setRoles(Collections.singletonList(new Role(4, "CUSTOMER")));
-        userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
-                        ApplicationConstants.ResponseMessage.SUCCESS, user)
-        );
+        throw new DuplicatedKeyException("Username: " + userDto.getUsername());
     }
 
     @Override
-    public ResponseEntity<ResponseObject> createStaff(UserRequestDTO userDto) {
-        if (Boolean.TRUE.equals(userRepository.existsByUsername(userDto.getUsername()))) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
-                            ApplicationConstants.ResponseMessage.EXISTED,
-                            userDto.getUsername())
-            );
+    public ResponseEntity<ResponseObject> createStaff(UserRequestDTO userDto) throws DuplicatedKeyException {
+        if (Boolean.FALSE.equals(userRepository.existsByUsername(userDto.getUsername()))) {
+            if (!userRepository.existsByEmail(userDto.getEmail())) {
+                User user = userMapper.mapToUserEntity(userDto);
+                user.setRoles(Collections.singletonList(new Role(2, "STAFF")));
+                userRepository.save(user);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS, userDto)
+                );
+            }
+            throw new DuplicatedKeyException("Email: " + userDto.getEmail());
         }
-        User user = userMapper.mapToUserEntity(userDto);
-        user.setRoles(Collections.singletonList(new Role(2, "STAFF")));
-        userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
-                        ApplicationConstants.ResponseMessage.SUCCESS, user)
-        );
+        throw new DuplicatedKeyException("Username: " + userDto.getUsername());
     }
 
     @Override
-    public ResponseEntity<ResponseObject> createZooTrainer(UserRequestDTO userDto) {
-        if (Boolean.TRUE.equals(userRepository.existsByUsername(userDto.getUsername()))) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
-                            ApplicationConstants.ResponseMessage.EXISTED,
-                            userDto.getUsername())
-            );
+    public ResponseEntity<ResponseObject> createZooTrainer(UserRequestDTO userDto) throws DuplicatedKeyException {
+        if (Boolean.FALSE.equals(userRepository.existsByUsername(userDto.getUsername()))) {
+            if (!userRepository.existsByEmail(userDto.getEmail())) {
+                User user = userMapper.mapToUserEntity(userDto);
+                user.setRoles(Collections.singletonList(new Role(3, "ZOO_TRAINER")));
+                userRepository.save(user);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS, userDto)
+                );
+            }
+            throw new DuplicatedKeyException("Email: " + userDto.getEmail());
         }
-        User user = userMapper.mapToUserEntity(userDto);
-        user.setRoles(Collections.singletonList(new Role(3, "ZOO_TRAINER")));
-        userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
-                        ApplicationConstants.ResponseMessage.SUCCESS, user)
-        );
+        throw new DuplicatedKeyException("Username: " + userDto.getUsername());
     }
 
     @Override
@@ -167,5 +168,26 @@ public class UserService implements IUserService {
 
         }
         throw new NotFoundException("User ID: " + id);
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> resetPassword(String newPassword, String email) throws NotFoundException {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Email: " + email));
+        userRepository.save(userMapper.encodePassword(user, newPassword));
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        email)
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> verifyEmail(String email) throws NotFoundException {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Email: " + email));
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        new VerifyEmailResponseDTO(email, emailService.sendResetPasswordMail(user)))
+        );
     }
 }

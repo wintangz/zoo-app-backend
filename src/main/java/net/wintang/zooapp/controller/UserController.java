@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import net.wintang.zooapp.dto.request.UserRequestDTO;
 import net.wintang.zooapp.dto.request.UserUpdateDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
+import net.wintang.zooapp.exception.DuplicatedKeyException;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.exception.PermissionDeniedException;
 import net.wintang.zooapp.service.IUserService;
@@ -48,17 +49,17 @@ public class UserController {
     }
 
     @PostMapping("/customers")
-    public ResponseEntity<ResponseObject> createCustomer(@Valid @RequestBody UserRequestDTO user) {
+    public ResponseEntity<ResponseObject> createCustomer(@Valid @RequestBody UserRequestDTO user) throws DuplicatedKeyException {
         return userService.createCustomer(user);
     }
 
     @PostMapping("/staff")
-    public ResponseEntity<ResponseObject> createStaff(@Valid @RequestBody UserRequestDTO user) {
+    public ResponseEntity<ResponseObject> createStaff(@Valid @RequestBody UserRequestDTO user) throws DuplicatedKeyException {
         return userService.createStaff(user);
     }
 
     @PostMapping("/zoo-trainers")
-    public ResponseEntity<ResponseObject> createZooTrainer(@Valid @RequestBody UserRequestDTO user) {
+    public ResponseEntity<ResponseObject> createZooTrainer(@Valid @RequestBody UserRequestDTO user) throws DuplicatedKeyException {
         return userService.createZooTrainer(user);
     }
 
@@ -70,5 +71,16 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseObject> deleteUserById(@PathVariable int id) throws NotFoundException {
         return userService.deleteUserById(id);
+    }
+
+    @PostMapping("/password-reset/verification")
+    public ResponseEntity<ResponseObject> verifyEmail(@RequestBody String email) throws NotFoundException {
+        return userService.verifyEmail(email);
+    }
+
+    @PostMapping("/password-reset")
+    public ResponseEntity<ResponseObject> resetPassword(@RequestBody String newPassword,
+                                                        @RequestParam String email) throws NotFoundException {
+        return userService.resetPassword(newPassword, email);
     }
 }
