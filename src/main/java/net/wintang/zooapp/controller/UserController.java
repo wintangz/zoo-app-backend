@@ -3,16 +3,12 @@ package net.wintang.zooapp.controller;
 import jakarta.validation.Valid;
 import net.wintang.zooapp.dto.request.UserRequestDTO;
 import net.wintang.zooapp.dto.request.UserUpdateDTO;
+import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.exception.PermissionDeniedException;
 import net.wintang.zooapp.service.IUserService;
-import net.wintang.zooapp.util.ApplicationConstants;
-import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -52,50 +48,22 @@ public class UserController {
     }
 
     @PostMapping("/customers")
-    public ResponseEntity<ResponseObject> createCustomer(@Valid @RequestBody UserRequestDTO user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
-                            bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList(),
-                            null));
-        }
+    public ResponseEntity<ResponseObject> createCustomer(@Valid @RequestBody UserRequestDTO user) {
         return userService.createCustomer(user);
     }
 
     @PostMapping("/staff")
-    public ResponseEntity<ResponseObject> createStaff(@Valid @RequestBody UserRequestDTO user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
-                            bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList(),
-                            null));
-        }
+    public ResponseEntity<ResponseObject> createStaff(@Valid @RequestBody UserRequestDTO user) {
         return userService.createStaff(user);
     }
 
     @PostMapping("/zoo-trainers")
-    public ResponseEntity<ResponseObject> createZooTrainer(@Valid @RequestBody UserRequestDTO user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
-                            bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList(),
-                            null));
-        }
+    public ResponseEntity<ResponseObject> createZooTrainer(@Valid @RequestBody UserRequestDTO user) {
         return userService.createZooTrainer(user);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseObject> updateUserById(@Valid @RequestBody UserUpdateDTO user, BindingResult bindingResult, @PathVariable int id) throws NotFoundException, PermissionDeniedException {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
-                            bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList(),
-                            null));
-        }
+    public ResponseEntity<ResponseObject> updateUserById(@Valid @RequestBody UserUpdateDTO user, @PathVariable int id) throws NotFoundException, PermissionDeniedException {
         return userService.updateUserById(user, id);
     }
 

@@ -26,10 +26,7 @@ public class AnimalController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseObject> createAnimal(@Valid @RequestBody AnimalRequestDTO animal, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            //do something here
-        }
+    public ResponseEntity<ResponseObject> createAnimal(@Valid @RequestBody AnimalRequestDTO animal) {
         return animalService.createAnimal(animal);
     }
 

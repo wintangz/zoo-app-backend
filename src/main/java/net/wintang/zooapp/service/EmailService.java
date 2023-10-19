@@ -96,11 +96,11 @@ public class EmailService implements IEmailService {
 
             // Add image attachments inline in the email
             StringBuilder emailContent = new StringBuilder();
-            emailContent.append("<h1>We have ve received your order. Thank you for choosing our Zoo!</h1>" + "<br>Your order no: ")
+            emailContent.append("<h1 style='text-align: center'>We have received your order. Thank you for choosing our Zoo!</h1>" + "<div style='text-align: center'><br>Your order no: ")
                     .append(order.getId())
                     .append("<br>Purchased at: ")
                     .append(order.getCreatedDate().toString().replace("T", " "))
-                    .append("<br>Your tickets:<br/>")
+                    .append("<br>Your tickets:<br/></div>")
                     .append("<div style='text-align: center'>");
             ticketsWithImgUrl.forEach((ticketId, imgUrl) ->
                     emailContent.append("<h2>Ticket no.")

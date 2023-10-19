@@ -57,7 +57,7 @@ public class FeedingScheduleService implements IFeedingScheduleService {
                             ApplicationConstants.ResponseMessage.SUCCESS,
                             feedingScheduleDto));
         }
-        throw new NotFoundException("Animal ID or Diet ID ");
+        throw new NotFoundException("Animal ID or Diet ID");
     }
 
     @Override
