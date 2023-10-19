@@ -33,4 +33,14 @@ public class FoodController {
     public ResponseEntity<ResponseObject> createFood(@RequestBody FoodRequestDTO foodRequestDTO) {
         return foodService.createFood(foodRequestDTO);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseObject> updateFood(@PathVariable int id, @RequestBody FoodRequestDTO foodRequestDTO) throws NotFoundException {
+        return foodService.updateFood(id, foodRequestDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseObject> deleteFood(@PathVariable int id) throws NotFoundException {
+        return foodService.deleteFood(id);
+    }
 }

@@ -47,4 +47,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new ErrorResponseObject("", "", errorMessages));
     }
+
+    @ExceptionHandler(ClassCastException.class)
+    public ResponseEntity<ErrorResponseObject> classCastHandler(ClassCastException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ErrorResponseObject("", "", "Please check your token!"));
+    }
 }

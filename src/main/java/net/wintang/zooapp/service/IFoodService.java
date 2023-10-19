@@ -11,4 +11,8 @@ public interface IFoodService {
     ResponseEntity<ResponseObject> getFoodById(int id) throws NotFoundException;
 
     ResponseEntity<ResponseObject> createFood(FoodRequestDTO foodRequestDTO);
+
+    ResponseEntity<ResponseObject> updateFood(int id, FoodRequestDTO foodRequestDTO) throws NotFoundException;
+
+    ResponseEntity<ResponseObject> deleteFood(int id) throws NotFoundException;
 }

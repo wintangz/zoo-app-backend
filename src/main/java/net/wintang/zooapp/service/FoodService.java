@@ -55,4 +55,30 @@ public class FoodService implements IFoodService {
                         foodRequestDTO)
         );
     }
+
+    @Override
+    public ResponseEntity<ResponseObject> updateFood(int id, FoodRequestDTO foodRequestDTO) throws NotFoundException {
+        Food food = foodRepository.findById(id).orElseThrow(() -> new NotFoundException("Food ID: " + id));
+        food.setName(foodRequestDTO.getName());
+        food.setType(foodRequestDTO.getType());
+        foodRepository.save(food);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        foodRequestDTO)
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> deleteFood(int id) throws NotFoundException {
+        if (foodRepository.existsById(id)) {
+            foodRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                            ApplicationConstants.ResponseMessage.SUCCESS,
+                            id)
+            );
+        }
+        throw new NotFoundException("Food ID: " + id);
+    }
 }
