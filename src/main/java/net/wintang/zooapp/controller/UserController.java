@@ -1,10 +1,7 @@
 package net.wintang.zooapp.controller;
 
 import jakarta.validation.Valid;
-import net.wintang.zooapp.dto.request.PasswordResetDTO;
-import net.wintang.zooapp.dto.request.UserRequestDTO;
-import net.wintang.zooapp.dto.request.UserUpdateDTO;
-import net.wintang.zooapp.dto.request.VerificationRequestDTO;
+import net.wintang.zooapp.dto.request.*;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.exception.DuplicatedKeyException;
 import net.wintang.zooapp.exception.NotFoundException;
@@ -76,8 +73,8 @@ public class UserController {
     }
 
     @PostMapping("/password-reset/email")
-    public ResponseEntity<ResponseObject> verifyEmail(@RequestBody String email) throws NotFoundException {
-        return userService.verifyEmail(email);
+    public ResponseEntity<ResponseObject> verifyEmail(@RequestBody EmailVerificationRequestDTO emailVerificationRequestDTO) throws NotFoundException {
+        return userService.verifyEmail(emailVerificationRequestDTO.getEmail());
     }
 
     @PostMapping("/password-reset/verification-code")
