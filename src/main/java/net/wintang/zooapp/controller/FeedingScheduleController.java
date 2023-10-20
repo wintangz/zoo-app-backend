@@ -32,7 +32,7 @@ public class FeedingScheduleController {
     }
 
     @PutMapping("/{id}/confirmation")
-    public ResponseEntity<ResponseObject> confirmFeedingSchedule(@PathVariable int id, FeedingScheduleConfirmDTO feedingScheduleConfirmDto) throws NotFoundException {
+    public ResponseEntity<ResponseObject> confirmFeedingSchedule(@PathVariable int id, @Valid @RequestBody FeedingScheduleConfirmDTO feedingScheduleConfirmDto) throws NotFoundException {
         return feedingScheduleService.confirmFeedingSchedule(id, feedingScheduleConfirmDto);
     }
 }

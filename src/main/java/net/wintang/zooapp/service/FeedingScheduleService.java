@@ -71,7 +71,8 @@ public class FeedingScheduleService implements IFeedingScheduleService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> confirmFeedingSchedule(int id, FeedingScheduleConfirmDTO feedingScheduleConfirmDto) throws NotFoundException {
+    public ResponseEntity<ResponseObject>
+    confirmFeedingSchedule(int id, FeedingScheduleConfirmDTO feedingScheduleConfirmDto) throws NotFoundException {
         UserDetails feeder = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         FeedingSchedule updatedFeedingSchedule = feedingScheduleRepository.findById(id).orElseThrow(() -> new NotFoundException("Feeding Schedule ID: " + id));
         updatedFeedingSchedule.setConfirmationImgUrl(feedingScheduleConfirmDto.getConfirmationImgUrl());
