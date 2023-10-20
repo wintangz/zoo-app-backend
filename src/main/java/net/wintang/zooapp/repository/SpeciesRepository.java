@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SpeciesRepository extends JpaRepository<Species, Integer> {
     Species findByName(String name);
+
+    boolean existsBySpecies(String species);
 }

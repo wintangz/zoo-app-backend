@@ -2,8 +2,6 @@ package net.wintang.zooapp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -22,6 +20,7 @@ public class Species {
     @Column(unique = true)
     private String name;
 
+    @Column(name = "species_name")
     private String species;
 
     private String genus;
@@ -41,8 +40,7 @@ public class Species {
     @Lob
     private String avatarUrl;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @ManyToOne
     @JoinColumn(name = "habitat_id")
     private Habitat habitat;
 
