@@ -1,6 +1,7 @@
 package net.wintang.zooapp.dto.response;
 
 import lombok.Data;
+import net.wintang.zooapp.dto.mapper.HabitatMapper;
 import net.wintang.zooapp.entity.Species;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class SpeciesResponseDTO {
 
     private String family;
 
-    private String habitat;
+    private HabitatResponseDTO habitat;
 
     private String diet;
 
@@ -45,7 +46,7 @@ public class SpeciesResponseDTO {
         this.description = species.getDescription();
         this.imgUrl = species.getImgUrl();
         this.avatarUrl = species.getAvatarUrl();
-        this.habitat = species.getHabitat().getName();
+        this.habitat = HabitatMapper.mapToHabitatDTO(species.getHabitat());
         this.createdDate = species.getCreatedDate();
         this.status = species.isStatus();
     }
