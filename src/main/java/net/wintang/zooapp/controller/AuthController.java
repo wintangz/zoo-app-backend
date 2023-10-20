@@ -50,9 +50,8 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@RequestHeader("Authorization") String authorization) {
         // Validate and invalidate the token
-        TokenExtractor tokenExtractor = new TokenExtractor();
-        String token = tokenExtractor.extractToken(authorization);
-        if (token != null && jwtGenerator.validateToken(token)) {
+        String token = TokenExtractor.extractToken(authorization);
+        if (!token.isBlank() && jwtGenerator.validateToken(token)) {
             jwtGenerator.invalidateToken(token);
             SecurityContextHolder.clearContext();
             return ResponseEntity.ok("Logout successful");

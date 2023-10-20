@@ -7,6 +7,7 @@ import net.wintang.zooapp.exception.PermissionDeniedException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -59,5 +60,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseObject> classCastHandler(ClassCastException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new ErrorResponseObject("", "", "Please check your token!"));
+    }
+
+    @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
+    public ResponseEntity<ErrorResponseObject> authCredentialsNotFoundHandler(AuthenticationCredentialsNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ErrorResponseObject("", "", ex.getMessage()));
     }
 }

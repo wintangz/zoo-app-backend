@@ -37,6 +37,18 @@ public class JwtGenerator {
                 .compact();
     }
 
+    public String generateToken(String email, String code) {
+        Date currentDate = new Date();
+        Date expireDate = new Date(currentDate.getTime() + ApplicationConstants.SecurityConstants.JWT_EXPIRATION_RESET);
+        return Jwts.builder()
+                .setSubject(email)
+                .claim("code", code)
+                .setIssuedAt(currentDate)
+                .setExpiration(expireDate)
+                .signWith(key)
+                .compact();
+    }
+
     public String getUserIdFromJwt(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -53,6 +65,15 @@ public class JwtGenerator {
                 .parseClaimsJws(token)
                 .getBody();
         return claims.get("roles");
+    }
+
+    public Object getCodeFromJwt(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.get("code");
     }
 
     public UserDetails getUserDetailsFromToken(String token) {
@@ -85,12 +106,14 @@ public class JwtGenerator {
     }
 
     public boolean validateToken(String token) {
-        cleanUpExpiredTokens(); // Clean up expired tokens before validation
+        cleanUpExpiredTokens();
         if (invalidatedTokens.contains(token)) {
-            return false; // Token is in the invalidatedTokens list
+            System.out.println("Invalidated");
+            return false;
         }
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            System.out.println("Validating...");
             return true;
         } catch (Exception ex) {
             throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect");

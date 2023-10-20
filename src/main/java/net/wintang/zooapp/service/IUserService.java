@@ -2,6 +2,7 @@ package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.dto.request.UserRequestDTO;
 import net.wintang.zooapp.dto.request.UserUpdateDTO;
+import net.wintang.zooapp.dto.request.VerificationRequestDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.exception.DuplicatedKeyException;
 import net.wintang.zooapp.exception.NotFoundException;
@@ -32,7 +33,9 @@ public interface IUserService {
 
     ResponseEntity<ResponseObject> deleteUserById(int id) throws NotFoundException;
 
-    ResponseEntity<ResponseObject> resetPassword(String newPassword, String email) throws NotFoundException;
+    ResponseEntity<ResponseObject> resetPassword(String newPassword, String token) throws NotFoundException;
 
     ResponseEntity<ResponseObject> verifyEmail(String email) throws NotFoundException;
+
+    ResponseEntity<ResponseObject> verifyCode(VerificationRequestDTO code) throws NotFoundException;
 }

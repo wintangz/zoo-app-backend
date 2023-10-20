@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class ZooAppApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ZooAppApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ZooAppApplication.class, args);
+    }
 }

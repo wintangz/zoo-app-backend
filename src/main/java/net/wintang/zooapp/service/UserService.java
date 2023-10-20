@@ -3,14 +3,16 @@ package net.wintang.zooapp.service;
 import net.wintang.zooapp.dto.mapper.UserMapper;
 import net.wintang.zooapp.dto.request.UserRequestDTO;
 import net.wintang.zooapp.dto.request.UserUpdateDTO;
+import net.wintang.zooapp.dto.request.VerificationRequestDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
-import net.wintang.zooapp.dto.response.VerifyEmailResponseDTO;
+import net.wintang.zooapp.dto.response.VerificationResponseDTO;
 import net.wintang.zooapp.entity.Role;
 import net.wintang.zooapp.entity.User;
 import net.wintang.zooapp.exception.DuplicatedKeyException;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.exception.PermissionDeniedException;
 import net.wintang.zooapp.repository.UserRepository;
+import net.wintang.zooapp.security.JwtGenerator;
 import net.wintang.zooapp.util.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,13 +31,15 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final IEmailService emailService;
+    private final JwtGenerator jwtGenerator;
 
     @Autowired
     public UserService(UserRepository userRepository,
-                       UserMapper userMapper, IEmailService emailService) {
+                       UserMapper userMapper, IEmailService emailService, JwtGenerator jwtGenerator) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.emailService = emailService;
+        this.jwtGenerator = jwtGenerator;
     }
 
     @Override
@@ -171,13 +175,21 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> resetPassword(String newPassword, String email) throws NotFoundException {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Email: " + email));
-        userRepository.save(userMapper.encodePassword(user, newPassword));
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
-                        ApplicationConstants.ResponseMessage.SUCCESS,
-                        email)
+    public ResponseEntity<ResponseObject> resetPassword(String newPassword, String token) throws NotFoundException {
+        if (jwtGenerator.validateToken(token)) {
+            User user = userRepository.findByEmail(jwtGenerator.getUserIdFromJwt(token)).orElseThrow(() -> new NotFoundException("Email"));
+            user.setResetToken(null);
+            userRepository.save(userMapper.encodePassword(user, newPassword));
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                            ApplicationConstants.ResponseMessage.SUCCESS,
+                            "Password reset")
+            );
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                        ApplicationConstants.ResponseMessage.INVALID,
+                        "Expired")
         );
     }
 
@@ -187,7 +199,27 @@ public class UserService implements IUserService {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        new VerifyEmailResponseDTO(email, emailService.sendResetPasswordMail(user)))
+                        emailService.sendResetPasswordMail(user))
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> verifyCode(VerificationRequestDTO request) throws NotFoundException {
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new NotFoundException("Email: " + request.getEmail()));
+        String token = user.getResetToken();
+        if (jwtGenerator.validateToken(token)) {
+            if (jwtGenerator.getCodeFromJwt(token).equals(request.getCode())) {
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS,
+                                new VerificationResponseDTO(token))
+                );
+            }
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                        ApplicationConstants.ResponseMessage.INVALID,
+                        "Expired")
         );
     }
 }

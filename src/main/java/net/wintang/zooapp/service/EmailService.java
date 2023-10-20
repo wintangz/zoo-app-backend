@@ -9,6 +9,8 @@ import net.wintang.zooapp.entity.User;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.repository.OrderDetailRepository;
 import net.wintang.zooapp.repository.OrderRepository;
+import net.wintang.zooapp.repository.UserRepository;
+import net.wintang.zooapp.security.JwtGenerator;
 import net.wintang.zooapp.util.ApplicationConstants;
 import net.wintang.zooapp.util.Encryptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +40,20 @@ public class EmailService implements IEmailService {
 
     private final OrderDetailRepository orderDetailRepository;
 
+    private final UserRepository userRepository;
+
     private final AzureStorageService azureStorageService;
 
+    private final JwtGenerator jwtGenerator;
+
     @Autowired
-    public EmailService(JavaMailSender javaMailSender, OrderRepository orderService, OrderDetailRepository orderDetailRepository, AzureStorageService azureStorageService) {
+    public EmailService(JavaMailSender javaMailSender, OrderRepository orderService, OrderDetailRepository orderDetailRepository, UserRepository userRepository, AzureStorageService azureStorageService, JwtGenerator jwtGenerator) {
         this.javaMailSender = javaMailSender;
         this.orderRepository = orderService;
         this.orderDetailRepository = orderDetailRepository;
+        this.userRepository = userRepository;
         this.azureStorageService = azureStorageService;
+        this.jwtGenerator = jwtGenerator;
     }
 
     @Value("${spring.mail.username}")
@@ -134,7 +142,10 @@ public class EmailService implements IEmailService {
                     "Your verification code is " + code);
             mailMessage.setSubject("Reset password for user " + user.getUsername());
             javaMailSender.send(mailMessage);
-            return String.valueOf(code);
+            String resetToken = jwtGenerator.generateToken(user.getEmail(), String.valueOf(code));
+            user.setResetToken(resetToken);
+            userRepository.save(user);
+            return "Email sent to user";
         } catch (Exception e) {
             return "Error while Sending Mail";
         }
