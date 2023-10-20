@@ -15,7 +15,6 @@ import net.wintang.zooapp.util.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -42,12 +41,28 @@ public class OrderController {
         this.emailService = emailService;
     }
 
+    @GetMapping
+    public ResponseEntity<ResponseObject> getOrders() {
+        return orderService.getOrders();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseObject> getOrderById(@PathVariable int id) throws NotFoundException {
+        return orderService.getOrderById(id);
+    }
+
+    @GetMapping("/tickets")
+    public ResponseEntity<ResponseObject> getPurchasedTickets() {
+        return orderService.getPurchasedTickets();
+    }
+
+    @GetMapping("/{id}/tickets")
+    public ResponseEntity<ResponseObject> getPurchasedTicketsByOrderId(@PathVariable int id) throws NotFoundException {
+        return orderService.getPurchasedTicketsByOrderId(id);
+    }
+
     @PostMapping
-    public ResponseEntity<ResponseObject> createOrder(@Valid @RequestBody OrderRequestDTO order, BindingResult bindingResult, HttpServletRequest req) throws UnsupportedEncodingException, SignatureException, NoSuchAlgorithmException, InvalidKeyException {
-
-        if (bindingResult.hasErrors()) {
-
-        }
+    public ResponseEntity<ResponseObject> createOrder(@Valid @RequestBody OrderRequestDTO order, HttpServletRequest req) throws UnsupportedEncodingException, SignatureException, NoSuchAlgorithmException, InvalidKeyException {
         return paymentService.getPaymentUrl((OrderResponseDTO) orderService.createOrder(order).getBody().getData(), req);
     }
 

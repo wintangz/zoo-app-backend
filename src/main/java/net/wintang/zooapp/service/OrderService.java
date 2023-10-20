@@ -50,7 +50,41 @@ public class OrderService implements IOrderService {
 
     @Override
     public ResponseEntity<ResponseObject> getOrders() {
-        return null;
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        orderRepository.findAll())
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> getOrderById(int id) throws NotFoundException {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        orderRepository.findById(id).orElseThrow(() -> new NotFoundException("Order ID: " + id)))
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> getPurchasedTickets() {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        orderDetailRepository.findAll())
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> getPurchasedTicketsByOrderId(int id) throws NotFoundException {
+        if (orderRepository.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                            ApplicationConstants.ResponseMessage.SUCCESS,
+                            orderDetailRepository.findAllByOrderId(id))
+            );
+        }
+        throw new NotFoundException("Order ID: " + id);
     }
 
     @Override

@@ -13,7 +13,13 @@ import java.time.LocalDateTime;
 public interface IOrderService {
     ResponseEntity<ResponseObject> getOrders();
 
+    ResponseEntity<ResponseObject> getPurchasedTickets();
+
+    ResponseEntity<ResponseObject> getPurchasedTicketsByOrderId(int id) throws NotFoundException;
+
     ResponseEntity<ResponseObject> createOrder(OrderRequestDTO orderDto);
 
     ResponseEntity<ResponseObject> verifyTickets(int orderId, int customerId, int ticketId, String ticketType, LocalDateTime issuedDate, String hashData) throws NoSuchAlgorithmException, InvalidKeyException, NotFoundException, PermissionDeniedException;
+
+    ResponseEntity<ResponseObject> getOrderById(int id) throws NotFoundException;
 }
