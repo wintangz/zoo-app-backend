@@ -1,8 +1,10 @@
 package net.wintang.zooapp.dto.mapper;
 
 import net.wintang.zooapp.dto.request.AnimalRequestDTO;
+import net.wintang.zooapp.dto.response.AnimalEnclosureResponseDTO;
 import net.wintang.zooapp.dto.response.AnimalResponseDTO;
 import net.wintang.zooapp.entity.Animal;
+import net.wintang.zooapp.entity.AnimalEnclosure;
 import net.wintang.zooapp.repository.SpeciesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,5 +35,13 @@ public class AnimalMapper {
                 .species(speciesRepository.findByName(dto.getSpecies()))
                 .imgUrl(dto.getImgUrl())
                 .build();
+    }
+
+    public static List<AnimalEnclosureResponseDTO> mapToAEDto(List<AnimalEnclosure> animalEnclosure) {
+        return animalEnclosure.stream().map(AnimalEnclosureResponseDTO::new).toList();
+    }
+
+    public static AnimalEnclosureResponseDTO mapToAEDto(AnimalEnclosure animalEnclosure) {
+        return new AnimalEnclosureResponseDTO(animalEnclosure);
     }
 }

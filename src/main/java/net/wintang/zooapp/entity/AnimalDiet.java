@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "animal_diet")
+@Table(name = "diet")
 public class AnimalDiet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

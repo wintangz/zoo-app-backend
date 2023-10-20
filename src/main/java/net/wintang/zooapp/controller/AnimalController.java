@@ -22,7 +22,7 @@ public class AnimalController {
 
     @GetMapping
     public ResponseEntity<ResponseObject> getAnimals() {
-        return animalService.getAllAnimals();
+        return animalService.getAnimals();
     }
 
     @PostMapping
@@ -38,5 +38,27 @@ public class AnimalController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseObject> deleteAnimalById(@PathVariable int id) throws NotFoundException {
         return animalService.deleteAnimalById(id);
+    }
+
+    @GetMapping("/enclosures")
+    public ResponseEntity<ResponseObject> getAnimalsEnclosures() {
+        return animalService.getAnimalsEnclosures();
+    }
+
+    @GetMapping("/{id}/enclosures")
+    public ResponseEntity<ResponseObject> getAnimalEnclosuresByAnimalId(@PathVariable int id) {
+        return animalService.getAnimalEnclosuresByAnimalId(id);
+    }
+
+    @PostMapping("/{animalId}/enclosures/{enclosureId}")
+    public ResponseEntity<ResponseObject> moveInAnimalToEnclosure(@PathVariable int animalId,
+                                                                  @PathVariable int enclosureId) {
+        return animalService.moveInAnAnimal(enclosureId, animalId);
+    }
+
+    @PutMapping("/{animalId}/enclosures/{enclosureId}")
+    public ResponseEntity<ResponseObject> moveOutAnimalFromEnclosure(@PathVariable int animalId,
+                                                                     @PathVariable int enclosureId) throws NotFoundException {
+        return animalService.moveOutAnAnimal(enclosureId, animalId);
     }
 }

@@ -3,12 +3,12 @@ package net.wintang.zooapp.service;
 import net.wintang.zooapp.dto.mapper.AnimalMapper;
 import net.wintang.zooapp.dto.request.AnimalRequestDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
-import net.wintang.zooapp.entity.Animal;
-import net.wintang.zooapp.entity.AnimalTrainerAssignor;
-import net.wintang.zooapp.entity.User;
+import net.wintang.zooapp.entity.*;
 import net.wintang.zooapp.exception.NotFoundException;
+import net.wintang.zooapp.repository.AnimalEnclosureRepository;
 import net.wintang.zooapp.repository.AnimalRepository;
 import net.wintang.zooapp.repository.AnimalTrainerAssignorRepository;
+import net.wintang.zooapp.repository.EnclosureRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,25 +16,30 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 @Service
 public class AnimalService implements IAnimalService {
 
     private final AnimalRepository animalRepository;
-
     private final AnimalMapper animalMapper;
-
     private final AnimalTrainerAssignorRepository animalTrainerAssignorRepository;
+    private final EnclosureRepository enclosureRepository;
+    private final AnimalEnclosureRepository animalEnclosureRepository;
 
-    public AnimalService(AnimalRepository animalRepository, AnimalMapper animalMapper, AnimalTrainerAssignorRepository animalTrainerAssignorRepository) {
+    public AnimalService(AnimalRepository animalRepository, AnimalMapper animalMapper, AnimalTrainerAssignorRepository animalTrainerAssignorRepository,
+                         EnclosureRepository enclosureRepository,
+                         AnimalEnclosureRepository animalEnclosureRepository) {
         this.animalRepository = animalRepository;
         this.animalMapper = animalMapper;
         this.animalTrainerAssignorRepository = animalTrainerAssignorRepository;
+        this.enclosureRepository = enclosureRepository;
+        this.animalEnclosureRepository = animalEnclosureRepository;
     }
 
     @Override
-    public ResponseEntity<ResponseObject> getAllAnimals() {
+    public ResponseEntity<ResponseObject> getAnimals() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
@@ -89,5 +94,56 @@ public class AnimalService implements IAnimalService {
                             animalId));
         }
         throw new NotFoundException("Animal: " + animalId);
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> getAnimalsEnclosures() {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        AnimalMapper.mapToAEDto(animalEnclosureRepository.findAll()))
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> moveInAnAnimal(int id, int animalId) {
+        AnimalEnclosure animalEnclosure = AnimalEnclosure.builder()
+                .animal(Animal.builder().id(animalId).build())
+                .enclosure(Enclosure.builder().id(id).build())
+                .moveInDate(LocalDateTime.now())
+                .build();
+        animalEnclosureRepository.save(animalEnclosure);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        "Moved in")
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> moveOutAnAnimal(int id, int animalId) throws NotFoundException {
+        AnimalEnclosure animalEnclosure = animalEnclosureRepository
+                .findByAnimalAndEnclosure(
+                        Animal.builder().id(animalId).build(),
+                        Enclosure.builder().id(id).build())
+                .orElseThrow(() -> new NotFoundException("Animal or Enclosure"));
+        animalEnclosure.setAnimal(Animal.builder().id(animalId).build());
+        animalEnclosure.setEnclosure(Enclosure.builder().id(id).build());
+        animalEnclosure.setMoveOutDate(LocalDateTime.now());
+        animalEnclosureRepository.save(animalEnclosure);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        "Moved out")
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> getAnimalEnclosuresByAnimalId(int id) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        AnimalMapper.mapToAEDto(animalEnclosureRepository.findByAnimal(Animal.builder().id(id).build())))
+        );
     }
 }

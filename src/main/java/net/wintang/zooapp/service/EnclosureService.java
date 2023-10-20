@@ -6,6 +6,8 @@ import net.wintang.zooapp.dto.response.EnclosureResponseDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.entity.Enclosure;
 import net.wintang.zooapp.exception.NotFoundException;
+import net.wintang.zooapp.repository.AnimalEnclosureRepository;
+import net.wintang.zooapp.repository.AnimalRepository;
 import net.wintang.zooapp.repository.EnclosureRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +19,16 @@ import org.springframework.stereotype.Service;
 public class EnclosureService implements IEnclosureService {
 
     private final EnclosureRepository enclosureRepository;
+    private final AnimalRepository animalRepository;
+    private final AnimalEnclosureRepository animalEnclosureRepository;
 
     @Autowired
-    public EnclosureService(EnclosureRepository enclosureRepository) {
+    public EnclosureService(EnclosureRepository enclosureRepository,
+                            AnimalRepository animalRepository,
+                            AnimalEnclosureRepository animalEnclosureRepository) {
         this.enclosureRepository = enclosureRepository;
+        this.animalRepository = animalRepository;
+        this.animalEnclosureRepository = animalEnclosureRepository;
     }
 
     @Override
