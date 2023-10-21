@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     boolean existsByUsername(String username);
 
-    @Query(value = "select distinct u.id, u.username, u.password, u.lastname, u.firstname, u.sex, u.date_of_birth, u.address, u.nationality, u.phone, u.email, u.created_date, u.status, u.avatar_url from " +
+    @Query(value = "select distinct u.id, u.username, u.password, u.lastname, u.firstname, u.sex, u.date_of_birth, u.address, u.nationality, u.phone, u.email, u.created_date, u.status, u.avatar_url, u.reset_token from " +
             "[user] u left join user_role r on u.id=r.user_id " +
             "where r.role_id=:role", nativeQuery = true)
     List<User> findByRole(@Param("role") int roleId);
