@@ -8,7 +8,6 @@ import net.wintang.zooapp.entity.Enclosure;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +17,6 @@ public class EnclosureResponseDTO implements Serializable {
     private String name;
     private String info;
     private int maxCapacity;
-    private List<SpeciesResponseDTO> speciesList;
     private LocalDateTime createdDate;
     private String imgUrl;
     private HabitatResponseDTO habitat;
