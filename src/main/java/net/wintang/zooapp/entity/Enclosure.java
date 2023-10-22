@@ -26,12 +26,6 @@ public class Enclosure {
 
     private int maxCapacity;
 
-    @ManyToMany
-    @JoinTable(name = "enclosure_species",
-            joinColumns = @JoinColumn(name = "enclosure_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "species_id", referencedColumnName = "id"))
-    private List<Species> speciesList;
-
     @Column(insertable = false, updatable = false, nullable = true)
     private LocalDateTime createdDate;
 

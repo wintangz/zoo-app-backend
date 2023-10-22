@@ -2,12 +2,12 @@ package net.wintang.zooapp.controller;
 
 import jakarta.validation.Valid;
 import net.wintang.zooapp.dto.request.AnimalRequestDTO;
+import net.wintang.zooapp.dto.response.ResponseObject;
+import net.wintang.zooapp.exception.DuplicatedKeyException;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.service.IAnimalService;
-import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -52,7 +52,7 @@ public class AnimalController {
 
     @PostMapping("/{animalId}/enclosures/{enclosureId}")
     public ResponseEntity<ResponseObject> moveInAnimalToEnclosure(@PathVariable int animalId,
-                                                                  @PathVariable int enclosureId) {
+                                                                  @PathVariable int enclosureId) throws DuplicatedKeyException {
         return animalService.moveInAnAnimal(enclosureId, animalId);
     }
 

@@ -24,7 +24,6 @@ public class EnclosureMapper {
                 .status(enclosureRequestDTO.isStatus())
                 .maxCapacity(enclosureRequestDTO.getMaxCapacity())
                 .habitat(Habitat.builder().id(enclosureRequestDTO.getHabitatId()).build())
-                .speciesList(enclosureRequestDTO.getSpeciesListIds().stream().map(Species::new).toList())
                 .build();
     }
 
@@ -37,8 +36,6 @@ public class EnclosureMapper {
                 .maxCapacity(enclosureRequestDTO.getMaxCapacity() == 0 ? enclosure.getMaxCapacity() : enclosureRequestDTO.getMaxCapacity())
                 .status(enclosureRequestDTO.isStatus() == enclosure.isStatus() ? enclosure.isStatus() : enclosureRequestDTO.isStatus())
                 .habitat(enclosureRequestDTO.getHabitatId() == 0 ? enclosure.getHabitat() : Habitat.builder().id(enclosureRequestDTO.getHabitatId()).build())
-                .speciesList(enclosureRequestDTO.getSpeciesListIds().isEmpty() || enclosureRequestDTO.getSpeciesListIds() == null
-                        ? enclosure.getSpeciesList() : enclosureRequestDTO.getSpeciesListIds().stream().map(Species::new).toList())
                 .build();
     }
 }

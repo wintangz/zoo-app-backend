@@ -3,6 +3,7 @@ package net.wintang.zooapp.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,11 +41,24 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("api/auth/**").permitAll()
+                        .requestMatchers("api/users/password-reset/**").permitAll()
                         .requestMatchers("api/animals/**").hasAnyAuthority(Roles.ADMIN,
                                 Roles.STAFF, Roles.ZOO_TRAINER)
                         .requestMatchers("api/users").hasAuthority(Roles.ADMIN)
                         .requestMatchers("api/users/staff/**").hasAuthority(Roles.ADMIN)
                         .requestMatchers("api/users/zoo-trainers/**").hasAuthority(Roles.STAFF)
+                        .requestMatchers(HttpMethod.GET, "api/species").permitAll()
+                        .requestMatchers("api/species/**").hasAuthority(Roles.ZOO_TRAINER)
+                        .requestMatchers(HttpMethod.GET, "api/diets").hasAnyAuthority(Roles.ZOO_TRAINER, Roles.STAFF)
+                        .requestMatchers("api/diets/**").hasAuthority(Roles.ZOO_TRAINER)
+                        .requestMatchers(HttpMethod.GET, "api/foods").hasAnyAuthority(Roles.ZOO_TRAINER, Roles.STAFF)
+                        .requestMatchers("api/foods/**").hasAuthority(Roles.ZOO_TRAINER)
+                        .requestMatchers(HttpMethod.GET, "api/orders").hasAuthority(Roles.STAFF)
+                        .requestMatchers(HttpMethod.GET, "api/orders/tickets").hasAuthority(Roles.STAFF)
+                        .requestMatchers(HttpMethod.GET, "api/enclosures").hasAnyAuthority(Roles.STAFF, Roles.ZOO_TRAINER)
+                        .requestMatchers("api/enclosures/**").hasAuthority(Roles.STAFF)
+                        .requestMatchers(HttpMethod.GET, "api/habitats").permitAll()
+                        .requestMatchers("api/habitats/**").hasAuthority(Roles.STAFF)
                         .anyRequest().permitAll())
                 .httpBasic(withDefaults());
         http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);

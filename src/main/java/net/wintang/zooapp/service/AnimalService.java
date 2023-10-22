@@ -4,11 +4,11 @@ import net.wintang.zooapp.dto.mapper.AnimalMapper;
 import net.wintang.zooapp.dto.request.AnimalRequestDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.entity.*;
+import net.wintang.zooapp.exception.DuplicatedKeyException;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.repository.AnimalEnclosureRepository;
 import net.wintang.zooapp.repository.AnimalRepository;
 import net.wintang.zooapp.repository.AnimalTrainerAssignorRepository;
-import net.wintang.zooapp.repository.EnclosureRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,16 +25,15 @@ public class AnimalService implements IAnimalService {
     private final AnimalRepository animalRepository;
     private final AnimalMapper animalMapper;
     private final AnimalTrainerAssignorRepository animalTrainerAssignorRepository;
-    private final EnclosureRepository enclosureRepository;
     private final AnimalEnclosureRepository animalEnclosureRepository;
 
-    public AnimalService(AnimalRepository animalRepository, AnimalMapper animalMapper, AnimalTrainerAssignorRepository animalTrainerAssignorRepository,
-                         EnclosureRepository enclosureRepository,
+    public AnimalService(AnimalRepository animalRepository,
+                         AnimalMapper animalMapper,
+                         AnimalTrainerAssignorRepository animalTrainerAssignorRepository,
                          AnimalEnclosureRepository animalEnclosureRepository) {
         this.animalRepository = animalRepository;
         this.animalMapper = animalMapper;
         this.animalTrainerAssignorRepository = animalTrainerAssignorRepository;
-        this.enclosureRepository = enclosureRepository;
         this.animalEnclosureRepository = animalEnclosureRepository;
     }
 
@@ -106,18 +105,22 @@ public class AnimalService implements IAnimalService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> moveInAnAnimal(int id, int animalId) {
-        AnimalEnclosure animalEnclosure = AnimalEnclosure.builder()
-                .animal(Animal.builder().id(animalId).build())
-                .enclosure(Enclosure.builder().id(id).build())
-                .moveInDate(LocalDateTime.now())
-                .build();
-        animalEnclosureRepository.save(animalEnclosure);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
-                        ApplicationConstants.ResponseMessage.SUCCESS,
-                        "Moved in")
-        );
+    public ResponseEntity<ResponseObject> moveInAnAnimal(int id, int animalId) throws DuplicatedKeyException {
+        if (!animalEnclosureRepository.existsByAnimalAndEnclosure(Animal.builder().id(animalId).build(),
+                Enclosure.builder().id(id).build())) {
+            AnimalEnclosure animalEnclosure = AnimalEnclosure.builder()
+                    .animal(Animal.builder().id(animalId).build())
+                    .enclosure(Enclosure.builder().id(id).build())
+                    .moveInDate(LocalDateTime.now())
+                    .build();
+            animalEnclosureRepository.save(animalEnclosure);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                            ApplicationConstants.ResponseMessage.SUCCESS,
+                            "Moved in")
+            );
+        }
+        throw new DuplicatedKeyException("This Animal - Enclosure");
     }
 
     @Override

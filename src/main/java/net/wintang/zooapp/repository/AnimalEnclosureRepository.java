@@ -14,4 +14,6 @@ public interface AnimalEnclosureRepository extends JpaRepository<AnimalEnclosure
     Optional<AnimalEnclosure> findByAnimalAndEnclosure(@NotNull Animal animal, @NotNull Enclosure enclosure);
 
     List<AnimalEnclosure> findByAnimal(Animal animalId);
+
+    boolean existsByAnimalAndEnclosure(@NotNull Animal animal, @NotNull Enclosure enclosure);
 }

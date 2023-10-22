@@ -21,7 +21,6 @@ public class EnclosureRequestDTO implements Serializable {
     String info;
     @Min(message = "Max Capacity cannot be negative or zero", value = 0)
     int maxCapacity;
-    List<Integer> speciesListIds;
     @NotBlank(message = "Image url cannot be empty")
     String imgUrl;
     int habitatId;
