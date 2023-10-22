@@ -55,10 +55,11 @@ public class HabitatService implements IHabitatService {
 
     @Override
     public ResponseEntity<ResponseObject> createHabitat(HabitatRequestDTO habitatRequestDTO) {
+        habitatRepository.save(HabitatMapper.mapToHabitatEntity(habitatRequestDTO));
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        HabitatMapper.mapToHabitatEntity(habitatRequestDTO))
+                        habitatRequestDTO)
         );
     }
 

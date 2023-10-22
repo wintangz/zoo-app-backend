@@ -33,7 +33,6 @@ public class PaymentService implements IPaymentService {
 
     public ResponseEntity<ResponseObject> getPaymentUrl(OrderResponseDTO order, HttpServletRequest req) throws UnsupportedEncodingException, SignatureException, NoSuchAlgorithmException, InvalidKeyException {
 
-        Random random = new Random();
         System.out.println("VNP 1");
 
         String vnp_Version = "2.1.0";
@@ -41,7 +40,8 @@ public class PaymentService implements IPaymentService {
         String vnp_OrderInfo = "Pay for your Zoo tickets";
         String orderType = "250000";
         String vnp_TxnRef = String.valueOf(order.getId());
-        String vnp_IpAddr = req.getRemoteAddr();
+        String vnp_IpAddr = "0%3A0%3A0%3A0%3A0%3A0%3A0%3A1";
+//        String vnp_IpAddr = req.getRemoteAddr();
         String vnp_TmnCode = "FV7L6BYI";
 
         int amount = (int) order.getTotal() * 100;
