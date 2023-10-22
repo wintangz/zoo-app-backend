@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.wintang.zooapp.dto.mapper.HabitatMapper;
-import net.wintang.zooapp.dto.mapper.SpeciesMapper;
 import net.wintang.zooapp.entity.Enclosure;
 
 import java.io.Serializable;
@@ -30,7 +29,6 @@ public class EnclosureResponseDTO implements Serializable {
         this.name = enclosure.getName();
         this.info = enclosure.getInfo();
         this.maxCapacity = enclosure.getMaxCapacity();
-        this.speciesList = SpeciesMapper.mapToSpeciesDto(enclosure.getSpeciesList());
         this.createdDate = enclosure.getCreatedDate();
         this.imgUrl = enclosure.getImgUrl();
         this.habitat = HabitatMapper.mapToHabitatDTO(enclosure.getHabitat());
