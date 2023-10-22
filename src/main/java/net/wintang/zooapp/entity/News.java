@@ -36,7 +36,7 @@ public class News {
     @Column(insertable = false, updatable = false, nullable = true)
     private LocalDateTime createdDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "author_id")
     private User author;

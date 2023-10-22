@@ -25,7 +25,7 @@ public class Order {
 
     private String paymentMethod;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "customer_id")
     private User customer;
 
