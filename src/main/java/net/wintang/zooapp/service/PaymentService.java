@@ -40,7 +40,7 @@ public class PaymentService implements IPaymentService {
         String vnp_OrderInfo = "Pay for your Zoo tickets";
         String orderType = "250000";
         String vnp_TxnRef = String.valueOf(order.getId());
-        String vnp_IpAddr = "0%3A0%3A0%3A0%3A0%3A0%3A0%3A1";
+        String vnp_IpAddr = "0:0:0:0:0:0:0:1";
 //        String vnp_IpAddr = req.getRemoteAddr();
         String vnp_TmnCode = "FV7L6BYI";
 
