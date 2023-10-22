@@ -40,8 +40,7 @@ public class PaymentService implements IPaymentService {
         String vnp_OrderInfo = "Pay for your Zoo tickets";
         String orderType = "250000";
         String vnp_TxnRef = String.valueOf(order.getId());
-        String vnp_IpAddr = "0:0:0:0:0:0:0:1";
-//        String vnp_IpAddr = req.getRemoteAddr();
+        String vnp_IpAddr = req.getRemoteAddr();
         String vnp_TmnCode = "FV7L6BYI";
 
         int amount = (int) order.getTotal() * 100;
@@ -60,6 +59,7 @@ public class PaymentService implements IPaymentService {
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        formatter.setTimeZone(TimeZone.getTimeZone("Etc/GMT+7"));
         String vnp_CreateDate = formatter.format(cld.getTime());
 
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
