@@ -42,7 +42,7 @@ public class AnimalService implements IAnimalService {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        animalMapper.mapToAnimalDTO(animalRepository.findAll()))
+                        AnimalMapper.mapToAnimalDTO(animalRepository.findAll()))
         );
     }
 
@@ -57,7 +57,7 @@ public class AnimalService implements IAnimalService {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        animalMapper.mapToAnimalDTO(Collections.singletonList(animal)))
+                        AnimalMapper.mapToAnimalDTO(animal))
         );
     }
 

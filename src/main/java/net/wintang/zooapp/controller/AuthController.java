@@ -32,31 +32,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseObject> login(@Valid @RequestBody AuthRequestDTO user, BindingResult result) throws NotFoundException {
-        if (result.hasErrors()) {
-            List<String> errors = result.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .toList();
-            AuthResponseDTO response = new AuthResponseDTO();
-            response.setErrors(errors);
-            return new ResponseEntity<>(new ResponseObject(
-                    ApplicationConstants.ResponseStatus.FAILED,
-                    ApplicationConstants.ResponseMessage.INVALID,
-                    response), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<ResponseObject> login(@Valid @RequestBody AuthRequestDTO user) throws NotFoundException {
         return authService.checkLogin(user);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestHeader("Authorization") String authorization) {
+    public ResponseEntity<ResponseObject> logout(@RequestHeader("Authorization") String authorization) {
         // Validate and invalidate the token
         String token = TokenExtractor.extractToken(authorization);
-        if (!token.isBlank() && jwtGenerator.validateToken(token)) {
-            jwtGenerator.invalidateToken(token);
-            SecurityContextHolder.clearContext();
-            return ResponseEntity.ok("Logout successful");
-        } else {
-            return ResponseEntity.status(401).body("Invalid token");
-        }
+        return authService.logout(token);
     }
 }

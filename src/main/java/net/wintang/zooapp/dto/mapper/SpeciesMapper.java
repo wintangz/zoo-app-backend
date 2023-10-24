@@ -4,11 +4,9 @@ import net.wintang.zooapp.dto.request.SpeciesRequestDTO;
 import net.wintang.zooapp.dto.response.SpeciesResponseDTO;
 import net.wintang.zooapp.entity.Habitat;
 import net.wintang.zooapp.entity.Species;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
 public class SpeciesMapper {
 
     public static List<SpeciesResponseDTO> mapToSpeciesDto(List<Species> species) {

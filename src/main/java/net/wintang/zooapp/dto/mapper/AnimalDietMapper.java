@@ -4,11 +4,9 @@ import net.wintang.zooapp.dto.request.AnimalDietRequestDTO;
 import net.wintang.zooapp.dto.response.AnimalDietResponseDTO;
 import net.wintang.zooapp.entity.AnimalDiet;
 import net.wintang.zooapp.entity.Food;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
 public class AnimalDietMapper {
 
     public static List<AnimalDietResponseDTO> mapToDietDto(List<AnimalDiet> dietList) {

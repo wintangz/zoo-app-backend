@@ -59,6 +59,7 @@ public class UserMapper {
         userBuilder.dateOfBirth(user.getDateOfBirth() != null ? user.getDateOfBirth() : oldUser.getDateOfBirth());
         userBuilder.roles(new ArrayList<>(user.getRoles() != null ? user.getRoles() : oldUser.getRoles()));
         userBuilder.avatarUrl(user.getAvatarUrl() != null ? user.getAvatarUrl() : oldUser.getAvatarUrl());
+        userBuilder.status(user.isStatus());
         return userBuilder.build();
     }
 

@@ -1,15 +1,29 @@
 package net.wintang.zooapp.dto.mapper;
 
+import net.wintang.zooapp.dto.request.TicketRequestDTO;
 import net.wintang.zooapp.dto.response.TicketResponseDTO;
 import net.wintang.zooapp.entity.Ticket;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
 public class TicketMapper {
 
-    public List<TicketResponseDTO> mapToTicketDTO(List<Ticket> tickets) {
+    public static List<TicketResponseDTO> mapToTicketDTO(List<Ticket> tickets) {
         return tickets.stream().map(TicketResponseDTO::new).toList();
+    }
+
+    public static TicketResponseDTO mapToTicketDTO(Ticket ticket) {
+        return new TicketResponseDTO(ticket);
+    }
+
+    public static Ticket mapToTicketEntity(TicketRequestDTO ticketRequestDTO) {
+        return Ticket.builder()
+                .name(ticketRequestDTO.getName())
+                .price(ticketRequestDTO.getPrice())
+                .type(ticketRequestDTO.getType())
+                .description(ticketRequestDTO.getDescription())
+                .imgUrl(ticketRequestDTO.getImgUrl())
+                .status(ticketRequestDTO.isStatus())
+                .build();
     }
 }

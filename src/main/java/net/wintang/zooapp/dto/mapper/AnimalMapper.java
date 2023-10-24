@@ -21,8 +21,12 @@ public class AnimalMapper {
         this.speciesRepository = speciesRepository;
     }
 
-    public Object mapToAnimalDTO(List<Animal> animals) {
+    public static List<AnimalResponseDTO> mapToAnimalDTO(List<Animal> animals) {
         return animals.stream().map(AnimalResponseDTO::new).toList();
+    }
+
+    public static AnimalResponseDTO mapToAnimalDTO(Animal animal) {
+        return new AnimalResponseDTO(animal);
     }
 
     public Animal mapToAnimalEntity(AnimalRequestDTO dto) {

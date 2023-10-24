@@ -45,4 +45,22 @@ public class AuthService implements IAuthService {
                         new AuthResponseDTO(token))
         );
     }
+
+    @Override
+    public ResponseEntity<ResponseObject> logout(String token) {
+        if (!token.isBlank() && jwtGenerator.validateToken(token)) {
+            jwtGenerator.invalidateToken(token);
+            SecurityContextHolder.clearContext();
+            return ResponseEntity.ok(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                            ApplicationConstants.ResponseMessage.SUCCESS,
+                            "Log out successfully")
+            );
+        } else {
+            return ResponseEntity.status(401).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                            ApplicationConstants.ResponseMessage.INVALID,
+                            "Invalid token"));
+        }
+    }
 }

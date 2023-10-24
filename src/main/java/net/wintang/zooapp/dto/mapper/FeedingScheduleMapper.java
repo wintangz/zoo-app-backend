@@ -5,18 +5,16 @@ import net.wintang.zooapp.dto.response.FeedingScheduleResponseDTO;
 import net.wintang.zooapp.entity.Animal;
 import net.wintang.zooapp.entity.AnimalDiet;
 import net.wintang.zooapp.entity.FeedingSchedule;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
 public class FeedingScheduleMapper {
 
-    public List<FeedingScheduleResponseDTO> mapToFeedScheduleDto(List<FeedingSchedule> feedingSchedules) {
+    public static List<FeedingScheduleResponseDTO> mapToFeedScheduleDto(List<FeedingSchedule> feedingSchedules) {
         return feedingSchedules.stream().map(FeedingScheduleResponseDTO::new).toList();
     }
 
-    public FeedingSchedule mapToFeedScheduleEntity(FeedingScheduleRequestDTO feedingScheduleRequestDto) {
+    public static FeedingSchedule mapToFeedScheduleEntity(FeedingScheduleRequestDTO feedingScheduleRequestDto) {
         return FeedingSchedule.builder()
                 .feedingTime(feedingScheduleRequestDto.getFeedingTime())
                 .animal(Animal.builder().id(feedingScheduleRequestDto.getAnimalId()).build())

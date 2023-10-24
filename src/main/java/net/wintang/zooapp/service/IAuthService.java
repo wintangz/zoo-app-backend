@@ -7,4 +7,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface IAuthService {
     ResponseEntity<ResponseObject> checkLogin(AuthRequestDTO userDto) throws NotFoundException;
+
+    ResponseEntity<ResponseObject> logout(String token);
 }

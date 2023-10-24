@@ -1,5 +1,6 @@
 package net.wintang.zooapp.service;
 
+import net.wintang.zooapp.dto.mapper.OrderMapper;
 import net.wintang.zooapp.dto.mapper.UserMapper;
 import net.wintang.zooapp.dto.request.UserRequestDTO;
 import net.wintang.zooapp.dto.request.UserUpdateDTO;
@@ -11,6 +12,7 @@ import net.wintang.zooapp.entity.User;
 import net.wintang.zooapp.exception.DuplicatedKeyException;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.exception.PermissionDeniedException;
+import net.wintang.zooapp.repository.OrderRepository;
 import net.wintang.zooapp.repository.UserRepository;
 import net.wintang.zooapp.security.JwtGenerator;
 import net.wintang.zooapp.util.ApplicationConstants;
@@ -20,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -32,14 +35,20 @@ public class UserService implements IUserService {
     private final UserMapper userMapper;
     private final IEmailService emailService;
     private final JwtGenerator jwtGenerator;
+    private final OrderRepository orderRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final IAuthService authService;
 
     @Autowired
     public UserService(UserRepository userRepository,
-                       UserMapper userMapper, IEmailService emailService, JwtGenerator jwtGenerator) {
+                       UserMapper userMapper, IEmailService emailService, JwtGenerator jwtGenerator, OrderRepository orderRepository, PasswordEncoder passwordEncoder, IAuthService authService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.emailService = emailService;
         this.jwtGenerator = jwtGenerator;
+        this.orderRepository = orderRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authService = authService;
     }
 
     @Override
@@ -169,7 +178,6 @@ public class UserService implements IUserService {
                             ApplicationConstants.ResponseMessage.SUCCESS,
                             id)
             );
-
         }
         throw new NotFoundException("User ID: " + id);
     }
@@ -220,6 +228,41 @@ public class UserService implements IUserService {
                 new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
                         ApplicationConstants.ResponseMessage.INVALID,
                         "Expired")
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> getOrdersByUserId(int id) throws PermissionDeniedException {
+        UserDetails authenticatedUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (authenticatedUser.getUsername().equals(String.valueOf(id))) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                            ApplicationConstants.ResponseMessage.SUCCESS,
+                            OrderMapper.mapToOrderDto(orderRepository.findAllByCustomer(User.builder().id(id).build())))
+            );
+        }
+        throw new PermissionDeniedException();
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> changePassword(String oldPassword, String newPassword, String token) throws NotFoundException {
+        UserDetails authenticatedUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findById(Integer.parseInt(authenticatedUser.getUsername()))
+                .orElseThrow(() -> new NotFoundException("User ID: " + authenticatedUser.getUsername()));
+        if (passwordEncoder.matches(oldPassword, user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+            authService.logout(token);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                            ApplicationConstants.ResponseMessage.SUCCESS,
+                            "Changed password, please log in again")
+            );
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                        ApplicationConstants.ResponseMessage.NOT_MODIFIED,
+                        "Old password not matched")
         );
     }
 }

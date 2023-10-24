@@ -4,12 +4,9 @@ import net.wintang.zooapp.dto.request.EnclosureRequestDTO;
 import net.wintang.zooapp.dto.response.EnclosureResponseDTO;
 import net.wintang.zooapp.entity.Enclosure;
 import net.wintang.zooapp.entity.Habitat;
-import net.wintang.zooapp.entity.Species;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
 public class EnclosureMapper {
 
     public static List<EnclosureResponseDTO> mapToEnclosureDto(List<Enclosure> enclosures) {

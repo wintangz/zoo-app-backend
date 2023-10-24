@@ -50,4 +50,6 @@ public class UserUpdateDTO {
     private String avatarUrl;
 
     private List<Role> roles;
+
+    private boolean status;
 }

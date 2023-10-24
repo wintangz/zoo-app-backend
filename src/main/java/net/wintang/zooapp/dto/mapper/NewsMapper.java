@@ -3,12 +3,9 @@ package net.wintang.zooapp.dto.mapper;
 import net.wintang.zooapp.dto.request.NewsRequestDTO;
 import net.wintang.zooapp.dto.response.NewsResponseDTO;
 import net.wintang.zooapp.entity.News;
-import net.wintang.zooapp.entity.User;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
 public class NewsMapper {
 
     public static List<NewsResponseDTO> mapToNewsDTO(List<News> newsList) {

@@ -7,6 +7,7 @@ import net.wintang.zooapp.exception.DuplicatedKeyException;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.exception.PermissionDeniedException;
 import net.wintang.zooapp.service.IUserService;
+import net.wintang.zooapp.util.TokenExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,11 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getUsersById(@PathVariable int id) throws NotFoundException {
         return userService.getUserById(id);
+    }
+
+    @GetMapping("/{id}/orders")
+    public ResponseEntity<ResponseObject> getOrdersByUserId(@PathVariable int id) throws NotFoundException, PermissionDeniedException {
+        return userService.getOrdersByUserId(id);
     }
 
     @GetMapping("/customers")
@@ -85,5 +91,10 @@ public class UserController {
     @PostMapping("/password-reset")
     public ResponseEntity<ResponseObject> resetPassword(@Valid @RequestBody PasswordResetDTO request) throws NotFoundException {
         return userService.resetPassword(request.getNewPassword(), request.getToken());
+    }
+
+    @PostMapping("/password-change")
+    public ResponseEntity<ResponseObject> changePassword(@Valid @RequestBody PasswordChangeDTO request, @RequestHeader("Authorization") String authorization) throws NotFoundException {
+        return userService.changePassword(request.getOldPassword(), request.getNewPassword(), TokenExtractor.extractToken(authorization));
     }
 }

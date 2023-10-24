@@ -38,4 +38,8 @@ public interface IUserService {
     ResponseEntity<ResponseObject> verifyEmail(String email) throws NotFoundException;
 
     ResponseEntity<ResponseObject> verifyCode(VerificationRequestDTO code) throws NotFoundException;
+
+    ResponseEntity<ResponseObject> getOrdersByUserId(int id) throws PermissionDeniedException;
+
+    ResponseEntity<ResponseObject> changePassword(String oldPassword, String newPassword, String token) throws NotFoundException;
 }

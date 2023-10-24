@@ -1,15 +1,15 @@
 package net.wintang.zooapp.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "animal_health_record")
 public class HealthRecord {
@@ -40,4 +40,8 @@ public class HealthRecord {
     @ManyToOne
     @JoinColumn(name = "recorded_by")
     private User zooTrainer;
+
+    @ManyToOne
+    @JoinColumn(name = "animal_id")
+    private Animal animal;
 }

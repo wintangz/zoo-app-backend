@@ -1,5 +1,6 @@
 package net.wintang.zooapp.service;
 
+import net.wintang.zooapp.dto.mapper.OrderMapper;
 import net.wintang.zooapp.dto.request.OrderRequestDTO;
 import net.wintang.zooapp.dto.response.OrderResponseDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
@@ -53,7 +54,7 @@ public class OrderService implements IOrderService {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        orderRepository.findAll())
+                        OrderMapper.mapToOrderDto(orderRepository.findAll()))
         );
     }
 
@@ -62,7 +63,7 @@ public class OrderService implements IOrderService {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        orderRepository.findById(id).orElseThrow(() -> new NotFoundException("Order ID: " + id)))
+                        OrderMapper.mapToOrderDto(orderRepository.findById(id).orElseThrow(() -> new NotFoundException("Order ID: " + id))))
         );
     }
 

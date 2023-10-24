@@ -3,11 +3,9 @@ package net.wintang.zooapp.dto.mapper;
 import net.wintang.zooapp.dto.request.FoodRequestDTO;
 import net.wintang.zooapp.dto.response.FoodResponseDTO;
 import net.wintang.zooapp.entity.Food;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
 public class FoodMapper {
 
     public static List<FoodResponseDTO> mapToFoodDto(List<Food> foodList) {

@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -40,8 +41,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<ErrorResponseObject> dataAccessHandler(DataAccessException ex) {
+        String message = ex.getMessage();
+        if (ex.getMessage().contains("REFERENCE")) {
+            message = "You can't delete this because it is associated with other data. Please disable using update instead.";
+        }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                new ErrorResponseObject("", ex.getMessage(), ""));
+                new ErrorResponseObject("", message, ""));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -64,6 +69,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
     public ResponseEntity<ErrorResponseObject> authCredentialsNotFoundHandler(AuthenticationCredentialsNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ErrorResponseObject("", "", ex.getMessage()));
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponseObject> authenticationHandler(AuthenticationException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new ErrorResponseObject("", "", ex.getMessage()));
     }
