@@ -23,16 +23,9 @@ public class FeedingSchedule {
 
     private LocalDateTime feedingTime;
 
-    @Column(columnDefinition = "bit default 0")
-    private boolean approved;
-
     @ManyToOne
     @JoinColumn(name = "created_by")
     private User zooTrainer;
-
-    @ManyToOne
-    @JoinColumn(name = "approved_by")
-    private User staff;
 
     @ManyToOne
     @JoinColumn(name = "diet_id")

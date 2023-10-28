@@ -11,24 +11,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class FeedingScheduleResponseDTO implements Serializable {
 
-    int id;
-    LocalDateTime createdDate;
-    LocalDateTime feedingTime;
-    boolean approved;
-    int zooTrainerId;
-    int staffId;
-    int dietId;
-    int animalId;
-    boolean fed;
-    int feederId;
+    private int id;
+    private LocalDateTime createdDate;
+    private LocalDateTime feedingTime;
+    private int zooTrainerId;
+    private int dietId;
+    private int animalId;
+    private boolean fed;
+    private int feederId;
 
     public FeedingScheduleResponseDTO(FeedingSchedule feedingSchedule) {
         this.id = feedingSchedule.getId();
         this.createdDate = feedingSchedule.getCreatedDate();
         this.feedingTime = feedingSchedule.getFeedingTime();
-        this.approved = feedingSchedule.isApproved();
         this.zooTrainerId = feedingSchedule.getZooTrainer().getId();
-        this.staffId = feedingSchedule.getStaff() != null ? feedingSchedule.getStaff().getId() : 0;
         this.dietId = feedingSchedule.getDiet().getId();
         this.animalId = feedingSchedule.getAnimal().getId();
         this.fed = feedingSchedule.isFed();
