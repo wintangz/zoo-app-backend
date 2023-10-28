@@ -45,6 +45,12 @@ public class GlobalExceptionHandler {
         if (ex.getMessage().contains("REFERENCE")) {
             message = "You can't delete this because it is associated with other data. Please disable using update instead.";
         }
+        if (ex.getMessage().contains("Animal is already in an enclosure.")) {
+            message = "Animal is already in an enclosure.";
+        }
+        if (ex.getMessage().contains("Enclosure is full.")) {
+            message = "Enclosure is full.";
+        }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new ErrorResponseObject("", message, ""));
     }

@@ -52,7 +52,7 @@ public class AnimalController {
 
     @PostMapping("/{animalId}/enclosures/{enclosureId}")
     public ResponseEntity<ResponseObject> moveInAnimalToEnclosure(@PathVariable int animalId,
-                                                                  @PathVariable int enclosureId) throws DuplicatedKeyException {
+                                                                  @PathVariable int enclosureId) {
         return animalService.moveInAnAnimal(enclosureId, animalId);
     }
 

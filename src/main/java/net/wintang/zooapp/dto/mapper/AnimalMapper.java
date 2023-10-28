@@ -38,6 +38,7 @@ public class AnimalMapper {
                 .origin(dto.getOrigin())
                 .species(speciesRepository.findByName(dto.getSpecies()))
                 .imgUrl(dto.getImgUrl())
+                .status(dto.isStatus())
                 .build();
     }
 

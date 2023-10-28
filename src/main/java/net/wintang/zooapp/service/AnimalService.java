@@ -57,7 +57,7 @@ public class AnimalService implements IAnimalService {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        AnimalMapper.mapToAnimalDTO(animal))
+                        animalDto)
         );
     }
 
@@ -105,22 +105,18 @@ public class AnimalService implements IAnimalService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> moveInAnAnimal(int id, int animalId) throws DuplicatedKeyException {
-        if (!animalEnclosureRepository.existsByAnimalAndEnclosure(Animal.builder().id(animalId).build(),
-                Enclosure.builder().id(id).build())) {
-            AnimalEnclosure animalEnclosure = AnimalEnclosure.builder()
-                    .animal(Animal.builder().id(animalId).build())
-                    .enclosure(Enclosure.builder().id(id).build())
-                    .moveInDate(LocalDateTime.now())
-                    .build();
-            animalEnclosureRepository.save(animalEnclosure);
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
-                            ApplicationConstants.ResponseMessage.SUCCESS,
-                            "Moved in")
-            );
-        }
-        throw new DuplicatedKeyException("This Animal - Enclosure");
+    public ResponseEntity<ResponseObject> moveInAnAnimal(int id, int animalId) {
+        AnimalEnclosure animalEnclosure = AnimalEnclosure.builder()
+                .animal(Animal.builder().id(animalId).build())
+                .enclosure(Enclosure.builder().id(id).build())
+                .moveInDate(LocalDateTime.now())
+                .build();
+        animalEnclosureRepository.save(animalEnclosure);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        "Moved in")
+        );
     }
 
     @Override

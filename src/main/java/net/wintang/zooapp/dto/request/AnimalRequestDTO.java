@@ -32,4 +32,6 @@ public class AnimalRequestDTO {
 
     @NotBlank(message = "Species cannot be empty")
     private String species;
+
+    private boolean status;
 }

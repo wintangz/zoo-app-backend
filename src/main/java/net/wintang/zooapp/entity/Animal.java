@@ -63,8 +63,4 @@ public class Animal {
     @OneToOne
     @JoinColumn(name = "created_by", unique = false)
     private User createdBy;
-
-    @OneToOne
-    @JoinColumn(name = "approved_by", nullable = true, unique = false)
-    private User approvedBy;
 }

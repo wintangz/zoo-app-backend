@@ -17,7 +17,7 @@ public interface IAnimalService {
 
     ResponseEntity<ResponseObject> getAnimalsEnclosures();
 
-    ResponseEntity<ResponseObject> moveInAnAnimal(int id, int animalId) throws DuplicatedKeyException;
+    ResponseEntity<ResponseObject> moveInAnAnimal(int id, int animalId);
 
     ResponseEntity<ResponseObject> moveOutAnAnimal(int id, int animalId) throws NotFoundException;
 
