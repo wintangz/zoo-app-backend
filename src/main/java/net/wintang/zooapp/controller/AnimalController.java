@@ -2,6 +2,7 @@ package net.wintang.zooapp.controller;
 
 import jakarta.validation.Valid;
 import net.wintang.zooapp.dto.request.AnimalRequestDTO;
+import net.wintang.zooapp.dto.request.AnimalUpdateDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.exception.DuplicatedKeyException;
 import net.wintang.zooapp.exception.NotFoundException;
@@ -33,6 +34,11 @@ public class AnimalController {
     @PostMapping("/{id}/zoo-trainers/{zooTrainerId}")
     public ResponseEntity<ResponseObject> assignZooTrainerToAnimal(@PathVariable int id, @PathVariable int zooTrainerId) throws NotFoundException {
         return animalService.assignZooTrainerToAnimal(id, zooTrainerId);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseObject> updateAnimalById(@PathVariable int id, @RequestBody AnimalUpdateDTO animal) throws NotFoundException {
+        return animalService.updateAnimalById(id, animal);
     }
 
     @DeleteMapping("/{id}")

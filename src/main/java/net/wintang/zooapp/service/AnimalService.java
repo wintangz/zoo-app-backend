@@ -2,9 +2,9 @@ package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.dto.mapper.AnimalMapper;
 import net.wintang.zooapp.dto.request.AnimalRequestDTO;
+import net.wintang.zooapp.dto.request.AnimalUpdateDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.entity.*;
-import net.wintang.zooapp.exception.DuplicatedKeyException;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.repository.AnimalEnclosureRepository;
 import net.wintang.zooapp.repository.AnimalRepository;
@@ -17,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 
 @Service
 public class AnimalService implements IAnimalService {
@@ -67,6 +66,17 @@ public class AnimalService implements IAnimalService {
             throw new NotFoundException("Animal: " + id);
         }
         animalRepository.deleteById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        id)
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> updateAnimalById(int id, AnimalUpdateDTO animalDto) throws NotFoundException {
+        Animal old = animalRepository.findById(id).orElseThrow(() -> new NotFoundException("Animal ID: " + id));
+        animalRepository.save(animalMapper.mapToAnimalEntity(animalDto, old));
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,

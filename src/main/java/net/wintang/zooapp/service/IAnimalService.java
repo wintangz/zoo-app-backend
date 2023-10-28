@@ -1,6 +1,7 @@
 package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.dto.request.AnimalRequestDTO;
+import net.wintang.zooapp.dto.request.AnimalUpdateDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.exception.DuplicatedKeyException;
 import net.wintang.zooapp.exception.NotFoundException;
@@ -12,6 +13,8 @@ public interface IAnimalService {
     ResponseEntity<ResponseObject> createAnimal(AnimalRequestDTO animalDto);
 
     ResponseEntity<ResponseObject> deleteAnimalById(int id) throws NotFoundException;
+
+    ResponseEntity<ResponseObject> updateAnimalById(int id, AnimalUpdateDTO animalDto) throws NotFoundException;
 
     ResponseEntity<ResponseObject> assignZooTrainerToAnimal(int id, int zooTrainerId) throws NotFoundException;
 
