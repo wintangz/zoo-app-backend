@@ -144,9 +144,10 @@ public class AnimalService implements IAnimalService {
     @Override
     public ResponseEntity<ResponseObject> moveOutAnAnimal(int id, int animalId) throws NotFoundException {
         AnimalEnclosure animalEnclosure = animalEnclosureRepository
-                .findByAnimalAndEnclosure(
+                .findByAnimalAndEnclosureAndMoveOutDate(
                         Animal.builder().id(animalId).build(),
-                        Enclosure.builder().id(id).build())
+                        Enclosure.builder().id(id).build(),
+                        null)
                 .orElseThrow(() -> new NotFoundException("Animal or Enclosure"));
         animalEnclosure.setAnimal(Animal.builder().id(animalId).build());
         animalEnclosure.setEnclosure(Enclosure.builder().id(id).build());
