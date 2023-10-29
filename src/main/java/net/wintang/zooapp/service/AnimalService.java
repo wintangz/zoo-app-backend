@@ -106,6 +106,18 @@ public class AnimalService implements IAnimalService {
     }
 
     @Override
+    public ResponseEntity<ResponseObject> unassignZooTrainerToAnimal(int animalId, int zooTrainerId) throws NotFoundException {
+        AnimalTrainerAssignor object = animalTrainerAssignorRepository
+                .findByAnimalAndTrainer(Animal.builder().id(animalId).build(), User.builder().id(zooTrainerId).build())
+                .orElseThrow(() -> new NotFoundException("This animal with this trainer"));
+        animalTrainerAssignorRepository.delete(object);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        animalId));
+    }
+
+    @Override
     public ResponseEntity<ResponseObject> getAnimalsEnclosures() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,

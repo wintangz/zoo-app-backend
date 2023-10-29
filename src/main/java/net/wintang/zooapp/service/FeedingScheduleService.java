@@ -58,16 +58,6 @@ public class FeedingScheduleService implements IFeedingScheduleService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> updateFeedingSchedule() {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<ResponseObject> deleteFeedingSchedule() {
-        return null;
-    }
-
-    @Override
     public ResponseEntity<ResponseObject> confirmFeedingSchedule(int id, FeedingScheduleConfirmDTO feedingScheduleConfirmDto) throws NotFoundException {
         UserDetails feeder = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         FeedingSchedule updatedFeedingSchedule = feedingScheduleRepository.findById(id).orElseThrow(() -> new NotFoundException("Feeding Schedule ID: " + id));
@@ -80,6 +70,22 @@ public class FeedingScheduleService implements IFeedingScheduleService {
                         ApplicationConstants.ResponseMessage.SUCCESS,
                         id)
         );
+    }
 
+    @Override
+    public ResponseEntity<ResponseObject> deleteFeedingScheduleById(int id) throws NotFoundException {
+        FeedingSchedule feedingSchedule = feedingScheduleRepository.findById(id).orElseThrow(() -> new NotFoundException("Feeding Schedult ID: " + id));
+        if (!feedingSchedule.isFed()) {
+            feedingScheduleRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                            ApplicationConstants.ResponseMessage.SUCCESS,
+                            id)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                        ApplicationConstants.ResponseMessage.NOT_MODIFIED, "Confirmed feeding schedule cannot be deleted")
+        );
     }
 }

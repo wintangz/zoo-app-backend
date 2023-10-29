@@ -36,6 +36,11 @@ public class AnimalController {
         return animalService.assignZooTrainerToAnimal(id, zooTrainerId);
     }
 
+    @DeleteMapping("/{id}/zoo-trainers/{zooTrainerId}")
+    public ResponseEntity<ResponseObject> unassignZooTrainerToAnimal(@PathVariable int id, @PathVariable int zooTrainerId) throws NotFoundException {
+        return animalService.unassignZooTrainerToAnimal(id, zooTrainerId);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ResponseObject> updateAnimalById(@PathVariable int id, @RequestBody AnimalUpdateDTO animal) throws NotFoundException {
         return animalService.updateAnimalById(id, animal);

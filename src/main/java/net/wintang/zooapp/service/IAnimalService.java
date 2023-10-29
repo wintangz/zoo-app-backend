@@ -18,6 +18,8 @@ public interface IAnimalService {
 
     ResponseEntity<ResponseObject> assignZooTrainerToAnimal(int id, int zooTrainerId) throws NotFoundException;
 
+    ResponseEntity<ResponseObject> unassignZooTrainerToAnimal(int animalId, int zooTrainerId) throws NotFoundException;
+
     ResponseEntity<ResponseObject> getAnimalsEnclosures();
 
     ResponseEntity<ResponseObject> moveInAnAnimal(int id, int animalId);

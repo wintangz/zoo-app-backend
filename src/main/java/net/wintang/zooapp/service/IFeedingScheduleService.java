@@ -11,10 +11,8 @@ public interface IFeedingScheduleService {
 
     ResponseEntity<ResponseObject> createFeedingSchedule(FeedingScheduleRequestDTO feedingScheduleRequestDto) throws NotFoundException;
 
-    ResponseEntity<ResponseObject> updateFeedingSchedule();
-
-    ResponseEntity<ResponseObject> deleteFeedingSchedule();
 
     ResponseEntity<ResponseObject> confirmFeedingSchedule(int id, FeedingScheduleConfirmDTO feedingScheduleConfirmDto) throws NotFoundException;
 
+    ResponseEntity<ResponseObject> deleteFeedingScheduleById(int id) throws NotFoundException;
 }

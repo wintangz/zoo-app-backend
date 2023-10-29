@@ -57,6 +57,8 @@ public class SecurityConfig {
                         .requestMatchers("api/foods/**").hasAuthority(Roles.ZOO_TRAINER)
                         .requestMatchers(HttpMethod.GET, "api/health_records").hasAnyAuthority(Roles.ZOO_TRAINER, Roles.STAFF)
                         .requestMatchers("api/health_records/**").hasAuthority(Roles.ZOO_TRAINER)
+                        .requestMatchers(HttpMethod.GET, "api/feeding_schedules").hasAnyAuthority(Roles.ZOO_TRAINER, Roles.STAFF)
+                        .requestMatchers("api/feeding_schedules/**").hasAuthority(Roles.ZOO_TRAINER)
                         .requestMatchers(HttpMethod.GET, "api/orders").hasAuthority(Roles.STAFF)
                         .requestMatchers(HttpMethod.GET, "api/orders/tickets").hasAuthority(Roles.STAFF)
                         .requestMatchers(HttpMethod.GET, "api/enclosures").hasAnyAuthority(Roles.STAFF, Roles.ZOO_TRAINER)
