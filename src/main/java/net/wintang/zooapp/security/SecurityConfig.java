@@ -45,10 +45,11 @@ public class SecurityConfig {
                         .requestMatchers("api/animals/**").hasAnyAuthority(Roles.ADMIN,
                                 Roles.STAFF, Roles.ZOO_TRAINER)
                         .requestMatchers("api/users").hasAuthority(Roles.ADMIN)
-                        .requestMatchers(HttpMethod.POST, "api/users/**").hasAnyAuthority(Roles.ADMIN, Roles.STAFF)
+                        .requestMatchers(HttpMethod.PUT, "api/users/**").hasAnyAuthority(Roles.ADMIN, Roles.STAFF)
                         .requestMatchers("api/users/staff/**").hasAuthority(Roles.ADMIN)
+                        .requestMatchers(HttpMethod.GET, "api/users/zoo-trainers").hasAuthority(Roles.STAFF)
                         .requestMatchers("api/users/zoo-trainers/**").hasAuthority(Roles.STAFF)
-                        .requestMatchers(HttpMethod.PUT, "api/users/customers").permitAll()
+                        .requestMatchers(HttpMethod.GET, "api/users/customers").hasAuthority(Roles.STAFF)
                         .requestMatchers("api/users/customers/**").hasAuthority(Roles.STAFF)
                         .requestMatchers(HttpMethod.GET, "api/species").permitAll()
                         .requestMatchers("api/species/**").hasAuthority(Roles.ZOO_TRAINER)
