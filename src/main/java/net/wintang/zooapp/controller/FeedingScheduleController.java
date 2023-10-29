@@ -36,6 +36,11 @@ public class FeedingScheduleController {
         return feedingScheduleService.confirmFeedingSchedule(id, feedingScheduleConfirmDto);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseObject> updateFeedingScheduleById(@PathVariable int id, @RequestBody FeedingScheduleRequestDTO feedingScheduleRequestDTO) throws NotFoundException {
+        return feedingScheduleService.updateFeedingScheduleById(id, feedingScheduleRequestDTO);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseObject> deleteFeedingScheduleById(@PathVariable int id) throws NotFoundException {
         return feedingScheduleService.deleteFeedingScheduleById(id);

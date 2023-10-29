@@ -58,6 +58,25 @@ public class FeedingScheduleService implements IFeedingScheduleService {
     }
 
     @Override
+    public ResponseEntity<ResponseObject> updateFeedingScheduleById(int id, FeedingScheduleRequestDTO feedingScheduleDto) throws NotFoundException {
+        if (animalRepository.existsById(feedingScheduleDto.getAnimalId()) && animalDietRepository.existsById(feedingScheduleDto.getDietId())) {
+            FeedingSchedule oldFeedingSchedule = feedingScheduleRepository.findById(id).orElseThrow(() -> new NotFoundException("Feeding Schedule ID: " + id));
+            if (!oldFeedingSchedule.isFed()) {
+                feedingScheduleRepository.save(FeedingScheduleMapper.mapToFeedScheduleEntity(feedingScheduleDto, oldFeedingSchedule));
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS,
+                                feedingScheduleDto));
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.FAILED,
+                            ApplicationConstants.ResponseMessage.NOT_MODIFIED, "Confirmed feeding schedule cannot be updated")
+            );
+        }
+        throw new NotFoundException("Animal ID or Diet ID");
+    }
+
+    @Override
     public ResponseEntity<ResponseObject> confirmFeedingSchedule(int id, FeedingScheduleConfirmDTO feedingScheduleConfirmDto) throws NotFoundException {
         UserDetails feeder = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         FeedingSchedule updatedFeedingSchedule = feedingScheduleRepository.findById(id).orElseThrow(() -> new NotFoundException("Feeding Schedule ID: " + id));

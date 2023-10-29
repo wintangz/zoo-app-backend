@@ -21,4 +21,11 @@ public class FeedingScheduleMapper {
                 .diet(AnimalDiet.builder().id(feedingScheduleRequestDto.getDietId()).build())
                 .build();
     }
+
+    public static FeedingSchedule mapToFeedScheduleEntity(FeedingScheduleRequestDTO feedingScheduleRequestDto, FeedingSchedule old) {
+        old.setFeedingTime(feedingScheduleRequestDto.getFeedingTime());
+        old.setAnimal(Animal.builder().id(feedingScheduleRequestDto.getAnimalId()).build());
+        old.setDiet(AnimalDiet.builder().id(feedingScheduleRequestDto.getDietId()).build());
+        return old;
+    }
 }
