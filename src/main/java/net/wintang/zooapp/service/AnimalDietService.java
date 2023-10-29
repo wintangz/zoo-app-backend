@@ -58,9 +58,9 @@ public class AnimalDietService implements IAnimalDietService {
     public ResponseEntity<ResponseObject> updateAnimalDietById(int id, AnimalDietRequestDTO animalDietRequestDTO) throws NotFoundException {
         AnimalDiet animalDiet = animalDietRepository.findById(id).orElseThrow(() -> new NotFoundException("Diet ID: " + id));
         AnimalDiet updated = AnimalDietMapper.mapToDietEntity(animalDietRequestDTO);
-        animalDiet.setFoodList(updated.getFoodList());
-        animalDiet.setType(updated.getType());
-        animalDietRepository.save(animalDiet);
+        updated.setId(animalDiet.getId());
+        updated.setCreator(animalDiet.getCreator());
+        animalDietRepository.save(updated);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
