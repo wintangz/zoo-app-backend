@@ -64,6 +64,7 @@ public class HealthRecordService implements IHealthRecordService {
             UserDetails authenticatedUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             HealthRecord healthRecord = HealthRecordMapper.mapToHealthRecordEntity(healthRecordRequestDTO);
             healthRecord.setZooTrainer(User.builder().id(Integer.parseInt(authenticatedUser.getUsername())).build());
+            healthRecord.setAnimal(Animal.builder().id(healthRecordRequestDTO.getAnimalId()).build());
             healthRecord.setId(id);
             healthRecordRepository.save(healthRecord);
             return ResponseEntity.status(HttpStatus.OK).body(
