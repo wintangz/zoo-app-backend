@@ -151,13 +151,17 @@ public class UserService implements IUserService {
     @Override
     public ResponseEntity<ResponseObject> updateUserById(UserUpdateDTO newUser, int id) throws NotFoundException, PermissionDeniedException {
         UserDetails authenticatedUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (Integer.parseInt(authenticatedUser.getUsername()) != id && !authenticatedUser.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+        if (Integer.parseInt(authenticatedUser.getUsername()) != id && !authenticatedUser.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))
+                && !authenticatedUser.getAuthorities().contains(new SimpleGrantedAuthority("STAFF"))) {
             throw new PermissionDeniedException();
         }
 
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User existingUser = optionalUser.get();
+            if (existingUser.getRoles().get(0).getName().equals("STAFF") && Integer.parseInt(authenticatedUser.getUsername()) != id) {
+                throw new PermissionDeniedException();
+            }
             User updatedUser = userMapper.mapToUserEntity(newUser, existingUser);
             updatedUser.setId(id);
             return ResponseEntity.status(HttpStatus.OK).body(
