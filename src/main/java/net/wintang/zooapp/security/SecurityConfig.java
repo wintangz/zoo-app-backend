@@ -49,6 +49,7 @@ public class SecurityConfig {
                         .requestMatchers("api/users/staff/**").hasAuthority(Roles.ADMIN)
                         .requestMatchers(HttpMethod.GET, "api/users/zoo-trainers").hasAuthority(Roles.STAFF)
                         .requestMatchers("api/users/zoo-trainers/**").hasAuthority(Roles.STAFF)
+                        .requestMatchers(HttpMethod.POST, "api/users/customers").permitAll()
                         .requestMatchers(HttpMethod.GET, "api/users/customers").hasAuthority(Roles.STAFF)
                         .requestMatchers("api/users/customers/**").hasAuthority(Roles.STAFF)
                         .requestMatchers(HttpMethod.GET, "api/species").permitAll()
