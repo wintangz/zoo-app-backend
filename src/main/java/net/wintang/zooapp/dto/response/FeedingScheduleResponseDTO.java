@@ -19,6 +19,7 @@ public class FeedingScheduleResponseDTO implements Serializable {
     private int animalId;
     private boolean fed;
     private int feederId;
+    private String confirmationImgUrl;
 
     public FeedingScheduleResponseDTO(FeedingSchedule feedingSchedule) {
         this.id = feedingSchedule.getId();
@@ -29,5 +30,6 @@ public class FeedingScheduleResponseDTO implements Serializable {
         this.animalId = feedingSchedule.getAnimal().getId();
         this.fed = feedingSchedule.isFed();
         this.feederId = feedingSchedule.getFeeder() != null ? feedingSchedule.getFeeder().getId() : 0;
+        this.confirmationImgUrl = feedingSchedule.getConfirmationImgUrl();
     }
 }
