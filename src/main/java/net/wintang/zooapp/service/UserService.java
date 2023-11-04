@@ -17,6 +17,7 @@ import net.wintang.zooapp.repository.UserRepository;
 import net.wintang.zooapp.security.JwtGenerator;
 import net.wintang.zooapp.util.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -176,12 +177,21 @@ public class UserService implements IUserService {
     @Override
     public ResponseEntity<ResponseObject> deleteUserById(int id) throws NotFoundException {
         if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
-                            ApplicationConstants.ResponseMessage.SUCCESS,
-                            id)
-            );
+            try {
+                userRepository.deleteById(id);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS,
+                                id));
+            } catch (DataAccessException ex) {
+                User user = userRepository.findById(id).get();
+                user.setStatus(false);
+                userRepository.save(user);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS,
+                                id));
+            }
         }
         throw new NotFoundException("User ID: " + id);
     }

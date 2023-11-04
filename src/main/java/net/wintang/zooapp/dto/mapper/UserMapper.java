@@ -42,6 +42,7 @@ public class UserMapper {
                 .nationality(user.getNationality())
                 .dateOfBirth(user.getDateOfBirth())
                 .roles(user.getRoles())
+                .status(true)
                 .build();
     }
 
