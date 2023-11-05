@@ -61,6 +61,7 @@ public class FoodService implements IFoodService {
     public ResponseEntity<ResponseObject> updateFoodById(int id, FoodRequestDTO foodRequestDTO) throws NotFoundException {
         Food food = foodRepository.findById(id).orElseThrow(() -> new NotFoundException("Food ID: " + id));
         food.setName(foodRequestDTO.getName());
+        food.setStatus(foodRequestDTO.isStatus());
         food.setType(foodRequestDTO.getType());
         foodRepository.save(food);
         return ResponseEntity.status(HttpStatus.OK).body(
