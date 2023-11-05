@@ -17,7 +17,7 @@ public class OrderCleanupScheduler {
         this.entityManager = entityManager;
     }
 
-    @Scheduled(cron = "30 26 21 * * *") // Run daily at 00:00:00
+    @Scheduled(cron = "00 45 16 * * *") // Run daily at 00:00:00 UTC if on Azure
     @Transactional
     public void removeExpiredOrders() {
         Query query = entityManager.createNativeQuery("EXEC RemoveExpiredOrders");
