@@ -21,6 +21,24 @@ jobs:
         with:
           java-version: '17'
 
+      - name: Set up environment variables
+        run: |
+          echo "spring.datasource.url=${{ secrets.SPRING_DATASOURCE_URL }}" >> $GITHUB_ENV
+          echo "spring.datasource.username=${{ secrets.SPRING_DATASOURCE_USERNAME }}" >> $GITHUB_ENV
+          echo "spring.datasource.password=${{ secrets.SPRING_DATASOURCE_PASSWORD }}" >> $GITHUB_ENV
+          echo "spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver" >> $GITHUB_ENV
+          echo "spring.jpa.hibernate.ddl-auto=none" >> $GITHUB_ENV
+          echo "spring.jpa.show-sql=true" >> $GITHUB_ENV
+          echo "spring.mail.host=smtp.gmail.com" >> $GITHUB_ENV
+          echo "spring.mail.port=587" >> $GITHUB_ENV
+          echo "spring.mail.username=${{ secrets.SPRING_MAIL_USERNAME }}" >> $GITHUB_ENV
+          echo "spring.mail.password=${{ secrets.SPRING_MAIL_PASSWORD }}" >> $GITHUB_ENV
+          echo "spring.mail.properties.mail.smtp.auth=true" >> $GITHUB_ENV
+          echo "spring.mail.properties.mail.smtp.starttls.enable=true" >> $GITHUB_ENV
+          echo "azure.storage.account-name=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}" >> $GITHUB_ENV
+          echo "azure.storage.account-key=${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}" >> $GITHUB_ENV
+          echo "azure.storage.container-name=${{ secrets.AZURE_STORAGE_CONTAINER_NAME }}" >> $GITHUB_ENV
+
       - name: Build with Maven
         run: mvn clean install
 
