@@ -16,4 +16,5 @@ public class AnimalDietRequestDTO implements Serializable {
     @NotBlank(message = "Type cannot be null")
     private String type;
     private List<Integer> foodListIds;
+    private boolean status;
 }

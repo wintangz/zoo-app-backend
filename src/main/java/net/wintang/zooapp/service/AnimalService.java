@@ -10,6 +10,7 @@ import net.wintang.zooapp.repository.AnimalEnclosureRepository;
 import net.wintang.zooapp.repository.AnimalRepository;
 import net.wintang.zooapp.repository.AnimalTrainerAssignorRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -65,12 +66,23 @@ public class AnimalService implements IAnimalService {
         if (!animalRepository.existsById(id)) {
             throw new NotFoundException("Animal: " + id);
         }
-        animalRepository.deleteById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
-                        ApplicationConstants.ResponseMessage.SUCCESS,
-                        id)
-        );
+        try {
+            animalRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                            ApplicationConstants.ResponseMessage.SUCCESS,
+                            id)
+            );
+        } catch (DataAccessException ex) {
+            Animal animal = animalRepository.findById(id).get();
+            animal.setStatus(false);
+            animalRepository.save(animal);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                            ApplicationConstants.ResponseMessage.SUCCESS,
+                            id)
+            );
+        }
     }
 
     @Override

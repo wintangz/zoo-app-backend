@@ -21,6 +21,7 @@ public class AnimalDietMapper {
         return AnimalDiet.builder()
                 .type(animalDietRequestDto.getType())
                 .foodList(animalDietRequestDto.getFoodListIds().stream().map(Food::new).toList())
+                .status(animalDietRequestDto.isStatus())
                 .build();
     }
 }

@@ -9,6 +9,7 @@ import net.wintang.zooapp.repository.SpeciesRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -69,12 +70,23 @@ public class SpeciesService implements ISpeciesService {
     @Override
     public ResponseEntity<ResponseObject> deleteSpeciesById(int id) throws NotFoundException {
         if (speciesRepository.existsById(id)) {
-            speciesRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
-                            ApplicationConstants.ResponseMessage.SUCCESS,
-                            id)
-            );
+            try {
+                speciesRepository.deleteById(id);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS,
+                                id)
+                );
+            } catch (DataAccessException ex) {
+                Species species = speciesRepository.findById(id).get();
+                species.setStatus(false);
+                speciesRepository.save(species);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS,
+                                id)
+                );
+            }
         }
         throw new NotFoundException("Species ID: " + id);
     }

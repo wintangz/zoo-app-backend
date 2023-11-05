@@ -8,6 +8,7 @@ import net.wintang.zooapp.entity.User;
 import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.repository.AnimalDietRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -71,12 +72,23 @@ public class AnimalDietService implements IAnimalDietService {
     @Override
     public ResponseEntity<ResponseObject> deleteAnimalDietById(int id) throws NotFoundException {
         if (animalDietRepository.existsById(id)) {
-            animalDietRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
-                            ApplicationConstants.ResponseMessage.SUCCESS,
-                            id)
-            );
+            try {
+                animalDietRepository.deleteById(id);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS,
+                                id)
+                );
+            } catch (DataAccessException ex) {
+                AnimalDiet diet = animalDietRepository.findById(id).get();
+                diet.setStatus(false);
+                animalDietRepository.save(diet);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS,
+                                id)
+                );
+            }
         }
         throw new NotFoundException("Diet ID: " + id);
     }

@@ -20,6 +20,7 @@ public class FoodMapper {
         return Food.builder()
                 .type(foodRequestDTO.getType())
                 .name(foodRequestDTO.getName())
+                .status(foodRequestDTO.isStatus())
                 .build();
     }
 }

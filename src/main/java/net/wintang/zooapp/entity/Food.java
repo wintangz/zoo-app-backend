@@ -29,6 +29,8 @@ public class Food {
     @JoinColumn(name = "created_by")
     private User creator;
 
+    private boolean status;
+
     public Food(Integer id) {
         this.id = id;
     }

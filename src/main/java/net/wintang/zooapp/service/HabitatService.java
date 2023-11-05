@@ -8,6 +8,7 @@ import net.wintang.zooapp.repository.HabitatRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -43,12 +44,23 @@ public class HabitatService implements IHabitatService {
     @Override
     public ResponseEntity<ResponseObject> deleteHabitatById(int id) throws NotFoundException {
         if (habitatRepository.existsById(id)) {
-            habitatRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
-                            ApplicationConstants.ResponseMessage.SUCCESS,
-                            id)
-            );
+            try {
+                habitatRepository.deleteById(id);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS,
+                                id)
+                );
+            } catch (DataAccessException ex) {
+                Habitat habitat = habitatRepository.findById(id).get();
+                habitat.setStatus(false);
+                habitatRepository.save(habitat);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS,
+                                id)
+                );
+            }
         }
         throw new NotFoundException("Habitat ID: " + id);
     }

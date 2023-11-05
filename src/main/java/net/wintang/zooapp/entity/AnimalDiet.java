@@ -34,4 +34,6 @@ public class AnimalDiet {
             joinColumns = @JoinColumn(name = "diet_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "food_id", referencedColumnName = "id"))
     private List<Food> foodList = new ArrayList<>();
+
+    private boolean status;
 }

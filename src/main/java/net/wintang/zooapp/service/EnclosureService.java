@@ -11,6 +11,7 @@ import net.wintang.zooapp.repository.AnimalRepository;
 import net.wintang.zooapp.repository.EnclosureRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -73,12 +74,23 @@ public class EnclosureService implements IEnclosureService {
     @Override
     public ResponseEntity<ResponseObject> deleteEnclosureById(int id) throws NotFoundException {
         if (enclosureRepository.existsById(id)) {
-            enclosureRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
-                            ApplicationConstants.ResponseMessage.SUCCESS,
-                            id)
-            );
+            try {
+                enclosureRepository.deleteById(id);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS,
+                                id)
+                );
+            } catch (DataAccessException ex) {
+                Enclosure enclosure = enclosureRepository.findById(id).get();
+                enclosure.setStatus(false);
+                enclosureRepository.save(enclosure);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS,
+                                id)
+                );
+            }
         }
         throw new NotFoundException("Enclosure ID: " + id);
     }

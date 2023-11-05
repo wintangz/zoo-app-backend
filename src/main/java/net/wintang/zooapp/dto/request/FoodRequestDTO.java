@@ -16,4 +16,5 @@ public class FoodRequestDTO implements Serializable {
     String name;
     @NotBlank(message = "Type cannot be empty")
     String type;
+    private boolean status;
 }

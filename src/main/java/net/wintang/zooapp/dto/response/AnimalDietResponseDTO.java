@@ -22,6 +22,7 @@ public class AnimalDietResponseDTO implements Serializable {
     private LocalDateTime createdDate;
     private UserResponseDTO creator;
     private List<FoodResponseDTO> foodList;
+    private boolean status;
 
     public AnimalDietResponseDTO(AnimalDiet animalDiet) {
         this.id = animalDiet.getId();
@@ -29,5 +30,6 @@ public class AnimalDietResponseDTO implements Serializable {
         this.createdDate = animalDiet.getCreatedDate();
         this.creator = UserMapper.mapToUserDTO(animalDiet.getCreator());
         this.foodList = FoodMapper.mapToFoodDto(animalDiet.getFoodList());
+        this.status = animalDiet.isStatus();
     }
 }
