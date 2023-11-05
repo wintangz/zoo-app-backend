@@ -160,7 +160,7 @@ public class UserService implements IUserService {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User existingUser = optionalUser.get();
-            if (existingUser.getRoles().get(0).getName().equals("STAFF") && (Integer.parseInt(authenticatedUser.getUsername()) != id && authenticatedUser.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))) {
+            if (existingUser.getRoles().get(0).getName().equals("STAFF") && Integer.parseInt(authenticatedUser.getUsername()) != id && !authenticatedUser.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
                 throw new PermissionDeniedException();
             }
             User updatedUser = userMapper.mapToUserEntity(newUser, existingUser);
