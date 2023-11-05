@@ -59,7 +59,7 @@ public class FeedingScheduleService implements IFeedingScheduleService {
 
     @Override
     public ResponseEntity<ResponseObject> updateFeedingScheduleById(int id, FeedingScheduleRequestDTO feedingScheduleDto) throws NotFoundException {
-        if (animalRepository.existsById(feedingScheduleDto.getAnimalId()) && animalDietRepository.existsById(feedingScheduleDto.getDietId())) {
+        if (animalRepository.existsById(feedingScheduleDto.getAnimalId()) && animalDietRepository.existsByIdAndStatus(feedingScheduleDto.getDietId(), true)) {
             FeedingSchedule oldFeedingSchedule = feedingScheduleRepository.findById(id).orElseThrow(() -> new NotFoundException("Feeding Schedule ID: " + id));
             if (!oldFeedingSchedule.isFed()) {
                 feedingScheduleRepository.save(FeedingScheduleMapper.mapToFeedScheduleEntity(feedingScheduleDto, oldFeedingSchedule));

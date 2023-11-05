@@ -98,7 +98,7 @@ public class AnimalService implements IAnimalService {
 
     @Override
     public ResponseEntity<ResponseObject> assignZooTrainerToAnimal(int animalId, int zooTrainerId) throws NotFoundException {
-        if (animalRepository.existsById(animalId)) {
+        if (animalRepository.existsByIdAndStatus(animalId, true)) {
             UserDetails authenticatedUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             User assignor = User.builder().id(Integer.parseInt(authenticatedUser.getUsername())).build();
             User zooTrainer = User.builder().id(zooTrainerId).build();

@@ -20,16 +20,10 @@ import org.springframework.stereotype.Service;
 public class EnclosureService implements IEnclosureService {
 
     private final EnclosureRepository enclosureRepository;
-    private final AnimalRepository animalRepository;
-    private final AnimalEnclosureRepository animalEnclosureRepository;
 
     @Autowired
-    public EnclosureService(EnclosureRepository enclosureRepository,
-                            AnimalRepository animalRepository,
-                            AnimalEnclosureRepository animalEnclosureRepository) {
+    public EnclosureService(EnclosureRepository enclosureRepository) {
         this.enclosureRepository = enclosureRepository;
-        this.animalRepository = animalRepository;
-        this.animalEnclosureRepository = animalEnclosureRepository;
     }
 
     @Override

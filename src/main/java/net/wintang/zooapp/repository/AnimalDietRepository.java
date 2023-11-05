@@ -4,4 +4,5 @@ import net.wintang.zooapp.entity.AnimalDiet;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AnimalDietRepository extends JpaRepository<AnimalDiet, Integer> {
+    boolean existsByIdAndStatus(int id, boolean status);
 }
