@@ -168,7 +168,7 @@ public class OrderService implements IOrderService {
                 List<OrderDetail> tickets = orderDetailRepository.findAllByOrderId(orderId);
                 boolean ticketExist = false;
                 for (OrderDetail t : tickets) {
-                    if (t.getId() == ticketId && t.getTicket().getType().equals(ticketType)) {
+                    if (t.getId() == ticketId && t.getTicket().getName().equals(ticketType)) {
                         ticketExist = true;
                         break;
                     }

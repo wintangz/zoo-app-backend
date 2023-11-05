@@ -108,7 +108,7 @@ public class EmailService implements IEmailService {
             emailContent.append("<h1 style='text-align: center'>We have received your order. Thank you for choosing our Zoo!</h1>" + "<div style='text-align: center'><br>Your order no: ")
                     .append(order.getId())
                     .append("<br>Purchased at: ")
-                    .append(order.getCreatedDate().toString().substring(0, 18).replace("T", " "))
+                    .append(order.getCreatedDate().toString().substring(0, 19).replace("T", " "))
                     .append("<br>Your tickets:<br/></div>")
                     .append("<div style='text-align: center'>");
             ticketsWithImgUrl.forEach((ticketId, imgUrl) ->
