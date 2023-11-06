@@ -9,6 +9,7 @@ import net.wintang.zooapp.repository.TicketRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -70,12 +71,23 @@ public class TicketService implements ITicketService {
     @Override
     public ResponseEntity<ResponseObject> deleteTicketById(int id) throws NotFoundException {
         if (ticketRepository.existsById(id)) {
-            ticketRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject(ApplicationConstants.ResponseStatus.OK,
-                            ApplicationConstants.ResponseMessage.SUCCESS,
-                            id)
-            );
+            try {
+                ticketRepository.deleteById(id);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS,
+                                id)
+                );
+            } catch (DataAccessException ex) {
+                Ticket ticket = ticketRepository.findById(id).get();
+                ticket.setStatus(false);
+                ticketRepository.save(ticket);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                                ApplicationConstants.ResponseMessage.SUCCESS,
+                                id)
+                );
+            }
         }
         throw new NotFoundException("Ticket ID: " + id);
     }
