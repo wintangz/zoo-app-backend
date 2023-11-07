@@ -19,6 +19,7 @@ public class FoodResponseDTO implements Serializable {
     private String type;
     private LocalDateTime createdDate;
     private UserResponseDTO creator;
+    private int quantity;
     private boolean status;
 
     public FoodResponseDTO(Food food) {
@@ -28,5 +29,6 @@ public class FoodResponseDTO implements Serializable {
         this.createdDate = food.getCreatedDate();
         this.creator = UserMapper.mapToUserDTO(food.getCreator());
         this.status = food.isStatus();
+        this.quantity = food.getQuantity();
     }
 }

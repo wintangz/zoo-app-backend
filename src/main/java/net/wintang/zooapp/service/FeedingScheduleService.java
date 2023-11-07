@@ -2,13 +2,17 @@ package net.wintang.zooapp.service;
 
 import net.wintang.zooapp.dto.mapper.FeedingScheduleMapper;
 import net.wintang.zooapp.dto.request.FeedingScheduleConfirmDTO;
+import net.wintang.zooapp.dto.request.FeedingScheduleDetailConfirmDTO;
+import net.wintang.zooapp.dto.request.FeedingScheduleDetailRequestDTO;
 import net.wintang.zooapp.dto.request.FeedingScheduleRequestDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.entity.FeedingSchedule;
+import net.wintang.zooapp.entity.FeedingScheduleDetail;
+import net.wintang.zooapp.entity.Food;
 import net.wintang.zooapp.entity.User;
 import net.wintang.zooapp.exception.NotFoundException;
-import net.wintang.zooapp.repository.AnimalDietRepository;
 import net.wintang.zooapp.repository.AnimalRepository;
+import net.wintang.zooapp.repository.FeedingScheduleDetailRepository;
 import net.wintang.zooapp.repository.FeedingScheduleRepository;
 import net.wintang.zooapp.util.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class FeedingScheduleService implements IFeedingScheduleService {
 
@@ -25,13 +31,13 @@ public class FeedingScheduleService implements IFeedingScheduleService {
 
     private final AnimalRepository animalRepository;
 
-    private final AnimalDietRepository animalDietRepository;
+    private final FeedingScheduleDetailRepository feedingScheduleDetailRepository;
 
     @Autowired
-    public FeedingScheduleService(FeedingScheduleRepository feedingScheduleRepository, AnimalRepository animalRepository, AnimalDietRepository animalDietRepository) {
+    public FeedingScheduleService(FeedingScheduleRepository feedingScheduleRepository, AnimalRepository animalRepository, FeedingScheduleDetailRepository feedingScheduleDetailRepository) {
         this.feedingScheduleRepository = feedingScheduleRepository;
         this.animalRepository = animalRepository;
-        this.animalDietRepository = animalDietRepository;
+        this.feedingScheduleDetailRepository = feedingScheduleDetailRepository;
     }
 
     @Override
@@ -44,11 +50,21 @@ public class FeedingScheduleService implements IFeedingScheduleService {
 
     @Override
     public ResponseEntity<ResponseObject> createFeedingSchedule(FeedingScheduleRequestDTO feedingScheduleDto) throws NotFoundException {
-        if (animalRepository.existsById(feedingScheduleDto.getAnimalId()) && animalDietRepository.existsById(feedingScheduleDto.getDietId())) {
+        if (animalRepository.existsById(feedingScheduleDto.getAnimalId())) {
             FeedingSchedule feedingSchedule = FeedingScheduleMapper.mapToFeedScheduleEntity(feedingScheduleDto);
             UserDetails authenticatedUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             feedingSchedule.setZooTrainer(User.builder().id(Integer.parseInt(authenticatedUser.getUsername())).build());
-            feedingScheduleRepository.save(feedingSchedule);
+
+            FeedingSchedule saved = feedingScheduleRepository.save(feedingSchedule);
+
+            for (FeedingScheduleDetailRequestDTO detail : feedingScheduleDto.getDetails()) {
+                feedingScheduleDetailRepository.save(
+                        FeedingScheduleDetail.builder()
+                                .feedingSchedule(saved)
+                                .expectedQuantity(detail.getExpectedQuantity())
+                                .food(new Food(detail.getFoodId()))
+                                .build());
+            }
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                             ApplicationConstants.ResponseMessage.SUCCESS,
@@ -59,10 +75,16 @@ public class FeedingScheduleService implements IFeedingScheduleService {
 
     @Override
     public ResponseEntity<ResponseObject> updateFeedingScheduleById(int id, FeedingScheduleRequestDTO feedingScheduleDto) throws NotFoundException {
-        if (animalRepository.existsById(feedingScheduleDto.getAnimalId()) && animalDietRepository.existsByIdAndStatus(feedingScheduleDto.getDietId(), true)) {
+        if (animalRepository.existsById(feedingScheduleDto.getAnimalId())) {
             FeedingSchedule oldFeedingSchedule = feedingScheduleRepository.findById(id).orElseThrow(() -> new NotFoundException("Feeding Schedule ID: " + id));
             if (!oldFeedingSchedule.isFed()) {
                 feedingScheduleRepository.save(FeedingScheduleMapper.mapToFeedScheduleEntity(feedingScheduleDto, oldFeedingSchedule));
+                for (FeedingScheduleDetailRequestDTO detail : feedingScheduleDto.getDetails()) {
+                    FeedingScheduleDetail old = feedingScheduleDetailRepository.findByFoodAndFeedingSchedule(new Food(detail.getFoodId()), FeedingSchedule.builder().id(id).build()).orElseThrow(() -> new NotFoundException(""));
+                    old.setFood(new Food(detail.getFoodId()));
+                    old.setExpectedQuantity(detail.getExpectedQuantity());
+                    feedingScheduleDetailRepository.save(old);
+                }
                 return ResponseEntity.status(HttpStatus.OK).body(
                         new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                                 ApplicationConstants.ResponseMessage.SUCCESS,
@@ -80,10 +102,19 @@ public class FeedingScheduleService implements IFeedingScheduleService {
     public ResponseEntity<ResponseObject> confirmFeedingSchedule(int id, FeedingScheduleConfirmDTO feedingScheduleConfirmDto) throws NotFoundException {
         UserDetails feeder = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         FeedingSchedule updatedFeedingSchedule = feedingScheduleRepository.findById(id).orElseThrow(() -> new NotFoundException("Feeding Schedule ID: " + id));
-        updatedFeedingSchedule.setConfirmationImgUrl(feedingScheduleConfirmDto.getConfirmationImgUrl());
         updatedFeedingSchedule.setFeeder(User.builder().id(Integer.parseInt(feeder.getUsername())).build());
         updatedFeedingSchedule.setFed(true);
         feedingScheduleRepository.save(updatedFeedingSchedule);
+        List<FeedingScheduleDetail> details = feedingScheduleDetailRepository.findAllByFeedingSchedule(updatedFeedingSchedule).orElseThrow(() -> new NotFoundException(""));
+        for (FeedingScheduleDetail detail : details) {
+            for (FeedingScheduleDetailConfirmDTO confirmDetail : feedingScheduleConfirmDto.getDetails()) {
+                if (confirmDetail.getId() == detail.getId()) {
+                    detail.setImgUrl(confirmDetail.getImgUrl());
+                    detail.setActualQuantity(confirmDetail.getActualQuantity());
+                    feedingScheduleDetailRepository.save(detail);
+                }
+            }
+        }
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,

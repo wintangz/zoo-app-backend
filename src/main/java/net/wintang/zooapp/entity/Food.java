@@ -22,6 +22,8 @@ public class Food {
 
     private String type;
 
+    private int quantity;
+
     @Column(insertable = false, updatable = false)
     private LocalDateTime createdDate;
 

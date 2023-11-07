@@ -3,7 +3,6 @@ package net.wintang.zooapp.dto.mapper;
 import net.wintang.zooapp.dto.request.FeedingScheduleRequestDTO;
 import net.wintang.zooapp.dto.response.FeedingScheduleResponseDTO;
 import net.wintang.zooapp.entity.Animal;
-import net.wintang.zooapp.entity.AnimalDiet;
 import net.wintang.zooapp.entity.FeedingSchedule;
 
 import java.util.List;
@@ -18,14 +17,12 @@ public class FeedingScheduleMapper {
         return FeedingSchedule.builder()
                 .feedingTime(feedingScheduleRequestDto.getFeedingTime())
                 .animal(Animal.builder().id(feedingScheduleRequestDto.getAnimalId()).build())
-                .diet(AnimalDiet.builder().id(feedingScheduleRequestDto.getDietId()).build())
                 .build();
     }
 
     public static FeedingSchedule mapToFeedScheduleEntity(FeedingScheduleRequestDTO feedingScheduleRequestDto, FeedingSchedule old) {
         old.setFeedingTime(feedingScheduleRequestDto.getFeedingTime());
         old.setAnimal(Animal.builder().id(feedingScheduleRequestDto.getAnimalId()).build());
-        old.setDiet(AnimalDiet.builder().id(feedingScheduleRequestDto.getDietId()).build());
         return old;
     }
 }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -16,9 +17,9 @@ public class FeedingScheduleRequestDTO implements Serializable {
 
     @NotNull(message = "Feeding time cannot be null")
     @Future(message = "Feeding time cannot be in the past")
-    LocalDateTime feedingTime;
+    private LocalDateTime feedingTime;
 
-    int dietId;
+    private List<FeedingScheduleDetailRequestDTO> details;
 
-    int animalId;
+    private int animalId;
 }

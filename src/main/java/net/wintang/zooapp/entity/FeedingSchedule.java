@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -28,10 +29,6 @@ public class FeedingSchedule {
     private User zooTrainer;
 
     @ManyToOne
-    @JoinColumn(name = "diet_id")
-    private AnimalDiet diet;
-
-    @ManyToOne
     @JoinColumn(name = "animal_id")
     private Animal animal;
 
@@ -45,6 +42,6 @@ public class FeedingSchedule {
     @Column(updatable = false, insertable = false)
     private LocalDateTime fedTime;
 
-    @Lob
-    private String confirmationImgUrl;
+    @OneToMany(mappedBy = "feedingSchedule")
+    private List<FeedingScheduleDetail> feeding_schedule_details;
 }

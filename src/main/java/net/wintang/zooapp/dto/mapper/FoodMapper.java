@@ -21,6 +21,7 @@ public class FoodMapper {
                 .type(foodRequestDTO.getType())
                 .name(foodRequestDTO.getName())
                 .status(foodRequestDTO.isStatus())
+                .quantity(foodRequestDTO.getQuantity())
                 .build();
     }
 }
