@@ -22,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -42,6 +43,8 @@ public class FeedingScheduleService implements IFeedingScheduleService {
 
     @Override
     public ResponseEntity<ResponseObject> getFeedingSchedules() {
+        List<FeedingSchedule> feedingSchedules = feedingScheduleRepository.findAll();
+        System.out.println(Arrays.toString(feedingSchedules.get(0).getFeeding_schedule_details().toArray()));
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,

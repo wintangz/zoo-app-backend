@@ -1,5 +1,6 @@
 package net.wintang.zooapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,6 +10,7 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
+@Data
 @Table(name = "feeding_schedule_detail")
 public class FeedingScheduleDetail {
 
@@ -18,6 +20,7 @@ public class FeedingScheduleDetail {
 
     @ManyToOne
     @JoinColumn(name = "feeding_schedule_id")
+    @JsonIgnore
     private FeedingSchedule feedingSchedule;
 
     @ManyToOne

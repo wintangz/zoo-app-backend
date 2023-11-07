@@ -1,5 +1,6 @@
 package net.wintang.zooapp.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.wintang.zooapp.dto.mapper.AnimalMapper;
@@ -9,6 +10,7 @@ import net.wintang.zooapp.entity.FeedingScheduleDetail;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
