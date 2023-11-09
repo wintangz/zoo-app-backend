@@ -1,10 +1,8 @@
 package net.wintang.zooapp.dto.response;
 
 import lombok.Data;
-import net.wintang.zooapp.dto.mapper.UserMapper;
 import net.wintang.zooapp.entity.Animal;
 import net.wintang.zooapp.entity.AnimalTrainerAssignor;
-import net.wintang.zooapp.entity.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
