@@ -47,6 +47,6 @@ public class AnimalResponseDTO {
         this.origin = animal.getOrigin();
         this.status = animal.isStatus();
         this.species = animal.getSpecies().getName();
-        this.animalTrainerAssignors = animal.getAnimalTrainerAssignors();
+        this.animalTrainerAssignors = animal.getAnimalTrainerAssignors().stream().filter(a -> a.getUnassignedDate() == null).toList();
     }
 }
