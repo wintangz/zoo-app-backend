@@ -49,6 +49,6 @@ public class AnimalResponseDTO {
         this.status = animal.isStatus();
         this.species = animal.getSpecies().getName();
         this.animalTrainerAssignors = animal.getAnimalTrainerAssignors().stream().filter(a -> a.getUnassignedDate() == null).toList();
-        this.currentEnclosure = animal.getEnclosures().stream().filter(e -> e.getMoveOutDate() == null).toList().get(0);
+        this.currentEnclosure = animal.getEnclosures().stream().filter(e -> e.getMoveOutDate() == null).findFirst().orElse(null);
     }
 }

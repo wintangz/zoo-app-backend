@@ -1,5 +1,6 @@
 package net.wintang.zooapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -23,6 +24,7 @@ public class AnimalEnclosure implements Serializable {
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "animal_id", nullable = false)
+    @JsonIgnore
     private Animal animal;
 
     @NotNull
