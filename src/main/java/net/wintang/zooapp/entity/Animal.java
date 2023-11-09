@@ -42,11 +42,8 @@ public class Animal {
     @OneToMany(mappedBy = "animal")
     private List<AnimalTrainerAssignor> animalTrainerAssignors;
 
-    @ManyToMany
-    @JoinTable(name = "animal_enclosure",
-            joinColumns = @JoinColumn(name = "animal_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "enclosure_id", referencedColumnName = "id"))
-    private List<Enclosure> enclosures;
+    @OneToMany(mappedBy = "animal")
+    private List<AnimalEnclosure> enclosures;
 
     @Column(insertable = false, columnDefinition = "bit default 0")
     private boolean status;
