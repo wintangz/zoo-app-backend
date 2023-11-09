@@ -6,11 +6,9 @@ import net.wintang.zooapp.dto.request.FeedingScheduleDetailConfirmDTO;
 import net.wintang.zooapp.dto.request.FeedingScheduleDetailRequestDTO;
 import net.wintang.zooapp.dto.request.FeedingScheduleRequestDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
-import net.wintang.zooapp.entity.FeedingSchedule;
-import net.wintang.zooapp.entity.FeedingScheduleDetail;
-import net.wintang.zooapp.entity.Food;
-import net.wintang.zooapp.entity.User;
+import net.wintang.zooapp.entity.*;
 import net.wintang.zooapp.exception.NotFoundException;
+import net.wintang.zooapp.repository.AnimalEnclosureRepository;
 import net.wintang.zooapp.repository.AnimalRepository;
 import net.wintang.zooapp.repository.FeedingScheduleDetailRepository;
 import net.wintang.zooapp.repository.FeedingScheduleRepository;
@@ -22,7 +20,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -34,21 +31,47 @@ public class FeedingScheduleService implements IFeedingScheduleService {
 
     private final FeedingScheduleDetailRepository feedingScheduleDetailRepository;
 
+    private final AnimalEnclosureRepository animalEnclosureRepository;
+
     @Autowired
-    public FeedingScheduleService(FeedingScheduleRepository feedingScheduleRepository, AnimalRepository animalRepository, FeedingScheduleDetailRepository feedingScheduleDetailRepository) {
+    public FeedingScheduleService(FeedingScheduleRepository feedingScheduleRepository, AnimalRepository animalRepository, FeedingScheduleDetailRepository feedingScheduleDetailRepository, AnimalEnclosureRepository animalEnclosureRepository) {
         this.feedingScheduleRepository = feedingScheduleRepository;
         this.animalRepository = animalRepository;
         this.feedingScheduleDetailRepository = feedingScheduleDetailRepository;
+        this.animalEnclosureRepository = animalEnclosureRepository;
     }
 
     @Override
     public ResponseEntity<ResponseObject> getFeedingSchedules() {
         List<FeedingSchedule> feedingSchedules = feedingScheduleRepository.findAll();
-        System.out.println(Arrays.toString(feedingSchedules.get(0).getFeeding_schedule_details().toArray()));
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
                         FeedingScheduleMapper.mapToFeedScheduleDto(feedingScheduleRepository.findAll())));
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> getFeedingSchedulesByAnimal(int id) {
+        List<FeedingSchedule> feedingSchedules = feedingScheduleRepository.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        FeedingScheduleMapper.mapToFeedScheduleDto(feedingSchedules.stream().filter(feedingSchedule -> feedingSchedule.getAnimal().getId() == id).toList())));
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> getFeedingSchedulesByEnclosure(int id) {
+        List<FeedingSchedule> feedingSchedules = feedingScheduleRepository.findAll();
+
+        // Filter out schedules for animals with a valid moveOutDate
+        List<FeedingSchedule> filteredSchedules = feedingSchedules.stream()
+                .filter(schedule -> animalEnclosureRepository.findByAnimalAndEnclosureAndMoveOutDate(schedule.getAnimal(), Enclosure.builder().id(id).build(), null).isPresent())
+                .toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        FeedingScheduleMapper.mapToFeedScheduleDto(filteredSchedules)));
     }
 
     @Override

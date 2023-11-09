@@ -9,6 +9,10 @@ import org.springframework.http.ResponseEntity;
 public interface IFeedingScheduleService {
     ResponseEntity<ResponseObject> getFeedingSchedules();
 
+    ResponseEntity<ResponseObject> getFeedingSchedulesByAnimal(int id);
+
+    ResponseEntity<ResponseObject> getFeedingSchedulesByEnclosure(int id);
+
     ResponseEntity<ResponseObject> createFeedingSchedule(FeedingScheduleRequestDTO feedingScheduleRequestDto) throws NotFoundException;
 
 
