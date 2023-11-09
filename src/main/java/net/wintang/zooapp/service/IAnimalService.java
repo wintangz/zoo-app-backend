@@ -27,4 +27,6 @@ public interface IAnimalService {
     ResponseEntity<ResponseObject> moveOutAnAnimal(int id, int animalId) throws NotFoundException;
 
     ResponseEntity<ResponseObject> getAnimalEnclosuresByAnimalId(int id);
+
+    ResponseEntity<ResponseObject> getAnimalsHistory(int id) throws NotFoundException;
 }

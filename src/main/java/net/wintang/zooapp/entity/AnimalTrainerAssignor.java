@@ -1,7 +1,10 @@
 package net.wintang.zooapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,6 +21,7 @@ public class AnimalTrainerAssignor {
 
     @ManyToOne
     @JoinColumn(name = "animal_id")
+    @JsonIgnore
     private Animal animal;
 
     @ManyToOne
@@ -27,5 +31,11 @@ public class AnimalTrainerAssignor {
     @ManyToOne
     @JoinColumn(name = "assigned_by")
     private User assignedBy;
+
+    @Column(insertable = false, updatable = false)
+    private LocalDateTime assignedDate;
+
+    @Column(insertable = false, updatable = false)
+    private LocalDateTime unassignedDate;
 
 }

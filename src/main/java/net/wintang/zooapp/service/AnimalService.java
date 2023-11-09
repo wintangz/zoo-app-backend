@@ -120,9 +120,10 @@ public class AnimalService implements IAnimalService {
     @Override
     public ResponseEntity<ResponseObject> unassignZooTrainerToAnimal(int animalId, int zooTrainerId) throws NotFoundException {
         AnimalTrainerAssignor object = animalTrainerAssignorRepository
-                .findByAnimalAndTrainer(Animal.builder().id(animalId).build(), User.builder().id(zooTrainerId).build())
+                .findByAnimalAndTrainerAndUnassignedDate(Animal.builder().id(animalId).build(), User.builder().id(zooTrainerId).build(), null)
                 .orElseThrow(() -> new NotFoundException("This animal with this trainer"));
-        animalTrainerAssignorRepository.delete(object);
+        object.setUnassignedDate(LocalDateTime.now());
+        animalTrainerAssignorRepository.save(object);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
@@ -178,6 +179,15 @@ public class AnimalService implements IAnimalService {
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
                         AnimalMapper.mapToAEDto(animalEnclosureRepository.findByAnimal(Animal.builder().id(id).build())))
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> getAnimalsHistory(int id) throws NotFoundException {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        (animalTrainerAssignorRepository.findAllByAnimal(Animal.builder().id(id).build()).orElseThrow(() -> new NotFoundException(("Animal assign history")))))
         );
     }
 }

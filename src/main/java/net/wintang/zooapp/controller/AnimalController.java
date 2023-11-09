@@ -26,6 +26,11 @@ public class AnimalController {
         return animalService.getAnimals();
     }
 
+    @GetMapping("/{id}/history")
+    public ResponseEntity<ResponseObject> getAnimalsHistory(@PathVariable int id) throws NotFoundException {
+        return animalService.getAnimalsHistory(id);
+    }
+
     @PostMapping
     public ResponseEntity<ResponseObject> createAnimal(@Valid @RequestBody AnimalRequestDTO animal) {
         return animalService.createAnimal(animal);

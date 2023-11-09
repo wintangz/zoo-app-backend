@@ -14,5 +14,7 @@ public interface AnimalEnclosureRepository extends JpaRepository<AnimalEnclosure
 
     Optional<AnimalEnclosure> findByAnimalAndEnclosureAndMoveOutDate(@NotNull Animal animal, @NotNull Enclosure enclosure, LocalDateTime moveOutDate);
 
+    List<AnimalEnclosure> findByAnimalAndMoveOutDate(@NotNull Animal animal, LocalDateTime moveOutDate);
+
     List<AnimalEnclosure> findByAnimal(Animal animalId);
 }
