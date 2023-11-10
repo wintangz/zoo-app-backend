@@ -15,8 +15,8 @@ public class EnclosureMapper {
 
     public static Enclosure mapToEnclosureEntity(EnclosureRequestDTO enclosureRequestDTO) {
         return Enclosure.builder()
-                .name(enclosureRequestDTO.getName())
-                .info(enclosureRequestDTO.getInfo())
+                .name(enclosureRequestDTO.getName().trim())
+                .info(enclosureRequestDTO.getInfo().trim())
                 .imgUrl(enclosureRequestDTO.getImgUrl())
                 .status(enclosureRequestDTO.isStatus())
                 .maxCapacity(enclosureRequestDTO.getMaxCapacity())

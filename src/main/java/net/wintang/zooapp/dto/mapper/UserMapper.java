@@ -31,15 +31,15 @@ public class UserMapper {
 
     public User mapToUserEntity(UserRequestDTO user) {
         return User.builder()
-                .username(user.getUsername())
+                .username(user.getUsername().trim())
                 .password(passwordEncoder.encode(user.getPassword()))
-                .lastname(user.getLastname())
-                .firstname(user.getFirstname())
+                .lastname(user.getLastname().trim())
+                .firstname(user.getFirstname().trim())
                 .sex(user.isSex())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .address(user.getAddress())
-                .nationality(user.getNationality())
+                .email(user.getEmail().trim())
+                .phone(user.getPhone().trim())
+                .address(user.getAddress().trim())
+                .nationality(user.getNationality().trim())
                 .dateOfBirth(user.getDateOfBirth())
                 .roles(user.getRoles())
                 .status(true)
@@ -48,15 +48,15 @@ public class UserMapper {
 
     public User mapToUserEntity(UserUpdateDTO user, User oldUser) {
         User.UserBuilder userBuilder = User.builder();
-        userBuilder.username(user.getUsername() != null ? user.getUsername() : oldUser.getUsername());
+        userBuilder.username(user.getUsername() != null ? user.getUsername().trim() : oldUser.getUsername());
         userBuilder.password(user.getPassword() != null ? passwordEncoder.encode(user.getPassword()) : oldUser.getPassword());
-        userBuilder.lastname(user.getLastname() != null ? user.getLastname() : oldUser.getLastname());
-        userBuilder.firstname(user.getFirstname() != null ? user.getFirstname() : oldUser.getFirstname());
+        userBuilder.lastname(user.getLastname() != null ? user.getLastname().trim() : oldUser.getLastname());
+        userBuilder.firstname(user.getFirstname() != null ? user.getFirstname().trim() : oldUser.getFirstname());
         userBuilder.sex(user.getSex() != null ? Boolean.parseBoolean(user.getSex()) : oldUser.isSex());
-        userBuilder.email(user.getEmail() != null ? user.getEmail() : oldUser.getEmail());
-        userBuilder.phone(user.getPhone() != null ? user.getPhone() : oldUser.getPhone());
-        userBuilder.address(user.getAddress() != null ? user.getAddress() : oldUser.getAddress());
-        userBuilder.nationality(user.getNationality() != null ? user.getNationality() : oldUser.getNationality());
+        userBuilder.email(user.getEmail() != null ? user.getEmail().trim() : oldUser.getEmail());
+        userBuilder.phone(user.getPhone() != null ? user.getPhone().trim() : oldUser.getPhone());
+        userBuilder.address(user.getAddress() != null ? user.getAddress().trim() : oldUser.getAddress());
+        userBuilder.nationality(user.getNationality() != null ? user.getNationality().trim() : oldUser.getNationality());
         userBuilder.dateOfBirth(user.getDateOfBirth() != null ? user.getDateOfBirth() : oldUser.getDateOfBirth());
         userBuilder.roles(new ArrayList<>(user.getRoles() != null ? user.getRoles() : oldUser.getRoles()));
         userBuilder.avatarUrl(user.getAvatarUrl() != null ? user.getAvatarUrl() : oldUser.getAvatarUrl());

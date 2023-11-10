@@ -18,10 +18,10 @@ public class TicketMapper {
 
     public static Ticket mapToTicketEntity(TicketRequestDTO ticketRequestDTO) {
         return Ticket.builder()
-                .name(ticketRequestDTO.getName())
+                .name(ticketRequestDTO.getName().trim())
                 .price(ticketRequestDTO.getPrice())
-                .type(ticketRequestDTO.getType())
-                .description(ticketRequestDTO.getDescription())
+                .type(ticketRequestDTO.getType().trim())
+                .description(ticketRequestDTO.getDescription().trim())
                 .imgUrl(ticketRequestDTO.getImgUrl())
                 .status(ticketRequestDTO.isStatus())
                 .build();

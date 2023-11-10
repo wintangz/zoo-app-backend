@@ -20,11 +20,11 @@ public class HealthRecordMapper {
     public static HealthRecord mapToHealthRecordEntity(HealthRecordRequestDTO healthRecordRequestDTO) {
         return HealthRecord.builder()
                 .recordedDateTime(LocalDateTime.now())
-                .diagnosis(healthRecordRequestDTO.getDiagnosis())
+                .diagnosis(healthRecordRequestDTO.getDiagnosis().trim())
                 .height(healthRecordRequestDTO.getHeight())
                 .weight(healthRecordRequestDTO.getWeight())
                 .length(healthRecordRequestDTO.getLength())
-                .lifeStage(healthRecordRequestDTO.getLifeStage())
+                .lifeStage(healthRecordRequestDTO.getLifeStage().trim())
                 .temperature(healthRecordRequestDTO.getTemperature())
                 .imgUrl(healthRecordRequestDTO.getImgUrl())
                 .build();

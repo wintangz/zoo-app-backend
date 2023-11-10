@@ -18,8 +18,8 @@ public class FoodMapper {
 
     public static Food mapToFoodEntity(FoodRequestDTO foodRequestDTO) {
         return Food.builder()
-                .type(foodRequestDTO.getType())
-                .name(foodRequestDTO.getName())
+                .type(foodRequestDTO.getType().trim())
+                .name(foodRequestDTO.getName().trim())
                 .status(foodRequestDTO.isStatus())
                 .quantity(foodRequestDTO.getQuantity())
                 .build();

@@ -18,8 +18,8 @@ public class HabitatMapper {
 
     public static Habitat mapToHabitatEntity(HabitatRequestDTO habitatRequestDTO) {
         return Habitat.builder()
-                .name(habitatRequestDTO.getName())
-                .info(habitatRequestDTO.getInfo())
+                .name(habitatRequestDTO.getName().trim())
+                .info(habitatRequestDTO.getInfo().trim())
                 .status(habitatRequestDTO.isStatus())
                 .imgUrl(habitatRequestDTO.getImgUrl())
                 .bannerUrl(habitatRequestDTO.getBannerUrl())
@@ -29,8 +29,8 @@ public class HabitatMapper {
     public static Habitat mapToHabitatEntity(HabitatRequestDTO habitatRequestDTO, Habitat habitat) {
         return Habitat.builder()
                 .id(habitat.getId())
-                .name(habitatRequestDTO.getName())
-                .info(habitatRequestDTO.getInfo())
+                .name(habitatRequestDTO.getName().trim())
+                .info(habitatRequestDTO.getInfo().trim())
                 .status(habitatRequestDTO.isStatus() == habitat.isStatus() ? habitat.isStatus() : habitatRequestDTO.isStatus())
                 .imgUrl(habitatRequestDTO.getImgUrl())
                 .bannerUrl(habitatRequestDTO.getBannerUrl())

@@ -19,34 +19,34 @@ public class SpeciesMapper {
 
     public static Species mapToSpeciesEntity(SpeciesRequestDTO speciesRequestDTO) {
         return Species.builder()
-                .name(speciesRequestDTO.getName())
-                .species(speciesRequestDTO.getSpecies())
-                .diet(speciesRequestDTO.getDiet())
-                .family(speciesRequestDTO.getFamily())
-                .genus(speciesRequestDTO.getGenus())
+                .name(speciesRequestDTO.getName().trim())
+                .species(speciesRequestDTO.getSpecies().trim())
+                .diet(speciesRequestDTO.getDiet().trim())
+                .family(speciesRequestDTO.getFamily().trim())
+                .genus(speciesRequestDTO.getGenus().trim())
                 .avatarUrl(speciesRequestDTO.getAvatarUrl())
                 .habitat(Habitat.builder().id(speciesRequestDTO.getHabitatId()).build())
                 .imgUrl(speciesRequestDTO.getImgUrl())
-                .conversationStatus(speciesRequestDTO.getConversationStatus())
+                .conversationStatus(speciesRequestDTO.getConversationStatus().trim())
                 .status(speciesRequestDTO.isStatus())
-                .description(speciesRequestDTO.getDescription())
+                .description(speciesRequestDTO.getDescription().trim())
                 .build();
     }
 
     public static Species mapToSpeciesEntity(SpeciesRequestDTO speciesRequestDTO, Species species) {
         return Species.builder()
                 .id(species.getId())
-                .name(speciesRequestDTO.getName())
-                .species(speciesRequestDTO.getSpecies())
-                .diet(speciesRequestDTO.getDiet())
-                .family(speciesRequestDTO.getFamily())
-                .genus(speciesRequestDTO.getGenus())
+                .name(speciesRequestDTO.getName().trim())
+                .species(speciesRequestDTO.getSpecies().trim())
+                .diet(speciesRequestDTO.getDiet().trim())
+                .family(speciesRequestDTO.getFamily().trim())
+                .genus(speciesRequestDTO.getGenus().trim())
                 .avatarUrl(speciesRequestDTO.getAvatarUrl())
                 .habitat(Habitat.builder().id(speciesRequestDTO.getHabitatId()).build())
-                .imgUrl(speciesRequestDTO.getImgUrl())
-                .conversationStatus(speciesRequestDTO.getConversationStatus())
+                .imgUrl(speciesRequestDTO.getImgUrl().trim())
+                .conversationStatus(speciesRequestDTO.getConversationStatus().trim())
                 .status(speciesRequestDTO.isStatus() == species.isStatus() ? species.isStatus() : speciesRequestDTO.isStatus())
-                .description(speciesRequestDTO.getDescription())
+                .description(speciesRequestDTO.getDescription().trim())
                 .build();
     }
 }

@@ -32,11 +32,11 @@ public class AnimalMapper {
 
     public Animal mapToAnimalEntity(AnimalRequestDTO dto) {
         return Animal.builder()
-                .name(dto.getName())
+                .name(dto.getName().trim())
                 .sex(dto.isSex())
                 .arrivalDate(dto.getArrivalDate())
                 .dateOfBirth(dto.getDateOfBirth())
-                .origin(dto.getOrigin())
+                .origin(dto.getOrigin().trim())
                 .species(speciesRepository.findByName(dto.getSpecies()))
                 .imgUrl(dto.getImgUrl())
                 .status(dto.isStatus())
@@ -44,13 +44,13 @@ public class AnimalMapper {
     }
 
     public Animal mapToAnimalEntity(AnimalUpdateDTO dto, Animal old) {
-        old.setName(dto.getName());
+        old.setName(dto.getName().trim());
         old.setSex(dto.isSex());
         old.setImgUrl(dto.getImgUrl());
         old.setArrivalDate(dto.getArrivalDate());
         old.setDateOfBirth(dto.getDateOfBirth());
         old.setDateOfDeath(dto.getDateOfDeath());
-        old.setOrigin(dto.getOrigin());
+        old.setOrigin(dto.getOrigin().trim());
         old.setSpecies(speciesRepository.findByName(dto.getSpecies()));
         old.setStatus(dto.isStatus());
         return old;
