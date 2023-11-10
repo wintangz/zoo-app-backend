@@ -4,6 +4,7 @@ import net.wintang.zooapp.dto.request.FoodRequestDTO;
 import net.wintang.zooapp.dto.response.FoodResponseDTO;
 import net.wintang.zooapp.entity.Food;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class FoodMapper {
@@ -22,6 +23,7 @@ public class FoodMapper {
                 .name(foodRequestDTO.getName().trim())
                 .status(foodRequestDTO.isStatus())
                 .quantity(foodRequestDTO.getQuantity())
+                .createdDate(LocalDateTime.now())
                 .build();
     }
 }
