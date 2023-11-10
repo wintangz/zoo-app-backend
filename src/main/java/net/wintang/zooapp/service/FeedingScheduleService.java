@@ -164,6 +164,7 @@ public class FeedingScheduleService implements IFeedingScheduleService {
     public ResponseEntity<ResponseObject> deleteFeedingScheduleById(int id) throws NotFoundException {
         FeedingSchedule feedingSchedule = feedingScheduleRepository.findById(id).orElseThrow(() -> new NotFoundException("Feeding Schedult ID: " + id));
         if (!feedingSchedule.isFed()) {
+            feedingScheduleDetailRepository.deleteAll(feedingSchedule.getFeeding_schedule_details());
             feedingScheduleRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject(ApplicationConstants.ResponseStatus.OK,
