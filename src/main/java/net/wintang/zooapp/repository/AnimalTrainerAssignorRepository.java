@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AnimalTrainerAssignorRepository extends JpaRepository<AnimalTrainerAssignor, Integer> {
-    boolean existsByAnimalAndTrainer(Animal animal, User trainer);
+    boolean existsByAnimalAndTrainerAndUnassignedDate(Animal animal, User trainer, LocalDateTime unassignedDate);
 
     Optional<AnimalTrainerAssignor> findByAnimalAndTrainer(Animal animal, User trainer);
 

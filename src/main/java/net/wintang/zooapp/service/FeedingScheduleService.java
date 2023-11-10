@@ -8,10 +8,7 @@ import net.wintang.zooapp.dto.request.FeedingScheduleRequestDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
 import net.wintang.zooapp.entity.*;
 import net.wintang.zooapp.exception.NotFoundException;
-import net.wintang.zooapp.repository.AnimalEnclosureRepository;
-import net.wintang.zooapp.repository.AnimalRepository;
-import net.wintang.zooapp.repository.FeedingScheduleDetailRepository;
-import net.wintang.zooapp.repository.FeedingScheduleRepository;
+import net.wintang.zooapp.repository.*;
 import net.wintang.zooapp.util.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,13 +29,16 @@ public class FeedingScheduleService implements IFeedingScheduleService {
     private final FeedingScheduleDetailRepository feedingScheduleDetailRepository;
 
     private final AnimalEnclosureRepository animalEnclosureRepository;
+    private final AnimalTrainerAssignorRepository animalTrainerAssignorRepository;
 
     @Autowired
-    public FeedingScheduleService(FeedingScheduleRepository feedingScheduleRepository, AnimalRepository animalRepository, FeedingScheduleDetailRepository feedingScheduleDetailRepository, AnimalEnclosureRepository animalEnclosureRepository) {
+    public FeedingScheduleService(FeedingScheduleRepository feedingScheduleRepository, AnimalRepository animalRepository, FeedingScheduleDetailRepository feedingScheduleDetailRepository, AnimalEnclosureRepository animalEnclosureRepository,
+                                  AnimalTrainerAssignorRepository animalTrainerAssignorRepository) {
         this.feedingScheduleRepository = feedingScheduleRepository;
         this.animalRepository = animalRepository;
         this.feedingScheduleDetailRepository = feedingScheduleDetailRepository;
         this.animalEnclosureRepository = animalEnclosureRepository;
+        this.animalTrainerAssignorRepository = animalTrainerAssignorRepository;
     }
 
     @Override
@@ -62,10 +62,22 @@ public class FeedingScheduleService implements IFeedingScheduleService {
     @Override
     public ResponseEntity<ResponseObject> getFeedingSchedulesByEnclosure(int id) {
         List<FeedingSchedule> feedingSchedules = feedingScheduleRepository.findAll();
-
-        // Filter out schedules for animals with a valid moveOutDate
         List<FeedingSchedule> filteredSchedules = feedingSchedules.stream()
                 .filter(schedule -> animalEnclosureRepository.findByAnimalAndEnclosureAndMoveOutDate(schedule.getAnimal(), Enclosure.builder().id(id).build(), null).isPresent())
+                .toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        FeedingScheduleMapper.mapToFeedScheduleDto(filteredSchedules)));
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> getFeedingSchedulesByTrainer(int id) {
+        List<FeedingSchedule> feedingSchedules = feedingScheduleRepository.findAll();
+        List<FeedingSchedule> filteredSchedules = feedingSchedules.stream()
+                .filter(schedule -> schedule.getAnimal().getAnimalTrainerAssignors().stream()
+                        .anyMatch(obj -> obj.getTrainer().getId() == id && obj.getUnassignedDate() == null))
                 .toList();
 
         return ResponseEntity.status(HttpStatus.OK).body(

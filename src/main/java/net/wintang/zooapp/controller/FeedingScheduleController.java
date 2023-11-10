@@ -36,6 +36,11 @@ public class FeedingScheduleController {
         return feedingScheduleService.getFeedingSchedulesByEnclosure(id);
     }
 
+    @GetMapping("/zoo-trainers/{id}")
+    public ResponseEntity<ResponseObject> getFeedingSchedulesByTrainer(@PathVariable int id) {
+        return feedingScheduleService.getFeedingSchedulesByTrainer(id);
+    }
+
     @PostMapping
     public ResponseEntity<ResponseObject> createFeedingSchedule(@Valid @RequestBody FeedingScheduleRequestDTO feedingScheduleRequestDto) throws NotFoundException {
         return feedingScheduleService.createFeedingSchedule(feedingScheduleRequestDto);
