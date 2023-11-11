@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FeedingScheduleService implements IFeedingScheduleService {
@@ -118,10 +119,15 @@ public class FeedingScheduleService implements IFeedingScheduleService {
             if (!oldFeedingSchedule.isFed()) {
                 feedingScheduleRepository.save(FeedingScheduleMapper.mapToFeedScheduleEntity(feedingScheduleDto, oldFeedingSchedule));
                 for (FeedingScheduleDetailRequestDTO detail : feedingScheduleDto.getDetails()) {
-                    FeedingScheduleDetail old = feedingScheduleDetailRepository.findByFoodAndFeedingSchedule(new Food(detail.getFoodId()), FeedingSchedule.builder().id(id).build()).orElseThrow(() -> new NotFoundException(""));
-                    old.setFood(new Food(detail.getFoodId()));
-                    old.setExpectedQuantity(detail.getExpectedQuantity());
-                    feedingScheduleDetailRepository.save(old);
+                    Optional<FeedingScheduleDetail> old = feedingScheduleDetailRepository.findByFoodAndFeedingSchedule(new Food(detail.getFoodId()), FeedingSchedule.builder().id(id).build());
+                    if (old.isPresent()) {
+                        old.get().setFood(new Food(detail.getFoodId()));
+                        old.get().setExpectedQuantity(detail.getExpectedQuantity());
+                        feedingScheduleDetailRepository.save(old.get());
+                    } else {
+                        FeedingScheduleDetail newDetail = FeedingScheduleDetail.builder().food(new Food(detail.getFoodId())).expectedQuantity(detail.getExpectedQuantity()).build();
+                        feedingScheduleDetailRepository.save(newDetail);
+                    }
                 }
                 return ResponseEntity.status(HttpStatus.OK).body(
                         new ResponseObject(ApplicationConstants.ResponseStatus.OK,
