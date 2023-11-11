@@ -121,11 +121,10 @@ public class FeedingScheduleService implements IFeedingScheduleService {
                 for (FeedingScheduleDetailRequestDTO detail : feedingScheduleDto.getDetails()) {
                     Optional<FeedingScheduleDetail> old = feedingScheduleDetailRepository.findByFoodAndFeedingSchedule(new Food(detail.getFoodId()), FeedingSchedule.builder().id(id).build());
                     if (old.isPresent()) {
-                        old.get().setFood(new Food(detail.getFoodId()));
                         old.get().setExpectedQuantity(detail.getExpectedQuantity());
                         feedingScheduleDetailRepository.save(old.get());
                     } else {
-                        FeedingScheduleDetail newDetail = FeedingScheduleDetail.builder().food(new Food(detail.getFoodId())).expectedQuantity(detail.getExpectedQuantity()).build();
+                        FeedingScheduleDetail newDetail = FeedingScheduleDetail.builder().feedingSchedule(FeedingSchedule.builder().id(id).build()).food(new Food(detail.getFoodId())).expectedQuantity(detail.getExpectedQuantity()).build();
                         feedingScheduleDetailRepository.save(newDetail);
                     }
                 }
