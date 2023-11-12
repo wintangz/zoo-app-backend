@@ -184,7 +184,7 @@ public class OrderService implements IOrderService {
                             return ResponseEntity.status(HttpStatus.OK).body(
                                     new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                                             ApplicationConstants.ResponseMessage.SUCCESS,
-                                            "Ticket ID: " + ticketId + " Customer ID: " + customerId)
+                                            ticket)
                             );
                         }
                         throw new PermissionDeniedException("Ticket is used");
