@@ -53,11 +53,10 @@ public class AnimalService implements IAnimalService {
         zooTrainer.setId(Integer.parseInt(userDetails.getUsername()));
         Animal animal = animalMapper.mapToAnimalEntity(animalDto);
         animal.setCreatedBy(zooTrainer);
-        animalRepository.save(animal);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        animalDto)
+                        animalRepository.save(animal))
         );
     }
 
