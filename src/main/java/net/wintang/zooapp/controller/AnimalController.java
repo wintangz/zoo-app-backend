@@ -32,7 +32,7 @@ public class AnimalController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseObject> createAnimal(@Valid @RequestBody AnimalRequestDTO animal) {
+    public ResponseEntity<ResponseObject> createAnimal(@Valid @RequestBody AnimalRequestDTO animal) throws NotFoundException {
         return animalService.createAnimal(animal);
     }
 

@@ -29,8 +29,7 @@ public class AnimalUpdateDTO {
     @NotBlank(message = "Origin cannot be empty")
     private String origin;
 
-    @NotBlank(message = "Species cannot be empty")
-    private String species;
+    private int species;
 
     private boolean status;
 }

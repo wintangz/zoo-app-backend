@@ -6,6 +6,7 @@ import net.wintang.zooapp.dto.response.AnimalEnclosureResponseDTO;
 import net.wintang.zooapp.dto.response.AnimalResponseDTO;
 import net.wintang.zooapp.entity.Animal;
 import net.wintang.zooapp.entity.AnimalEnclosure;
+import net.wintang.zooapp.exception.NotFoundException;
 import net.wintang.zooapp.repository.SpeciesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,20 +31,20 @@ public class AnimalMapper {
         return new AnimalResponseDTO(animal);
     }
 
-    public Animal mapToAnimalEntity(AnimalRequestDTO dto) {
+    public Animal mapToAnimalEntity(AnimalRequestDTO dto) throws NotFoundException {
         return Animal.builder()
                 .name(dto.getName().trim())
                 .sex(dto.isSex())
                 .arrivalDate(dto.getArrivalDate())
                 .dateOfBirth(dto.getDateOfBirth())
                 .origin(dto.getOrigin().trim())
-                .species(speciesRepository.findByName(dto.getSpecies()))
+                .species(speciesRepository.findById(dto.getSpecies()).orElseThrow(() -> new NotFoundException(("Species ID: "))))
                 .imgUrl(dto.getImgUrl())
                 .status(dto.isStatus())
                 .build();
     }
 
-    public Animal mapToAnimalEntity(AnimalUpdateDTO dto, Animal old) {
+    public Animal mapToAnimalEntity(AnimalUpdateDTO dto, Animal old) throws NotFoundException {
         old.setName(dto.getName().trim());
         old.setSex(dto.isSex());
         old.setImgUrl(dto.getImgUrl());
@@ -51,7 +52,7 @@ public class AnimalMapper {
         old.setDateOfBirth(dto.getDateOfBirth());
         old.setDateOfDeath(dto.getDateOfDeath());
         old.setOrigin(dto.getOrigin().trim());
-        old.setSpecies(speciesRepository.findByName(dto.getSpecies()));
+        old.setSpecies(speciesRepository.findById(dto.getSpecies()).orElseThrow(() -> new NotFoundException(("Species ID: "))));
         old.setStatus(dto.isStatus());
         return old;
     }

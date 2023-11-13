@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 public interface IAnimalService {
     ResponseEntity<ResponseObject> getAnimals();
 
-    ResponseEntity<ResponseObject> createAnimal(AnimalRequestDTO animalDto);
+    ResponseEntity<ResponseObject> createAnimal(AnimalRequestDTO animalDto) throws NotFoundException;
 
     ResponseEntity<ResponseObject> deleteAnimalById(int id) throws NotFoundException;
 
