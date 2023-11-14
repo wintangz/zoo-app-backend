@@ -22,4 +22,6 @@ public interface IOrderService {
     ResponseEntity<ResponseObject> verifyTickets(int orderId, int customerId, int ticketId, String ticketType, LocalDateTime issuedDate, String hashData) throws NoSuchAlgorithmException, InvalidKeyException, NotFoundException, PermissionDeniedException;
 
     ResponseEntity<ResponseObject> getOrderById(int id) throws NotFoundException;
+
+    ResponseEntity<ResponseObject> getOrdersByCustomerId(int id);
 }

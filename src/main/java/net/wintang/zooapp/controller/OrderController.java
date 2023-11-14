@@ -46,6 +46,11 @@ public class OrderController {
         return orderService.getOrders();
     }
 
+    @GetMapping("/customers/{id}")
+    public ResponseEntity<ResponseObject> getOrdersByCustomerId(@PathVariable int id) {
+        return orderService.getOrdersByCustomerId(id);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getOrderById(@PathVariable int id) throws NotFoundException {
         return orderService.getOrderById(id);

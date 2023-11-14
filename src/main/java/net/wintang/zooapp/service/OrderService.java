@@ -68,6 +68,15 @@ public class OrderService implements IOrderService {
     }
 
     @Override
+    public ResponseEntity<ResponseObject> getOrdersByCustomerId(int id) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        OrderMapper.mapToOrderDto(orderRepository.findAllByCustomer(User.builder().id(id).build())))
+        );
+    }
+
+    @Override
     public ResponseEntity<ResponseObject> getPurchasedTickets() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
