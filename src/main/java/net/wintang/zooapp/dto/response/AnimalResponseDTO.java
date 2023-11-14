@@ -1,6 +1,7 @@
 package net.wintang.zooapp.dto.response;
 
 import lombok.Data;
+import net.wintang.zooapp.dto.mapper.SpeciesMapper;
 import net.wintang.zooapp.entity.Animal;
 import net.wintang.zooapp.entity.AnimalEnclosure;
 
@@ -29,7 +30,7 @@ public class AnimalResponseDTO {
 
     private boolean status;
 
-    private String species;
+    private SpeciesResponseDTO species;
 
     private List<AnimalTrainerAssignorResponseDTO> animalTrainerAssignors;
 
@@ -46,7 +47,7 @@ public class AnimalResponseDTO {
         this.dateOfDeath = animal.getDateOfDeath();
         this.origin = animal.getOrigin();
         this.status = animal.isStatus();
-        this.species = animal.getSpecies().getName();
+        this.species = SpeciesMapper.mapToSpeciesDto(animal.getSpecies());
         this.animalTrainerAssignors = animal.getAnimalTrainerAssignors().stream().filter(a -> a.getUnassignedDate() == null).map(AnimalTrainerAssignorResponseDTO::new).toList();
         this.currentEnclosure = animal.getEnclosures().stream().filter(e -> e.getMoveOutDate() == null).findFirst().orElse(null);
     }
