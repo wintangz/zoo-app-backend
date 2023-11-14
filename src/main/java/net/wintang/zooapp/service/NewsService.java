@@ -62,7 +62,7 @@ public class NewsService implements INewsService {
 
     @Override
     public ResponseEntity<ResponseObject> get3LatestNews() {
-        List<NewsResponseDTO> news = NewsMapper.mapToNewsDTO(newsRepository.findAll());
+        List<NewsResponseDTO> news = NewsMapper.mapToNewsDTO(newsRepository.findAll().stream().filter(n -> n.isStatus()).toList());
         List<NewsResponseDTO> recommend = List.of(news.get(news.size() - 1), news.get(news.size() - 2), news.get(news.size() - 3));
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,

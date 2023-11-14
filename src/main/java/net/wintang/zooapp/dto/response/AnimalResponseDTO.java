@@ -3,7 +3,6 @@ package net.wintang.zooapp.dto.response;
 import lombok.Data;
 import net.wintang.zooapp.entity.Animal;
 import net.wintang.zooapp.entity.AnimalEnclosure;
-import net.wintang.zooapp.entity.AnimalTrainerAssignor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,7 +31,7 @@ public class AnimalResponseDTO {
 
     private String species;
 
-    private List<AnimalTrainerAssignor> animalTrainerAssignors;
+    private List<AnimalTrainerAssignorResponseDTO> animalTrainerAssignors;
 
     private AnimalEnclosure currentEnclosure;
 
@@ -48,7 +47,7 @@ public class AnimalResponseDTO {
         this.origin = animal.getOrigin();
         this.status = animal.isStatus();
         this.species = animal.getSpecies().getName();
-        this.animalTrainerAssignors = animal.getAnimalTrainerAssignors().stream().filter(a -> a.getUnassignedDate() == null).toList();
+        this.animalTrainerAssignors = animal.getAnimalTrainerAssignors().stream().filter(a -> a.getUnassignedDate() == null).map(AnimalTrainerAssignorResponseDTO::new).toList();
         this.currentEnclosure = animal.getEnclosures().stream().filter(e -> e.getMoveOutDate() == null).findFirst().orElse(null);
     }
 }
