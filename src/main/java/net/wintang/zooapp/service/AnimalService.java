@@ -1,5 +1,6 @@
 package net.wintang.zooapp.service;
 
+import jakarta.persistence.EntityManager;
 import net.wintang.zooapp.dto.mapper.AnimalMapper;
 import net.wintang.zooapp.dto.request.AnimalRequestDTO;
 import net.wintang.zooapp.dto.request.AnimalUpdateDTO;
@@ -16,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -27,14 +30,17 @@ public class AnimalService implements IAnimalService {
     private final AnimalTrainerAssignorRepository animalTrainerAssignorRepository;
     private final AnimalEnclosureRepository animalEnclosureRepository;
 
+    private final EntityManager entityManager;
+
     public AnimalService(AnimalRepository animalRepository,
                          AnimalMapper animalMapper,
                          AnimalTrainerAssignorRepository animalTrainerAssignorRepository,
-                         AnimalEnclosureRepository animalEnclosureRepository) {
+                         AnimalEnclosureRepository animalEnclosureRepository, EntityManager entityManager) {
         this.animalRepository = animalRepository;
         this.animalMapper = animalMapper;
         this.animalTrainerAssignorRepository = animalTrainerAssignorRepository;
         this.animalEnclosureRepository = animalEnclosureRepository;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -126,11 +132,16 @@ public class AnimalService implements IAnimalService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity<ResponseObject> unassignZooTrainerToAnimal(int animalId, int zooTrainerId) throws NotFoundException {
         AnimalTrainerAssignor object = animalTrainerAssignorRepository
                 .findByAnimalAndTrainerAndUnassignedDate(Animal.builder().id(animalId).build(), User.builder().id(zooTrainerId).build(), null)
                 .orElseThrow(() -> new NotFoundException("This animal with this trainer"));
-        object.setUnassignedDate(LocalDateTime.now());
+
+        entityManager.createNativeQuery("UPDATE animal_trainer_assignor SET unassigned_date = GETDATE() WHERE id = ?")
+                .setParameter(1, object.getId())
+                .executeUpdate();
+
         animalTrainerAssignorRepository.save(object);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
