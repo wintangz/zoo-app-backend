@@ -47,6 +47,15 @@ public class AnimalService implements IAnimalService {
     }
 
     @Override
+    public ResponseEntity<ResponseObject> getAnimalById(int id) throws NotFoundException {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(ApplicationConstants.ResponseStatus.OK,
+                        ApplicationConstants.ResponseMessage.SUCCESS,
+                        AnimalMapper.mapToAnimalDTO(animalRepository.findById(id).orElseThrow(() -> new NotFoundException("Animal ID: "))))
+        );
+    }
+
+    @Override
     public ResponseEntity<ResponseObject> createAnimal(AnimalRequestDTO animalDto) throws NotFoundException {
         User zooTrainer = new User();
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

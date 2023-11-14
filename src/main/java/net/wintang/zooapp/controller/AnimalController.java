@@ -26,6 +26,11 @@ public class AnimalController {
         return animalService.getAnimals();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseObject> getAnimalById(@PathVariable int id) throws NotFoundException {
+        return animalService.getAnimalById(id);
+    }
+
     @GetMapping("/{id}/history")
     public ResponseEntity<ResponseObject> getAnimalsHistory(@PathVariable int id) throws NotFoundException {
         return animalService.getAnimalsHistory(id);

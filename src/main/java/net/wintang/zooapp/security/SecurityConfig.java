@@ -55,8 +55,6 @@ public class SecurityConfig {
                         .requestMatchers("api/users/customers/**").hasAuthority(Roles.STAFF)
                         .requestMatchers(HttpMethod.GET, "api/species").permitAll()
                         .requestMatchers("api/species/**").hasAuthority(Roles.ZOO_TRAINER)
-                        .requestMatchers(HttpMethod.GET, "api/diets").hasAnyAuthority(Roles.ZOO_TRAINER, Roles.STAFF)
-                        .requestMatchers("api/diets/**").hasAuthority(Roles.ZOO_TRAINER)
                         .requestMatchers(HttpMethod.GET, "api/foods").hasAnyAuthority(Roles.ZOO_TRAINER, Roles.STAFF)
                         .requestMatchers("api/foods/**").hasAuthority(Roles.ZOO_TRAINER)
                         .requestMatchers(HttpMethod.GET, "api/health_records").hasAnyAuthority(Roles.ZOO_TRAINER, Roles.STAFF)

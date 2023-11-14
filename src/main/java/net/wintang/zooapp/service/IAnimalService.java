@@ -3,7 +3,6 @@ package net.wintang.zooapp.service;
 import net.wintang.zooapp.dto.request.AnimalRequestDTO;
 import net.wintang.zooapp.dto.request.AnimalUpdateDTO;
 import net.wintang.zooapp.dto.response.ResponseObject;
-import net.wintang.zooapp.exception.DuplicatedKeyException;
 import net.wintang.zooapp.exception.NotFoundException;
 import org.springframework.http.ResponseEntity;
 
@@ -29,4 +28,6 @@ public interface IAnimalService {
     ResponseEntity<ResponseObject> getAnimalEnclosuresByAnimalId(int id);
 
     ResponseEntity<ResponseObject> getAnimalsHistory(int id) throws NotFoundException;
+
+    ResponseEntity<ResponseObject> getAnimalById(int id) throws NotFoundException;
 }
