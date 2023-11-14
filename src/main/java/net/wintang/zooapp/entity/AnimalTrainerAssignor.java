@@ -35,7 +35,7 @@ public class AnimalTrainerAssignor {
     @Column(insertable = false, updatable = false)
     private LocalDateTime assignedDate;
 
-    @Column(insertable = false, updatable = false)
+    @Column(updatable = false)
     private LocalDateTime unassignedDate;
 
 }
