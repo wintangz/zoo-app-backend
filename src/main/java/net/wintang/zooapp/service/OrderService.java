@@ -63,7 +63,7 @@ public class OrderService implements IOrderService {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(ApplicationConstants.ResponseStatus.OK,
                         ApplicationConstants.ResponseMessage.SUCCESS,
-                        OrderMapper.mapToOrderDto(orderRepository.findById(id).orElseThrow(() -> new NotFoundException("Order ID: " + id))))
+                        orderDetailRepository.findAllByOrderId(id))
         );
     }
 
